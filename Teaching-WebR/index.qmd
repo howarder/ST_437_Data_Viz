@@ -283,7 +283,7 @@ if (temperature > 76) {
 
 - [webR Documentation](https://docs.r-wasm.org/webr/latest/)
 - [webR GitHub Repository](https://github.com/georgestagg/shiny-standalone-webr-demo)
-- [Slide Source Code](https://github.com/bcervantesalvarez/Presentations/blob/main/WebR/index.qmd)
+- [Slide Source Code](https://github.com/howarder/ST_437_Data_Viz/blob/main/Teaching-WebR/index.qmd)
 
 :::
 
