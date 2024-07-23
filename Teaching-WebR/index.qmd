@@ -5,7 +5,7 @@ date: today
 date-format: long
 format:
   LUstyle-revealjs:
-    footer: "[https://howardr.github.io/ST_437_Data_Viz/Teaching-WebR](https://howardr.github.io/ST_437_Data_Viz/Teaching-WebR)"
+    footer: "[https://howarder.github.io/ST_437_Data_Viz/Teaching-WebR](https://howardr.github.io/ST_437_Data_Viz/Teaching-WebR)"
     logo: "images/OSULogo.png"
     auto-stretch: false
     scrollable: true
