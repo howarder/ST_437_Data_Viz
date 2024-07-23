@@ -1,0 +1,68 @@
+---
+title: "Week 2: Data Wrangling in R"
+author: "Brian Cervantes Alvarez"
+date: today
+date-format: long
+format: OSUstyle-html
+execute: 
+  echo: true
+  warning: false
+webr:
+  packages: ['ggplot2', 'dplyr', 'lubridate', 'stringr', 'tidyr'] # Install R packages on document open
+  show-startup-message: false    # Disable displaying status of webR initialization
+filters:
+- webr
+---
+
+# Introduction
+
+- Brief overview of data wrangling
+- Importance of data cleaning and preparation
+- Introduction to webR for interactive data wrangling
+
+# Fixing Dates
+
+## Theory
+- Common issues with date formats
+- Importance of consistent date formats
+
+## Code Example
+```{webr-r}
+# Load necessary libraries
+library(lubridate)
+
+# Sample dataset with dates
+data <- data.frame(date = c("2024-01-01", "01-02-2024", "March 3, 2024"))
+
+# Fixing date formats
+data$date <- mdy(data$date)
+```
+
+# Pivot Longer and Pivot Wider
+
+## Theory
+- Differences between pivoting longer and wider
+- When to use each method
+
+## Code Example
+```{webr-r}
+# Load necessary libraries
+library(tidyr)
+
+# Sample dataset
+data <- data.frame(id = 1:3, key1 = c("A", "B", "C"), key2 = c("X", "Y", "Z"))
+
+# Pivot longer
+data_long <- pivot_longer(data, cols = key1:key2, names_to = "key", values_to = "value")
+
+# Pivot wider
+data_wide <- pivot_wider(data_long, names_from = key, values_from = value)
+```
+
+# Conclusion
+
+- Recap of key concepts
+- Importance of data wrangling in data analysis
+- Interactive exercises using webR
+
+
