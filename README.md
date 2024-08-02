@@ -1,28 +1,3 @@
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Georgia&family=Open+Sans:wght@400;700&display=swap');
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Georgia', serif;
-    color: #333333;
-    font-weight: 900;
-}
-
-body, p, a, li, code, pre {
-    font-family: 'Open Sans', sans-serif;
-    color: #555555;
-    line-height: 1.6;
-}
-
-a {
-    color: #1a73e8;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-</style>
-
 # ST 437 Data Visualization
 
 [Homepage](https://howarder.github.io/ST_437_Data_Viz/)
