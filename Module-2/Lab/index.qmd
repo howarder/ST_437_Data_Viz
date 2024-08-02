@@ -100,13 +100,13 @@ head(countriesExtraDs, 5)
 #### Description of the Dataset
 - **`id`**: Unique identifier for each row.
 - **`country`**: Country name from a predefined list.
-- **`year`**: Random year between 2000 and 2023.
-- **`population`**: Random population size between 1 million and 1.5 billion.
+- **`year`**: Years between 2000 and 2023.
+- **`population`**: Population size between 1 million and 1.5 billion.
 - **`cases`**: Number of cases where electrical services were interrupted.
 - **`gdp_per_capita`**: GDP per capita.
 - **`date`**: Dates from 2000 and 2023.
 - **`temperature`**: Temperature in Celsius.
-- **`region`**: Region of the world, randomly assigned.
+- **`region`**: Region of the world
 
 #### Additional Dataset
 - **`country`**: Matches the country names from the main dataset.
@@ -132,6 +132,14 @@ filteredData <- countriesDs %>%
 head(filteredData, 5)
 ```
 
+##### Filtering Challenges:
+1. **Filter the dataset** to include only countries from Africa where the population exceeds 50 million.
+2. **Filter data** to show only the years 2015-2020 for countries in Europe with GDP per capita above $30,000.
+3. **Create a subset** of the data for countries in the Americas with more than 100,000 cases and display the first 10 rows.
+4. **Identify the countries** in Asia where the average temperature is below 10°C between 2010 and 2020.
+5. **Filter out** any entries with missing values in the `gdp_per_capita` column for the years 2000-2010.
+
+
 #### Selecting: 
 Select specific columns for analysis.
 ```{webr-r}
@@ -141,6 +149,14 @@ selectedData <- filteredData %>%
 head(selectedData, 5)
 ```
 
+##### Selecting Challenges:
+1. **Select columns** related to economic indicators (e.g., `country`, `gdp_per_capita`, `population`) for further analysis.
+2. **Create a dataset** with only the `year`, `cases`, and `temperature` columns for all countries and show the first 5 rows.
+3. **Choose columns** that exclude any geographical information and check the first 10 rows.
+4. **Select and rename** the `country` and `population` columns to `nation` and `pop_size`, respectively.
+5. **Create a new dataset** with only the `year`, `population`, and a newly created column, `population_in_millions` (which should be calculated as `population / 1e6`).
+
+
 #### Mutating: 
 Create new columns, such as cases per 100,000 population.
 ```{webr-r}
@@ -149,6 +165,15 @@ mutatedData <- countriesDs %>%
 
 head(mutatedData, 5)
 ```
+
+
+##### Mutating Challenges:
+1. **Create a new column** called `gdp_total` that multiplies `gdp_per_capita` by `population`.
+2. **Generate a column** that calculates cases per capita by dividing `cases` by `population` and multiplying by 100,000.
+3. **Add a new column** that indicates whether a country's GDP per capita is above or below the global average (use a logical indicator).
+4. **Create a `cases_per_million` column** by dividing `cases` by the population and multiplying by 1,000,000.
+5. **Mutate the `date` column** to create a new column, `year_month`, that extracts the year and month information.
+
 
 #### Summarizing: 
 Aggregate data by country, year, or region.
@@ -163,6 +188,14 @@ summaryData <- countriesDs %>%
 head(summaryData, 5)
 ```
 
+##### Summarizing Challenges:
+1. **Summarize the dataset** by finding the average temperature for each region.
+2. **Aggregate the data** to find the total population and total cases for each continent.
+3. **Group the data** by country and summarize to find the maximum and minimum GDP per capita for each country.
+4. **Summarize by year** to find the total number of cases and the average population size each year.
+5. **Create a summary** that calculates the average life expectancy and total population for countries with a GDP per capita above $20,000.
+
+
 #### Joining: 
 Combine main dataset with additional data based on the country.
 ```{webr-r}
@@ -170,6 +203,17 @@ joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
 
 head(joinedData, 5)
 ```
+
+
+##### Joining Challenges:
+1. **Perform a left join** on the main dataset and an additional dataset that contains information on urbanization rates by country.
+2. **Join the datasets** to add `avg_life_expectancy` and then filter for countries where life expectancy is below 60 years.
+3. **Create a new dataset** by performing an inner join on `countriesDs` and `countriesExtraDs`, then analyze the countries present in both datasets.
+4. **Perform a full join** to combine the datasets and identify countries that are missing from one dataset but present in the other.
+5. **Use an anti-join** to find the countries in the main dataset that do not have corresponding information in the additional dataset.
+
+These challenges will help your students apply and extend their data wrangling skills, reinforcing the concepts you've introduced.
+
 
 #### Combining all the steps
 ```{webr-r}
@@ -194,4 +238,14 @@ min(data$cases)
 max(data$cases)
 
 ```
+
+
+
+
+Here are five challenge questions for each of the data wrangling activities:
+
+
+
+
+
 

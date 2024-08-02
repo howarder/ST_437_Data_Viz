@@ -969,13 +969,13 @@ head(countriesExtraDs, 5)`,
 <ul>
 <li><strong><code>id</code></strong>: Unique identifier for each row.</li>
 <li><strong><code>country</code></strong>: Country name from a predefined list.</li>
-<li><strong><code>year</code></strong>: Random year between 2000 and 2023.</li>
-<li><strong><code>population</code></strong>: Random population size between 1 million and 1.5 billion.</li>
+<li><strong><code>year</code></strong>: Years between 2000 and 2023.</li>
+<li><strong><code>population</code></strong>: Population size between 1 million and 1.5 billion.</li>
 <li><strong><code>cases</code></strong>: Number of cases where electrical services were interrupted.</li>
 <li><strong><code>gdp_per_capita</code></strong>: GDP per capita.</li>
 <li><strong><code>date</code></strong>: Dates from 2000 and 2023.</li>
 <li><strong><code>temperature</code></strong>: Temperature in Celsius.</li>
-<li><strong><code>region</code></strong>: Region of the world, randomly assigned.</li>
+<li><strong><code>region</code></strong>: Region of the world</li>
 </ul>
 </section>
 <section id="additional-dataset" class="level4">
@@ -1024,6 +1024,16 @@ head(filteredData, 5)`,
   3);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="filtering-challenges" class="level5">
+<h5 class="anchored" data-anchor-id="filtering-challenges">Filtering Challenges:</h5>
+<ol type="1">
+<li><strong>Filter the dataset</strong> to include only countries from Africa where the population exceeds 50 million.</li>
+<li><strong>Filter data</strong> to show only the years 2015-2020 for countries in Europe with GDP per capita above $30,000.</li>
+<li><strong>Create a subset</strong> of the data for countries in the Americas with more than 100,000 cases and display the first 10 rows.</li>
+<li><strong>Identify the countries</strong> in Asia where the average temperature is below 10°C between 2010 and 2020.</li>
+<li><strong>Filter out</strong> any entries with missing values in the <code>gdp_per_capita</code> column for the years 2000-2010.</li>
+</ol>
+</section>
 </section>
 <section id="selecting" class="level4">
 <h4 class="anchored" data-anchor-id="selecting">Selecting:</h4>
@@ -1050,6 +1060,16 @@ head(selectedData, 5)`,
   4);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="selecting-challenges" class="level5">
+<h5 class="anchored" data-anchor-id="selecting-challenges">Selecting Challenges:</h5>
+<ol type="1">
+<li><strong>Select columns</strong> related to economic indicators (e.g., <code>country</code>, <code>gdp_per_capita</code>, <code>population</code>) for further analysis.</li>
+<li><strong>Create a dataset</strong> with only the <code>year</code>, <code>cases</code>, and <code>temperature</code> columns for all countries and show the first 5 rows.</li>
+<li><strong>Choose columns</strong> that exclude any geographical information and check the first 10 rows.</li>
+<li><strong>Select and rename</strong> the <code>country</code> and <code>population</code> columns to <code>nation</code> and <code>pop_size</code>, respectively.</li>
+<li><strong>Create a new dataset</strong> with only the <code>year</code>, <code>population</code>, and a newly created column, <code>population_in_millions</code> (which should be calculated as <code>population / 1e6</code>).</li>
+</ol>
+</section>
 </section>
 <section id="mutating" class="level4">
 <h4 class="anchored" data-anchor-id="mutating">Mutating:</h4>
@@ -1076,6 +1096,16 @@ head(mutatedData, 5)`,
   5);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="mutating-challenges" class="level5">
+<h5 class="anchored" data-anchor-id="mutating-challenges">Mutating Challenges:</h5>
+<ol type="1">
+<li><strong>Create a new column</strong> called <code>gdp_total</code> that multiplies <code>gdp_per_capita</code> by <code>population</code>.</li>
+<li><strong>Generate a column</strong> that calculates cases per capita by dividing <code>cases</code> by <code>population</code> and multiplying by 100,000.</li>
+<li><strong>Add a new column</strong> that indicates whether a country’s GDP per capita is above or below the global average (use a logical indicator).</li>
+<li><strong>Create a <code>cases_per_million</code> column</strong> by dividing <code>cases</code> by the population and multiplying by 1,000,000.</li>
+<li><strong>Mutate the <code>date</code> column</strong> to create a new column, <code>year_month</code>, that extracts the year and month information.</li>
+</ol>
+</section>
 </section>
 <section id="summarizing" class="level4">
 <h4 class="anchored" data-anchor-id="summarizing">Summarizing:</h4>
@@ -1106,6 +1136,16 @@ head(summaryData, 5)`,
   6);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="summarizing-challenges" class="level5">
+<h5 class="anchored" data-anchor-id="summarizing-challenges">Summarizing Challenges:</h5>
+<ol type="1">
+<li><strong>Summarize the dataset</strong> by finding the average temperature for each region.</li>
+<li><strong>Aggregate the data</strong> to find the total population and total cases for each continent.</li>
+<li><strong>Group the data</strong> by country and summarize to find the maximum and minimum GDP per capita for each country.</li>
+<li><strong>Summarize by year</strong> to find the total number of cases and the average population size each year.</li>
+<li><strong>Create a summary</strong> that calculates the average life expectancy and total population for countries with a GDP per capita above $20,000.</li>
+</ol>
+</section>
 </section>
 <section id="joining" class="level4">
 <h4 class="anchored" data-anchor-id="joining">Joining:</h4>
@@ -1131,6 +1171,17 @@ head(joinedData, 5)`,
   7);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="joining-challenges" class="level5">
+<h5 class="anchored" data-anchor-id="joining-challenges">Joining Challenges:</h5>
+<ol type="1">
+<li><strong>Perform a left join</strong> on the main dataset and an additional dataset that contains information on urbanization rates by country.</li>
+<li><strong>Join the datasets</strong> to add <code>avg_life_expectancy</code> and then filter for countries where life expectancy is below 60 years.</li>
+<li><strong>Create a new dataset</strong> by performing an inner join on <code>countriesDs</code> and <code>countriesExtraDs</code>, then analyze the countries present in both datasets.</li>
+<li><strong>Perform a full join</strong> to combine the datasets and identify countries that are missing from one dataset but present in the other.</li>
+<li><strong>Use an anti-join</strong> to find the countries in the main dataset that do not have corresponding information in the additional dataset.</li>
+</ol>
+<p>These challenges will help your students apply and extend their data wrangling skills, reinforcing the concepts you’ve introduced.</p>
+</section>
 </section>
 <section id="combining-all-the-steps" class="level4">
 <h4 class="anchored" data-anchor-id="combining-all-the-steps">Combining all the steps</h4>
@@ -1171,6 +1222,7 @@ max(data$cases)`,
   8);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>Here are five challenge questions for each of the data wrangling activities:</p>
 </section>
 </section>
 </section>
