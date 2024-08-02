@@ -11,7 +11,7 @@ execute:
   echo: true
   warning: false
 webr:
-  packages: ['ggplot2', 'dplyr', 'lubridate', 'stringr', 'tidyr'] # Install R packages on document open
+  packages: ['readr', 'dplyr', 'lubridate', 'stringr', 'tidyr'] # Install R packages on document open
   show-startup-message: false    # Disable displaying status of webR initialization
 filters:
 - webr
@@ -19,32 +19,147 @@ filters:
 
 ## Learning Objectives
 
-- Brief overview of data wrangling
-- Importance of data cleaning and preparation
+1. Understand the importance of data wrangling in the data analysis process.
+2. Transform and map raw data into a more suitable format for analysis.
+3. Emphasize the significance of data cleaning and preparation.
+4. Ensure data accuracy and consistency.
+5. Make reliable and valid conclusions based on well-prepared data.
 
-Data wrangling is an essential step in the data analysis process. It involves transforming and mapping data from its raw form into a more suitable format for analysis. The importance of data cleaning and preparation cannot be overstated as it ensures the accuracy and consistency of the data, which are crucial for making reliable and valid conclusions.
+## What is Data Wrangling?
 
-## Setup
+Data wrangling is the process of converting messy, untidy data into a tidy format, making it suitable for data visualization and analysis.
 
-First, ensure you have the necessary packages installed and loaded. We will use the `ggplot2`, `dplyr`, `lubridate`, `stringr`, and `tidyr` packages for our examples. Additionally, we'll use datasets from Kaggle. Make sure you have a Kaggle account and have downloaded the datasets you want to use.
+- **Data is often messy:** Real-world data is rarely provided in a tidy format.
+- **Industry challenges:** Many industries have poorly designed data structures, requiring data preparation before visualization.
+- **Rarely tidy datasets:** It is uncommon to receive a dataset that is already tidy.
 
+## What Causes Untidy Data?
+
+- **Incorrect/Inconsistent dates:** Dates can often be a headache due to inconsistencies.
+- **Wide format times:** Time data is often given in a wide format instead of long.
+- **Void or misspelled descriptions:** Descriptions can have gaps or missing/misspelled characters.
+- **Missing values:** Many datasets have missing values in some rows or columns.
+- **Condensed or incorrect headers:** Column names are often too short or mislabeled.
+- **Row content split:** Sometimes, data in a single row needs to be divided into multiple columns.
+
+Mastering data wrangling is crucial because you might have to handle datasets with millions of rows and hundreds of columns. 
+
+In most cases, you will import data using SQL to create narrower datasets. However, when given large datasets, you can use R to manipulate and create subset datasets for focused analysis.
+
+## Tidy Data
+
+Tidy data is a structured format that aligns the organization of a dataset with its underlying meaning. In tidy data:
+
+- **Each variable has its own column:** Every column in the dataset corresponds to a specific variable or attribute.
+- **Each observation has its own row:** Every row captures a single observation or data entry.
+- **Each cell contains a single value:** Each cell holds one distinct piece of information for a particular variable and observation.
+
+Creating a large dataset that can be used across multiple examples requires a dataset with a variety of columns and data types. Below is a script to generate a synthetic dataset in R that can be used for filtering, selecting, mutating, summarizing, and joining examples.
+
+## Data wrangling 101
+
+First, ensure you have the necessary packages installed and loaded. We will use the `dplyr`, `lubridate`, `readr`, `stringr`, and `tidyr` packages for our examples.
 ```{r}
-library(ggplot2)
 library(dplyr)
 library(lubridate)
 library(stringr)
 library(tidyr)
+library(readr)
 ```
 
-## Example 1: Renaming Columns and Handling Missing Data
+### Load the Data
+
+```{r}
+# Load datasets
+data <- read_csv("countries.csv")
+additionalData <- read_csv("countriesExtraInfo.csv")
+```
+
+#### Description of the Dataset
+- **`id`**: Unique identifier for each row.
+- **`country`**: Country name from a predefined list.
+- **`year`**: Random year between 2000 and 2023.
+- **`population`**: Random population size between 1 million and 1.5 billion.
+- **`cases`**: Number of cases where electrical services were interrupted.
+- **`gdp_per_capita`**: GDP per capita.
+- **`date`**: Dates from 2000 and 2023.
+- **`temperature`**: Temperature in Celsius.
+- **`region`**: Region of the world, randomly assigned.
+
+#### Additional Dataset
+- **`country`**: Matches the country names from the main dataset.
+- **`continent`**: Continent corresponding to each country.
+- **`avg_life_expectancy`**: Average life expectancy.
+
+### Important Tidyverse Functions
+- **Filtering**: Filter data based on conditions such as year, country, or region.
+- **Selecting**: Select specific columns for focused analysis.
+- **Mutating**: Create new columns, such as cases per 100,000 population.
+- **Summarizing**: Aggregate data by country, year, or region to find totals and averages.
+- **Joining**: Combine the main dataset with the additional data based on country.
 
 
+### Diving into Data wrangling
 
-## Example 2: Parsing Dates and Creating New Columns
+#### Filtering: 
+Filter data by year, country, or region.
+```{r}
+filteredData <- data %>%
+  filter(year >= 2010 & region == "Asia")
+```
 
+#### Selecting: 
+Select specific columns for analysis.
+```{r}
+selectedData <- filteredData %>%
+  select(country, year, cases, population)
+```
 
+##### Mutating: 
+Create new columns, such as cases per 100,000 population.
+```{r}
+mutatedData <- data %>%
+  mutate(cases_per_100k = cases / population * 100000)
+```
 
-## Example 3: Pivoting Data
+#### Summarizing: 
+Aggregate data by country, year, or region.
+```{r}
+summaryData <- data %>%
+  group_by(country) %>%
+  summarize(
+    total_cases = sum(cases),
+    avg_gdp_per_capita = mean(gdp_per_capita, na.rm = TRUE)
+  )
+```
 
+#### Joining: 
+Combine main dataset with additional data based on the country.
+```{r}
+joinedData <- left_join(data, additionalData, by = "country")
+```
 
+#### Combining all the steps
+```{r}
+# Combining the previous steps into one
+wrangledData <- data |>
+  filter(year >= 2010 & region == "Asia") |>
+  select(country, year, cases, population, gdp_per_capita) |>
+  mutate(cases_per_100k = cases / population * 100000) |>
+  group_by(country) |>
+  summarize(
+    total_cases = sum(cases),
+    avg_cases_per_100k = mean(cases_per_100k),
+    avg_gdp_per_capita = mean(gdp_per_capita)
+  )
+
+# Print the first few rows of the datasets
+head(data, 10)
+head(wrangledData, 10)
+
+mean(data$cases)
+min(data$cases)
+max(data$cases)
+
+```
 

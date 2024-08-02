@@ -46,7 +46,7 @@ $presentation-heading-font: 'Georgia', 'Stratum 2', 'Times New Roman', serif !de
 
 // font size
 $presentation-font-size-root: 16px;
-$presentation-line-height: 1.5em;
+$presentation-line-height: 1.8em;
 $heading-font-size-h1: 2em;
 $heading-font-size-h2: 1.8em;
 $heading-font-size-h3: 1.6em;
@@ -57,11 +57,13 @@ $heading-font-size-h6: 1em;
 // font colour
 $presentation-heading-color: #000000 !default;
 
+$heading-color: #D73F09 !default;
+
 // code
-$code-color: #D73F09 !default;
+$code-color: #000000 !default;
 $code-block-font-size: 16px;
 $code-block-border-color: #000000;
-$code-block-bg: #f9f9f9;
+$code-block-bg: #f5f5f5;
 
 // bg colours 
 $body-color: #000000;
@@ -81,58 +83,72 @@ body {
 
 h1 {
   font-family: $presentation-heading-font;
-  font-weight: 700; /* Stratum2-Bold */
+  font-weight: 700; 
   font-size: $heading-font-size-h1;
-  color: $code-color !important;
+  color: $heading-color !important;
 }
 
 h2 {
   font-family: $presentation-heading-font;
-  font-weight: 500; /* Stratum2-Medium */
+  font-weight: 500; 
   font-size: $heading-font-size-h2;
-  color: $code-color !important;
+  color: $heading-color !important;
   border-bottom: 2.5px solid $body-color; /* Add a border underneath */
 }
 
 h3 {
   font-family: $presentation-heading-font;
-  font-weight: 400; /* Stratum2-Regular */
+  font-weight: 400; 
   font-size: $heading-font-size-h3;
-  color: $code-color !important;
+  color: $heading-color !important;
 }
 
 h4 {
   font-family: $presentation-heading-font;
-  font-weight: 300; /* Stratum2-Light */
+  font-weight: 300; 
   font-size: $heading-font-size-h4;
-  color: $code-color !important;
+  color: $heading-color !important;
 }
 
 h5 {
   font-family: $presentation-heading-font;
-  font-weight: 100; /* Stratum2-Thin */
+  font-weight: 100; 
   font-size: $heading-font-size-h5;
-  color: $code-color !important;
+  color: $heading-color !important;
 }
 
 h6 {
   font-family: $presentation-heading-font;
-  font-weight: 100; /* Stratum2-Thin */
+  font-weight: 100; 
   font-size: $heading-font-size-h6;
-  color: $code-color !important;
+  color: $heading-color !important;
 }
 
 a {
   color: $link-color;
 }
 
+.qwebr-button-run {
+  font-family: $presentation-heading-font;
+  font-weight: 100;
+}
+
 pre, code {
-  font-family: 'Courier New', Courier, monospace;
-  background-color: $code-block-bg;
+  background-color: #f5f5f5;
   color: $code-color;
   padding: 0.2em 0.4em;
   border-radius: 3px;
-  border: 1px solid $code-block-border-color;
+   /* Enhanced styling */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.qwebr-output-code-stdout {
+  color: #111;
+  box-shadow: none;
+}
+
+.qwebr-output-code-area {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Table styles */
@@ -152,20 +168,6 @@ td {
   padding: 0.5em;
 }
 
-/* Button styles */
-button {
-  background-color: $link-color;
-  color: $body-bg;
-  border: none;
-  padding: 0.5em 1em;
-  border-radius: 3px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $body-color;
-  }
-}
-
 /* Additional styles to mimic reveal.js */
 .subtitle {
   font-size: $presentation-font-size-root * 0.8;
@@ -181,3 +183,5 @@ button {
 .right {
   text-align: right !important;
 }
+
+

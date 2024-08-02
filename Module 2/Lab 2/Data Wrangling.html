@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Brian Cervantes Alvarez">
-<meta name="dcterms.date" content="2024-07-23">
+<meta name="dcterms.date" content="2024-08-01">
 
 <title>Week 2: Data Wrangling in R</title>
 <style>
@@ -82,10 +82,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#example-1-renaming-columns-and-handling-missing-data" id="toc-example-1-renaming-columns-and-handling-missing-data" class="nav-link" data-scroll-target="#example-1-renaming-columns-and-handling-missing-data">Example 1: Renaming Columns and Handling Missing Data</a></li>
-  <li><a href="#example-2-parsing-dates-and-creating-new-columns" id="toc-example-2-parsing-dates-and-creating-new-columns" class="nav-link" data-scroll-target="#example-2-parsing-dates-and-creating-new-columns">Example 2: Parsing Dates and Creating New Columns</a></li>
-  <li><a href="#example-3-pivoting-data" id="toc-example-3-pivoting-data" class="nav-link" data-scroll-target="#example-3-pivoting-data">Example 3: Pivoting Data</a></li>
+  <li><a href="#what-is-data-wrangling" id="toc-what-is-data-wrangling" class="nav-link" data-scroll-target="#what-is-data-wrangling">What is Data Wrangling?</a></li>
+  <li><a href="#what-causes-untidy-data" id="toc-what-causes-untidy-data" class="nav-link" data-scroll-target="#what-causes-untidy-data">What Causes Untidy Data?</a></li>
+  <li><a href="#tidy-data" id="toc-tidy-data" class="nav-link" data-scroll-target="#tidy-data">Tidy Data</a></li>
+  <li><a href="#data-wrangling-101" id="toc-data-wrangling-101" class="nav-link" data-scroll-target="#data-wrangling-101">Data wrangling 101</a>
+  <ul class="collapse">
+  <li><a href="#load-the-data" id="toc-load-the-data" class="nav-link" data-scroll-target="#load-the-data">Load the Data</a></li>
+  <li><a href="#important-tidyverse-functions" id="toc-important-tidyverse-functions" class="nav-link" data-scroll-target="#important-tidyverse-functions">Important Tidyverse Functions</a></li>
+  <li><a href="#diving-into-data-wrangling" id="toc-diving-into-data-wrangling" class="nav-link" data-scroll-target="#diving-into-data-wrangling">Diving into Data wrangling</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -110,7 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 23, 2024</p>
+      <p class="date">August 1, 2024</p>
     </div>
   </div>
   
@@ -124,31 +129,204 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
-<ul>
-<li>Brief overview of data wrangling</li>
-<li>Importance of data cleaning and preparation</li>
-</ul>
-<p>Data wrangling is an essential step in the data analysis process. It involves transforming and mapping data from its raw form into a more suitable format for analysis. The importance of data cleaning and preparation cannot be overstated as it ensures the accuracy and consistency of the data, which are crucial for making reliable and valid conclusions.</p>
+<ol type="1">
+<li>Understand the importance of data wrangling in the data analysis process.</li>
+<li>Transform and map raw data into a more suitable format for analysis.</li>
+<li>Emphasize the significance of data cleaning and preparation.</li>
+<li>Ensure data accuracy and consistency.</li>
+<li>Make reliable and valid conclusions based on well-prepared data.</li>
+</ol>
 </section>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>ggplot2</code>, <code>dplyr</code>, <code>lubridate</code>, <code>stringr</code>, and <code>tidyr</code> packages for our examples. Additionally, we’ll use datasets from Kaggle. Make sure you have a Kaggle account and have downloaded the datasets you want to use.</p>
+<section id="what-is-data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-data-wrangling">What is Data Wrangling?</h2>
+<p>Data wrangling is the process of converting messy, untidy data into a tidy format, making it suitable for data visualization and analysis.</p>
+<ul>
+<li><strong>Data is often messy:</strong> Real-world data is rarely provided in a tidy format.</li>
+<li><strong>Industry challenges:</strong> Many industries have poorly designed data structures, requiring data preparation before visualization.</li>
+<li><strong>Rarely tidy datasets:</strong> It is uncommon to receive a dataset that is already tidy.</li>
+</ul>
+</section>
+<section id="what-causes-untidy-data" class="level2">
+<h2 class="anchored" data-anchor-id="what-causes-untidy-data">What Causes Untidy Data?</h2>
+<ul>
+<li><strong>Incorrect/Inconsistent dates:</strong> Dates can often be a headache due to inconsistencies.</li>
+<li><strong>Wide format times:</strong> Time data is often given in a wide format instead of long.</li>
+<li><strong>Void or misspelled descriptions:</strong> Descriptions can have gaps or missing/misspelled characters.</li>
+<li><strong>Missing values:</strong> Many datasets have missing values in some rows or columns.</li>
+<li><strong>Condensed or incorrect headers:</strong> Column names are often too short or mislabeled.</li>
+<li><strong>Row content split:</strong> Sometimes, data in a single row needs to be divided into multiple columns.</li>
+</ul>
+<p>Mastering data wrangling is crucial because you might have to handle datasets with millions of rows and hundreds of columns.</p>
+<p>In most cases, you will import data using SQL to create narrower datasets. However, when given large datasets, you can use R to manipulate and create subset datasets for focused analysis.</p>
+</section>
+<section id="tidy-data" class="level2">
+<h2 class="anchored" data-anchor-id="tidy-data">Tidy Data</h2>
+<p>Tidy data is a structured format that aligns the organization of a dataset with its underlying meaning. In tidy data:</p>
+<ul>
+<li><strong>Each variable has its own column:</strong> Every column in the dataset corresponds to a specific variable or attribute.</li>
+<li><strong>Each observation has its own row:</strong> Every row captures a single observation or data entry.</li>
+<li><strong>Each cell contains a single value:</strong> Each cell holds one distinct piece of information for a particular variable and observation.</li>
+</ul>
+<p>Creating a large dataset that can be used across multiple examples requires a dataset with a variety of columns and data types. Below is a script to generate a synthetic dataset in R that can be used for filtering, selecting, mutating, summarizing, and joining examples.</p>
+</section>
+<section id="data-wrangling-101" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling-101">Data wrangling 101</h2>
+<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>stringr</code>, and <code>tidyr</code> packages for our examples.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="load-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="load-the-data">Load the Data</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load datasets</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"countries.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>additionalData <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"countriesExtraInfo.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="description-of-the-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="description-of-the-dataset">Description of the Dataset</h4>
+<ul>
+<li><strong><code>id</code></strong>: Unique identifier for each row.</li>
+<li><strong><code>country</code></strong>: Country name from a predefined list.</li>
+<li><strong><code>year</code></strong>: Random year between 2000 and 2023.</li>
+<li><strong><code>population</code></strong>: Random population size between 1 million and 1.5 billion.</li>
+<li><strong><code>cases</code></strong>: Number of cases where electrical services were interrupted.</li>
+<li><strong><code>gdp_per_capita</code></strong>: GDP per capita.</li>
+<li><strong><code>date</code></strong>: Dates from 2000 and 2023.</li>
+<li><strong><code>temperature</code></strong>: Temperature in Celsius.</li>
+<li><strong><code>region</code></strong>: Region of the world, randomly assigned.</li>
+</ul>
+</section>
+<section id="additional-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="additional-dataset">Additional Dataset</h4>
+<ul>
+<li><strong><code>country</code></strong>: Matches the country names from the main dataset.</li>
+<li><strong><code>continent</code></strong>: Continent corresponding to each country.</li>
+<li><strong><code>avg_life_expectancy</code></strong>: Average life expectancy.</li>
+</ul>
+</section>
+</section>
+<section id="important-tidyverse-functions" class="level3">
+<h3 class="anchored" data-anchor-id="important-tidyverse-functions">Important Tidyverse Functions</h3>
+<ul>
+<li><strong>Filtering</strong>: Filter data based on conditions such as year, country, or region.</li>
+<li><strong>Selecting</strong>: Select specific columns for focused analysis.</li>
+<li><strong>Mutating</strong>: Create new columns, such as cases per 100,000 population.</li>
+<li><strong>Summarizing</strong>: Aggregate data by country, year, or region to find totals and averages.</li>
+<li><strong>Joining</strong>: Combine the main dataset with the additional data based on country.</li>
+</ul>
+</section>
+<section id="diving-into-data-wrangling" class="level3">
+<h3 class="anchored" data-anchor-id="diving-into-data-wrangling">Diving into Data wrangling</h3>
+<section id="filtering" class="level4">
+<h4 class="anchored" data-anchor-id="filtering">Filtering:</h4>
+<p>Filter data by year, country, or region.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>filteredData <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2010</span> <span class="sc">&amp;</span> region <span class="sc">==</span> <span class="st">"Asia"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="example-1-renaming-columns-and-handling-missing-data" class="level2">
-<h2 class="anchored" data-anchor-id="example-1-renaming-columns-and-handling-missing-data">Example 1: Renaming Columns and Handling Missing Data</h2>
+<section id="selecting" class="level4">
+<h4 class="anchored" data-anchor-id="selecting">Selecting:</h4>
+<p>Select specific columns for analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>selectedData <span class="ot">&lt;-</span> filteredData <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, year, cases, population)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="mutating" class="level5">
+<h5 class="anchored" data-anchor-id="mutating">Mutating:</h5>
+<p>Create new columns, such as cases per 100,000 population.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mutatedData <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cases_per_100k =</span> cases <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">100000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="example-2-parsing-dates-and-creating-new-columns" class="level2">
-<h2 class="anchored" data-anchor-id="example-2-parsing-dates-and-creating-new-columns">Example 2: Parsing Dates and Creating New Columns</h2>
 </section>
-<section id="example-3-pivoting-data" class="level2">
-<h2 class="anchored" data-anchor-id="example-3-pivoting-data">Example 3: Pivoting Data</h2>
+<section id="summarizing" class="level4">
+<h4 class="anchored" data-anchor-id="summarizing">Summarizing:</h4>
+<p>Aggregate data by country, year, or region.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>summaryData <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_cases =</span> <span class="fu">sum</span>(cases),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_gdp_per_capita =</span> <span class="fu">mean</span>(gdp_per_capita, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="joining-combine-main-dataset-with-additional-data-based-on-the-country." class="level4">
+<h4 class="anchored" data-anchor-id="joining-combine-main-dataset-with-additional-data-based-on-the-country.">Joining: Combine main dataset with additional data based on the country.</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>joinedData <span class="ot">&lt;-</span> <span class="fu">left_join</span>(data, additionalData, <span class="at">by =</span> <span class="st">"country"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="combining-all-the-steps" class="level4">
+<h4 class="anchored" data-anchor-id="combining-all-the-steps">Combining all the steps</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combining the previous steps into one</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>wrangledData <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2010</span> <span class="sc">&amp;</span> region <span class="sc">==</span> <span class="st">"Asia"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, year, cases, population, gdp_per_capita) <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cases_per_100k =</span> cases <span class="sc">/</span> population <span class="sc">*</span> <span class="dv">100000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_cases =</span> <span class="fu">sum</span>(cases),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_cases_per_100k =</span> <span class="fu">mean</span>(cases_per_100k),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_gdp_per_capita =</span> <span class="fu">mean</span>(gdp_per_capita)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the first few rows of the datasets</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 9
+      id country     year population cases gdp_per_capita date       temperature
+   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;date&gt;           &lt;dbl&gt;
+ 1     1 Brazil      2010  593541736  1058         26999. 2007-03-06        24.5
+ 2     2 Brazil      2019  403702602  1005         45156. 2016-09-25        16.6
+ 3     3 South Afr…  2004  152478982   978         23855. 2003-10-17        12.2
+ 4     4 Canada      2013  273509617   975          7692. 2013-07-26         8.6
+ 5     5 France      2017  750013308   940         33309. 2018-07-18        11.3
+ 6     6 Germany     2008  516562857   979         16310. 2008-09-19        12.2
+ 7     7 UK          2000  842238583  1024         43762. 2002-11-16        25.9
+ 8     8 France      2006 1213707967   948          8134. 2019-02-04         7.2
+ 9     9 Australia   2014  345123425   985          -250. 2023-10-07        31.4
+10    10 South Afr…  2016  812777792   999         27090. 2022-11-20        13.3
+# ℹ 1 more variable: region &lt;chr&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wrangledData, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   country      total_cases avg_cases_per_100k avg_gdp_per_capita
+   &lt;chr&gt;              &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;
+ 1 Australia          12117              0.405             24856.
+ 2 Brazil              9850              0.863             29107.
+ 3 Canada              5920              0.113             28208.
+ 4 China               7860              0.382             24091.
+ 5 France              2030              0.374             21797.
+ 6 Germany             9030              0.205             28698.
+ 7 India              10965              0.245             28807.
+ 8 South Africa       12062              0.390             33886.
+ 9 UK                  6901              0.553             26565.
+10 USA                 8939              0.261             26458.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>cases)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1000.171</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(data<span class="sc">$</span>cases)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 900</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(data<span class="sc">$</span>cases)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1110</code></pre>
+</div>
+</div>
+</section>
+</section>
 </section>
 
 </main>

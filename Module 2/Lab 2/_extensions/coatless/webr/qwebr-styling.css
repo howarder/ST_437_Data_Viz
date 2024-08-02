@@ -19,48 +19,42 @@
 }
 
 .qwebr-editor {
-  border: 1px solid #D73F09;
   font-size: 16px !important;
   overflow: auto;
+  box-shadow: 0 6px 4px rgba(0, 0, 0, 0.1);
 }
+
+
 
 .qwebr-button-run {
+  font-size: 16px;  /* Updated font size */
   background-color: #EEEEEE;
-  border: 1px solid #d74009;
-  border-radius: 0.1rem;
-  display: inline-block;
-  font-weight: 600;
-  line-height: 1.5;
-  color: #000;
   text-align: center;
-  text-decoration: none;
-  -webkit-user-select: none;
-  padding: 0.375rem 0.75rem;
-  font-size: 1.1rem;
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  margin-bottom: 5px;
   cursor: pointer;
-
-  /* Enhanced styling */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.qwebr-button-run:hover {
-  color: #000;
-  background-color: #ffa07a; /* Lighter shade of #D73F09 */
-  border-color: #D73F09;
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  outline: none;
+  color: #000;  /* White text color */
+  border: none;
+  border-radius: 0.5rem;  /* Updated border-radius */
+  display: inline-block;
+  line-height: 1.5;
+  font-weight: 600;
+  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, transform 0.15s ease-in-out;
 }
 
 .qwebr-button-run:active {
-  background-color: #D73F09;
-  border-color: #B23000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
+  background-color: #D73F09 !important;  /* Your orange color */;
+  transform: translateY(4px);  /* Button moves down when clicked */
 }
 
-.qwebr-button-run:disabled,.qwebr-button-run.disabled,fieldset:disabled .qwebr-button-run {
+.qwebr-button-run:disabled,
+.qwebr-button-run.disabled,
+fieldset:disabled .qwebr-button-run {
   pointer-events: none;
-  opacity: .65
+  opacity: .65;
 }
+
+
 
 /* Custom styling for RevealJS Presentations*/
 
