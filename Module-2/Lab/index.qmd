@@ -7,11 +7,12 @@ format:
     OSUstyle-html:
         toc: true
         toc-location: right
+        toc-depth: 5
 execute: 
   echo: true
   warning: false
 webr:
-  packages: ['ggplot2', 'readr', 'dplyr', 'lubridate', 'tidyr'] # Install R packages on document open
+  packages: ['lubridate', 'ggplot2', 'readr', 'dplyr', 'lubridate', 'tidyr'] # Install R packages on document open
   show-startup-message: false    # Disable displaying status of webR initialization
 filters:
 - webr
@@ -54,9 +55,8 @@ Tidy data is a structured format that aligns the organization of a dataset with 
 - **Each observation has its own row:** Every row captures a single observation or data entry.
 - **Each cell contains a single value:** Each cell holds one distinct piece of information for a particular variable and observation.
 
-Creating a large dataset that can be used across multiple examples requires a dataset with a variety of columns and data types. Below is a script to generate a synthetic dataset in R that can be used for filtering, selecting, mutating, summarizing, and joining examples.
 
-## Data wrangling 101
+## Getting stated with tidying data
 
 First, ensure you have the necessary packages installed and loaded. We will use the `dplyr`, `lubridate`, `readr`, `ggplot2`, and `tidyr` packages for our examples.
 ```{r}
@@ -65,6 +65,7 @@ library(dplyr)
 library(lubridate)
 library(tidyr)
 library(readr)
+library(lubridate)
 ```
 
 ### Download the Data
@@ -120,13 +121,13 @@ head(countriesExtraDs, 5)
 - **Summarizing**: Aggregate data by country, year, or region to find totals and averages.
 - **Joining**: Combine the main dataset with the additional data based on country.
 
-### Diving into Data Wrangling
+## Diving into Data Wrangling
 
-#### Filtering
+### Filtering
 
-Filtering is essential for narrowing down datasets to the most relevant information, making patterns easier to identify. Here are updated scenarios for your students to practice filtering.
+Filtering is essential for narrowing down datasets to the most relevant information, making patterns easier to identify.
 
-##### Scenario 1:
+#### Scenario 1:
 You are tasked with visualizing trends in life expectancy in Asian countries between 2010 and 2020.
 
 #### Filtering Process
@@ -140,7 +141,7 @@ head(filteredData, 5)
 #### Visualization
 ```{webr-r}
 ggplot(filteredData, aes(x = factor(year), y = life_expectancy, color = country)) +
-  geom_line(size = 1) +
+  geom_point(size = 2) +
   labs(title = "Life Expectancy Trends in Asia (2010-2020)",
        x = "Year", y = "Life Expectancy") +
   theme_minimal()
@@ -150,7 +151,7 @@ ggplot(filteredData, aes(x = factor(year), y = life_expectancy, color = country)
 
 By focusing on specific countries and years, filtering allows for more targeted and relevant visualizations, making it easier to analyze trends and patterns specific to the context.
 
-##### Scenario 2:
+#### Scenario 2:
 Analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.
 
 #### Filtering Process
@@ -165,7 +166,7 @@ head(filteredData, 5)
 #### Visualization
 ```{webr-r}
 ggplot(filteredData, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
-  geom_point(size = 3) +
+  geom_point(size = 2) +
   geom_smooth(method = "lm") +
   labs(title = "GDP per Capita vs. Life Expectancy in Europe (2015-2020)",
        x = "GDP per Capita", y = "Life Expectancy") +
@@ -176,7 +177,7 @@ ggplot(filteredData, aes(x = gdp_per_capita, y = life_expectancy, color = countr
 
 Filtering based on economic indicators allows for focused analysis on the relationship between wealth and life expectancy, removing noise from countries with different economic conditions.
 
-##### Filtering Challenges
+#### Filtering Challenges
 1. **Population Size in Africa**:
    - **Filter**: Only countries from Africa where the population exceeds 50 million.
    - **Purpose**: Isolate data for large African nations to analyze trends specific to highly populated areas.
@@ -197,7 +198,7 @@ Filtering based on economic indicators allows for focused analysis on the relati
    - **Filter**: Remove any entries with missing `gdp_per_capita` values for the years 2010-2020.
    - **Purpose**: Ensure clean data for economic analysis, removing incomplete records that could skew results.
 
-#### Selecting
+### Selecting
 
 Selecting allows you to focus on specific columns relevant to your analysis.
 
@@ -208,14 +209,14 @@ selectedData <- filteredData %>%
 head(selectedData, 5)
 ```
 
-##### Selecting Challenges
+#### Selecting Challenges
 1. **Select columns** related to economic indicators (e.g., `country`, `gdp_per_capita`, `population`) for further analysis.
 2. **Create a dataset** with only the `year`, `life_expectancy`, and `temperature` columns for all countries and show the first 5 rows.
 3. **Choose columns** that exclude any geographical information and check the first 10 rows.
 4. **Select and rename** the `country` and `population` columns to `nation` and `pop_size`, respectively.
 5. **Create a new dataset** with only the `year`, `population`, and a newly created column, `population_in_millions` (which should be calculated as `population / 1e6`).
 
-#### Mutating
+### Mutating
 
 Mutating helps create new columns based on existing data.
 
@@ -226,14 +227,14 @@ mutatedData <- countriesDs %>%
 head(mutatedData, 5)
 ```
 
-##### Mutating Challenges
+#### Mutating Challenges
 1. **Create a new column** called `gdp_total` that multiplies `gdp_per_capita` by `population`.
 2. **Add a new column** that indicates whether a country's GDP per capita is above or below a certain threshold (e.g., $20,000).
 3. **Mutate the `temperature` column** to create a new column, `temperature_f`, that converts Celsius to Fahrenheit.
 4. **Create a `population_density` column** by dividing `population` by a given area (assuming you have area data).
 5. **Generate a column** that calculates the ratio of birth rate to life expectancy for each country.
 
-#### Summarizing
+### Summarizing
 
 Summarizing aggregates data by country, year, or region to find totals and averages.
 
@@ -248,14 +249,99 @@ summaryData <- countriesDs %>%
 head(summaryData, 5)
 ```
 
-##### Summarizing Challenges
+#### Summarizing Challenges
 1. **Summarize the dataset** by finding the average temperature for each region.
 2. **Aggregate the data** to find the total population and average life expectancy for each continent.
 3. **Group the data** by country and summarize to find the maximum and minimum GDP per capita for each country.
 4. **Summarize by year** to find the total population and average birth rate each year.
 5. **Create a summary** that calculates the total population and average GDP per capita for countries classified as "First World."
 
-#### Joining
+
+### Handling Dates
+
+In some cases, it might be necessary to convert a `year` column from a numeric format (double) into a proper date format for time series analysis or plotting purposes. Here’s how you can do that in R using the `lubridate` package.
+
+#### Converting `year` to a Date
+
+Let's convert the `year` column into a date format, setting it as January 1st of that year.
+
+```{webr-r}
+# Ensure the lubridate package is loaded
+
+# Convert the year column to a date format (January 1st of each year)
+countriesDs <- countriesDs %>%
+  mutate(year_date = ymd(paste0(year, "-01-01")))
+
+# Check the first few rows to see the new column
+head(countriesDs, 5)
+```
+
+#### Explanation:
+- **`paste0(year, "-01-01")`**: Combines the year with the string "-01-01" to create a date string like "2010-01-01".
+- **`ymd()`**: Converts the resulting string into a date object in the "Year-Month-Day" format.
+
+This creates a new column, `year_date`, which is now in the proper date format.
+
+#### Converting Year to Date Challenges
+
+1. **Convert year to end of year date**:
+   - **Task**: Convert the `year` column to a date format, but set it as December 31st of that year.
+   - **Purpose**: Useful for representing data that summarizes annual results.
+
+   ```{webr-r}
+   countriesDs <- countriesDs %>%
+     mutate(year_end_date = ymd(paste0(year, "-12-31")))
+
+   head(countriesDs, 5)
+   ```
+
+2. **Create a quarterly date**:
+   - **Task**: Convert the `year` column into a date representing the first quarter (e.g., "2010-03-31").
+   - **Purpose**: Useful for quarterly analysis.
+
+   ```{webr-r}
+   countriesDs <- countriesDs %>%
+     mutate(quarter_date = ymd(paste0(year, "-03-31")))
+
+   head(countriesDs, 5)
+   ```
+
+3. **Mid-year date conversion**:
+   - **Task**: Convert the `year` column to a date format, setting it as June 30th of each year.
+   - **Purpose**: Represents mid-year data points.
+
+   ```{webr-r}
+   countriesDs <- countriesDs %>%
+     mutate(mid_year_date = ymd(paste0(year, "-06-30")))
+
+   head(countriesDs, 5)
+   ```
+
+4. **Use year as a dynamic time period**:
+   - **Task**: Convert the `year` column to represent the last day of a chosen month (e.g., November).
+   - **Purpose**: Allows for flexibility depending on the analysis context.
+
+   ```{webr-r}
+   chosen_month <- "11"
+   countriesDs <- countriesDs %>%
+     mutate(chosen_month_date = ymd(paste0(year, "-", chosen_month, "-30")))
+
+   head(countriesDs, 5)
+   ```
+
+5. **Convert year to fiscal year start date**:
+   - **Task**: Convert the `year` column into a date representing the start of the fiscal year (e.g., April 1st).
+   - **Purpose**: Useful for financial and budgetary analyses.
+
+   ```{webr-r}
+   countriesDs <- countriesDs %>%
+     mutate(fiscal_year_start = ymd(paste0(year, "-04-01")))
+
+   head(countriesDs, 5)
+   ```
+
+
+### Joining
 
 Joining combines data from the main dataset with additional data.
 
@@ -265,26 +351,92 @@ joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
 head(joinedData, 5)
 ```
 
-##### Joining Challenges
+#### Joining Challenges
 1. **Perform a left join** on the main dataset and an additional dataset that contains information on urbanization rates by country.
 2. **Join the datasets** to add `continent` and then filter for countries in a specific continent.
 3. **Create a new dataset** by performing an inner join on `countriesDs` and `countriesExtraDs`, then analyze the countries present in both datasets.
 4. **Perform a full join** to combine the datasets and identify countries that are missing from one dataset but present in the other.
 5. **Use an anti-join** to find the countries in the main dataset that do not have corresponding information in the additional dataset.
 
-#### Combining All the Steps
+
+## Mastering Data Wrangling for Stunning Visualizations
+
+We’ll combine all the data wrangling techniques you’ve learned—`filtering`, `selecting`, `mutating`, `summarizing`, and `joining`—to perform a detailed analysis and produce a polished, publication-ready visualization.
+
+### Creating a Professional-Quality Visualization
+
+Here’s a step-by-step guide to transform and visualize data from 10 countries in the dataset:
 
 ```{webr-r}
-wrangledData <- countriesDs |>
-  filter(year >= 2010 & region == "Asia") |>
-  select(country, year, population, gdp_per_capita, life_expectancy) |>
-  mutate(gdp_total = gdp_per_capita * population) |>
-  group_by(country) |>
-  summarize(
-    total_population = sum(population),
-    avg_life_expectancy = mean(life_expectancy),
-    avg_gdp_per_capita = mean(gdp_per_capita)
+# Step 1: Filter the dataset for Asian and European countries from 2020 to 2023
+filteredData <- countriesDs %>%
+  filter(year >= 2020 & year <= 2023)
+
+# Step 2: Join with the additional dataset to get continent information
+joinedData <- filteredData %>%
+  left_join(countriesExtraDs, by = "country")
+
+# Step 3: Select relevant columns for analysis
+selectedData <- joinedData %>%
+  select(country, year, population, gdp_per_capita, life_expectancy, birth_rate, continent)
+
+# Step 4: Mutate the data to create new metrics
+mutatedData <- selectedData %>%
+  mutate(
+    gdp_total = gdp_per_capita * population,
+    year_date = ymd(paste0(year, "-", ifelse(runif(n()) > 0.5, "06-30", "12-31")))
   )
 
-head(wrangledData, 5)
+# Step 5: Summarize the data to get average life expectancy, GDP per capita, and total population by country and continent
+summaryData <- mutatedData %>%
+  group_by(continent, country) %>%
+  summarize(
+    avg_life_expectancy = mean(life_expectancy, na.rm = TRUE),
+    avg_gdp_per_capita = mean(gdp_per_capita, na.rm = TRUE),
+    total_population_millions = sum(population, na.rm = TRUE) / 1e6  # Convert population to millions
+  ) %>%
+  ungroup()
+
+# Step 6: Create a publication-ready visualization
+ggplot(summaryData, aes(
+  x = avg_gdp_per_capita, 
+  y = avg_life_expectancy, 
+  size = total_population_millions,  # Use population in millions for size mapping
+  color = country
+)) +
+  geom_point(alpha = 0.4) +
+  scale_y_continuous(limits = c(min(summaryData$avg_life_expectancy) - 1, 66)) +  # Adjust y-axis scale to go up to 66
+  scale_size_continuous(
+    range = c(5, 15),  # Adjust the bubble size range
+    name = "Total Population (Millions)", 
+    breaks = c(50, 200, 500, 1000, 1500),  # Adjust based on realistic population ranges in millions
+    labels = c("50M", "200M", "500M", "1B", "1.5B")  # Correct labels in millions
+  ) +
+  scale_color_viridis_d(guide = "none") +  # Hide the color legend
+  labs(
+    title = "Relationship Between GDP per Capita and Life Expectancy Across Countries",
+    subtitle = "Bubble size represents total population across 2020-2023",
+    x = "Average GDP per Capita (USD)",
+    y = "Average Life Expectancy (Years)",
+    caption = "Data Source: Synthetic Dataset"
+  ) +
+  geom_text(aes(label = country), hjust = 0.5, size = 3, color = "black") + # Labels centered
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Georgia"),
+    plot.title = element_text(size = 11, face = "bold"), 
+    plot.subtitle = element_text(size = 9, face = "italic"), 
+    axis.title = element_text(size = 8),
+    legend.title = element_text(size = 8), 
+    legend.text = element_text(size = 8), 
+    legend.position = "bottom"
+  )
 ```
+
+### Visualization Review
+
+**Visualization**: The final product is a bubble plot that visually represents the relationship between GDP per capita (a key economic indicator) and life expectancy across the 10 countries. Each bubble corresponds to a country, with the size of the bubble reflecting its total population. This allows you to see not just how wealthy and healthy each country is, but also how large it is in terms of population.
+
+**Publication-Ready**: The plot is designed to be clean, simple, and professional. We’ve used specific text styles for titles and subtitles to ensure clarity, and selected color schemes that are accessible to everyone, including those who are colorblind. This makes the visualization suitable for both academic presentations and professional reports.
+
+By mastering this approach, you'll see how various data wrangling techniques can be combined to create a powerful and insightful visualization. This process transforms raw data into a compelling story that is both informative and visually appealing, whether you’re working on a class project or preparing a professional report.

@@ -184,7 +184,7 @@ fieldset:disabled .qwebr-button-run {
 const initializeWebRTimerStart = performance.now();
 
 // Determine if we need to install R packages
-var installRPackagesList = ['ggplot2', 'readr', 'dplyr', 'lubridate', 'tidyr'];
+var installRPackagesList = ['lubridate', 'ggplot2', 'readr', 'dplyr', 'lubridate', 'tidyr'];
 // Check to see if we have an empty array, if we do set to skip the installation.
 var setupRPackages = !(installRPackagesList.indexOf("") !== -1);
 var autoloadRPackages = true;
@@ -715,12 +715,57 @@ globalThis.qwebrCreateNonInteractiveSetupElement = function(qwebrCounter) {
   <li><a href="#what-is-data-wrangling" id="toc-what-is-data-wrangling" class="nav-link" data-scroll-target="#what-is-data-wrangling">What is Data Wrangling?</a></li>
   <li><a href="#what-causes-untidy-data" id="toc-what-causes-untidy-data" class="nav-link" data-scroll-target="#what-causes-untidy-data">What Causes Untidy Data?</a></li>
   <li><a href="#tidy-data" id="toc-tidy-data" class="nav-link" data-scroll-target="#tidy-data">Tidy Data</a></li>
-  <li><a href="#data-wrangling-101" id="toc-data-wrangling-101" class="nav-link" data-scroll-target="#data-wrangling-101">Data wrangling 101</a>
-  <ul class="collapse">
+  <li><a href="#getting-stated-with-tidying-data" id="toc-getting-stated-with-tidying-data" class="nav-link" data-scroll-target="#getting-stated-with-tidying-data">Getting stated with tidying data</a>
+  <ul>
   <li><a href="#download-the-data" id="toc-download-the-data" class="nav-link" data-scroll-target="#download-the-data">Download the Data</a></li>
-  <li><a href="#verify-dataset-with-head" id="toc-verify-dataset-with-head" class="nav-link" data-scroll-target="#verify-dataset-with-head">Verify Dataset with <code>head()</code></a></li>
+  <li><a href="#verify-dataset-with-head" id="toc-verify-dataset-with-head" class="nav-link" data-scroll-target="#verify-dataset-with-head">Verify Dataset with <code>head()</code></a>
+  <ul>
+  <li><a href="#description-of-the-dataset" id="toc-description-of-the-dataset" class="nav-link" data-scroll-target="#description-of-the-dataset">Description of the Dataset</a></li>
+  <li><a href="#additional-dataset-countriesextra.csv" id="toc-additional-dataset-countriesextra.csv" class="nav-link" data-scroll-target="#additional-dataset-countriesextra.csv">Additional Dataset (<code>countriesExtra.csv</code>)</a></li>
+  </ul></li>
   <li><a href="#important-tidyverse-functions" id="toc-important-tidyverse-functions" class="nav-link" data-scroll-target="#important-tidyverse-functions">Important Tidyverse Functions</a></li>
-  <li><a href="#diving-into-data-wrangling" id="toc-diving-into-data-wrangling" class="nav-link" data-scroll-target="#diving-into-data-wrangling">Diving into Data Wrangling</a></li>
+  </ul></li>
+  <li><a href="#diving-into-data-wrangling" id="toc-diving-into-data-wrangling" class="nav-link" data-scroll-target="#diving-into-data-wrangling">Diving into Data Wrangling</a>
+  <ul>
+  <li><a href="#filtering" id="toc-filtering" class="nav-link" data-scroll-target="#filtering">Filtering</a>
+  <ul>
+  <li><a href="#scenario-1" id="toc-scenario-1" class="nav-link" data-scroll-target="#scenario-1">Scenario 1:</a></li>
+  <li><a href="#filtering-process" id="toc-filtering-process" class="nav-link" data-scroll-target="#filtering-process">Filtering Process</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
+  <li><a href="#why-filtering-helps" id="toc-why-filtering-helps" class="nav-link" data-scroll-target="#why-filtering-helps">Why Filtering Helps</a></li>
+  <li><a href="#scenario-2" id="toc-scenario-2" class="nav-link" data-scroll-target="#scenario-2">Scenario 2:</a></li>
+  <li><a href="#filtering-process-1" id="toc-filtering-process-1" class="nav-link" data-scroll-target="#filtering-process-1">Filtering Process</a></li>
+  <li><a href="#visualization-1" id="toc-visualization-1" class="nav-link" data-scroll-target="#visualization-1">Visualization</a></li>
+  <li><a href="#why-filtering-helps-1" id="toc-why-filtering-helps-1" class="nav-link" data-scroll-target="#why-filtering-helps-1">Why Filtering Helps</a></li>
+  <li><a href="#filtering-challenges" id="toc-filtering-challenges" class="nav-link" data-scroll-target="#filtering-challenges">Filtering Challenges</a></li>
+  </ul></li>
+  <li><a href="#selecting" id="toc-selecting" class="nav-link" data-scroll-target="#selecting">Selecting</a>
+  <ul>
+  <li><a href="#selecting-challenges" id="toc-selecting-challenges" class="nav-link" data-scroll-target="#selecting-challenges">Selecting Challenges</a></li>
+  </ul></li>
+  <li><a href="#mutating" id="toc-mutating" class="nav-link" data-scroll-target="#mutating">Mutating</a>
+  <ul>
+  <li><a href="#mutating-challenges" id="toc-mutating-challenges" class="nav-link" data-scroll-target="#mutating-challenges">Mutating Challenges</a></li>
+  </ul></li>
+  <li><a href="#summarizing" id="toc-summarizing" class="nav-link" data-scroll-target="#summarizing">Summarizing</a>
+  <ul>
+  <li><a href="#summarizing-challenges" id="toc-summarizing-challenges" class="nav-link" data-scroll-target="#summarizing-challenges">Summarizing Challenges</a></li>
+  </ul></li>
+  <li><a href="#handling-dates" id="toc-handling-dates" class="nav-link" data-scroll-target="#handling-dates">Handling Dates</a>
+  <ul>
+  <li><a href="#converting-year-to-a-date" id="toc-converting-year-to-a-date" class="nav-link" data-scroll-target="#converting-year-to-a-date">Converting <code>year</code> to a Date</a></li>
+  <li><a href="#explanation" id="toc-explanation" class="nav-link" data-scroll-target="#explanation">Explanation:</a></li>
+  <li><a href="#converting-year-to-date-challenges" id="toc-converting-year-to-date-challenges" class="nav-link" data-scroll-target="#converting-year-to-date-challenges">Converting Year to Date Challenges</a></li>
+  </ul></li>
+  <li><a href="#joining" id="toc-joining" class="nav-link" data-scroll-target="#joining">Joining</a>
+  <ul>
+  <li><a href="#joining-challenges" id="toc-joining-challenges" class="nav-link" data-scroll-target="#joining-challenges">Joining Challenges</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#mastering-data-wrangling-for-stunning-visualizations" id="toc-mastering-data-wrangling-for-stunning-visualizations" class="nav-link" data-scroll-target="#mastering-data-wrangling-for-stunning-visualizations">Mastering Data Wrangling for Stunning Visualizations</a>
+  <ul>
+  <li><a href="#creating-a-professional-quality-visualization" id="toc-creating-a-professional-quality-visualization" class="nav-link" data-scroll-target="#creating-a-professional-quality-visualization">Creating a Professional-Quality Visualization</a></li>
+  <li><a href="#visualization-review" id="toc-visualization-review" class="nav-link" data-scroll-target="#visualization-review">Visualization Review</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -892,17 +937,17 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 <li><strong>Each observation has its own row:</strong> Every row captures a single observation or data entry.</li>
 <li><strong>Each cell contains a single value:</strong> Each cell holds one distinct piece of information for a particular variable and observation.</li>
 </ul>
-<p>Creating a large dataset that can be used across multiple examples requires a dataset with a variety of columns and data types. Below is a script to generate a synthetic dataset in R that can be used for filtering, selecting, mutating, summarizing, and joining examples.</p>
 </section>
-<section id="data-wrangling-101" class="level2">
-<h2 class="anchored" data-anchor-id="data-wrangling-101">Data wrangling 101</h2>
+<section id="getting-stated-with-tidying-data" class="level2">
+<h2 class="anchored" data-anchor-id="getting-stated-with-tidying-data">Getting stated with tidying data</h2>
 <p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>ggplot2</code>, and <code>tidyr</code> packages for our examples.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="download-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="download-the-data">Download the Data</h3>
@@ -997,15 +1042,15 @@ head(countriesExtraDs, 5)`,
 <li><strong>Joining</strong>: Combine the main dataset with the additional data based on country.</li>
 </ul>
 </section>
-<section id="diving-into-data-wrangling" class="level3">
-<h3 class="anchored" data-anchor-id="diving-into-data-wrangling">Diving into Data Wrangling</h3>
-<section id="filtering" class="level4">
-<h4 class="anchored" data-anchor-id="filtering">Filtering</h4>
-<p>Filtering is essential for narrowing down datasets to the most relevant information, making patterns easier to identify. Here are updated scenarios for your students to practice filtering.</p>
-<section id="scenario-1" class="level5">
-<h5 class="anchored" data-anchor-id="scenario-1">Scenario 1:</h5>
-<p>You are tasked with visualizing trends in life expectancy in Asian countries between 2010 and 2020.</p>
 </section>
+<section id="diving-into-data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="diving-into-data-wrangling">Diving into Data Wrangling</h2>
+<section id="filtering" class="level3">
+<h3 class="anchored" data-anchor-id="filtering">Filtering</h3>
+<p>Filtering is essential for narrowing down datasets to the most relevant information, making patterns easier to identify.</p>
+<section id="scenario-1" class="level4">
+<h4 class="anchored" data-anchor-id="scenario-1">Scenario 1:</h4>
+<p>You are tasked with visualizing trends in life expectancy in Asian countries between 2010 and 2020.</p>
 </section>
 <section id="filtering-process" class="level4">
 <h4 class="anchored" data-anchor-id="filtering-process">Filtering Process</h4>
@@ -1050,7 +1095,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `ggplot(filteredData, aes(x = factor(year), y = life_expectancy, color = country)) +
-  geom_line(size = 1) +
+  geom_point(size = 2) +
   labs(title = "Life Expectancy Trends in Asia (2010-2020)",
        x = "Year", y = "Life Expectancy") +
   theme_minimal()`, 
@@ -1061,10 +1106,10 @@ qwebrCreateMonacoEditorInstance(
 <section id="why-filtering-helps" class="level4">
 <h4 class="anchored" data-anchor-id="why-filtering-helps">Why Filtering Helps</h4>
 <p>By focusing on specific countries and years, filtering allows for more targeted and relevant visualizations, making it easier to analyze trends and patterns specific to the context.</p>
-<section id="scenario-2" class="level5">
-<h5 class="anchored" data-anchor-id="scenario-2">Scenario 2:</h5>
-<p>Analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.</p>
 </section>
+<section id="scenario-2" class="level4">
+<h4 class="anchored" data-anchor-id="scenario-2">Scenario 2:</h4>
+<p>Analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.</p>
 </section>
 <section id="filtering-process-1" class="level4">
 <h4 class="anchored" data-anchor-id="filtering-process-1">Filtering Process</h4>
@@ -1110,7 +1155,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `ggplot(filteredData, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
-  geom_point(size = 3) +
+  geom_point(size = 2) +
   geom_smooth(method = "lm") +
   labs(title = "GDP per Capita vs. Life Expectancy in Europe (2015-2020)",
        x = "GDP per Capita", y = "Life Expectancy") +
@@ -1122,8 +1167,9 @@ qwebrCreateMonacoEditorInstance(
 <section id="why-filtering-helps-1" class="level4">
 <h4 class="anchored" data-anchor-id="why-filtering-helps-1">Why Filtering Helps</h4>
 <p>Filtering based on economic indicators allows for focused analysis on the relationship between wealth and life expectancy, removing noise from countries with different economic conditions.</p>
-<section id="filtering-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="filtering-challenges">Filtering Challenges</h5>
+</section>
+<section id="filtering-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-challenges">Filtering Challenges</h4>
 <ol type="1">
 <li><strong>Population Size in Africa</strong>:
 <ul>
@@ -1153,8 +1199,8 @@ qwebrCreateMonacoEditorInstance(
 </ol>
 </section>
 </section>
-<section id="selecting" class="level4">
-<h4 class="anchored" data-anchor-id="selecting">Selecting</h4>
+<section id="selecting" class="level3">
+<h3 class="anchored" data-anchor-id="selecting">Selecting</h3>
 <p>Selecting allows you to focus on specific columns relevant to your analysis.</p>
 <div id="qwebr-insertion-location-7"></div>
 <script type="module">
@@ -1178,8 +1224,8 @@ head(selectedData, 5)`,
   7);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="selecting-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="selecting-challenges">Selecting Challenges</h5>
+<section id="selecting-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="selecting-challenges">Selecting Challenges</h4>
 <ol type="1">
 <li><strong>Select columns</strong> related to economic indicators (e.g., <code>country</code>, <code>gdp_per_capita</code>, <code>population</code>) for further analysis.</li>
 <li><strong>Create a dataset</strong> with only the <code>year</code>, <code>life_expectancy</code>, and <code>temperature</code> columns for all countries and show the first 5 rows.</li>
@@ -1189,8 +1235,8 @@ head(selectedData, 5)`,
 </ol>
 </section>
 </section>
-<section id="mutating" class="level4">
-<h4 class="anchored" data-anchor-id="mutating">Mutating</h4>
+<section id="mutating" class="level3">
+<h3 class="anchored" data-anchor-id="mutating">Mutating</h3>
 <p>Mutating helps create new columns based on existing data.</p>
 <div id="qwebr-insertion-location-8"></div>
 <script type="module">
@@ -1214,8 +1260,8 @@ head(mutatedData, 5)`,
   8);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="mutating-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="mutating-challenges">Mutating Challenges</h5>
+<section id="mutating-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="mutating-challenges">Mutating Challenges</h4>
 <ol type="1">
 <li><strong>Create a new column</strong> called <code>gdp_total</code> that multiplies <code>gdp_per_capita</code> by <code>population</code>.</li>
 <li><strong>Add a new column</strong> that indicates whether a country’s GDP per capita is above or below a certain threshold (e.g., $20,000).</li>
@@ -1225,8 +1271,8 @@ head(mutatedData, 5)`,
 </ol>
 </section>
 </section>
-<section id="summarizing" class="level4">
-<h4 class="anchored" data-anchor-id="summarizing">Summarizing</h4>
+<section id="summarizing" class="level3">
+<h3 class="anchored" data-anchor-id="summarizing">Summarizing</h3>
 <p>Summarizing aggregates data by country, year, or region to find totals and averages.</p>
 <div id="qwebr-insertion-location-9"></div>
 <script type="module">
@@ -1254,8 +1300,8 @@ head(summaryData, 5)`,
   9);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="summarizing-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="summarizing-challenges">Summarizing Challenges</h5>
+<section id="summarizing-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="summarizing-challenges">Summarizing Challenges</h4>
 <ol type="1">
 <li><strong>Summarize the dataset</strong> by finding the average temperature for each region.</li>
 <li><strong>Aggregate the data</strong> to find the total population and average life expectancy for each continent.</li>
@@ -1265,9 +1311,12 @@ head(summaryData, 5)`,
 </ol>
 </section>
 </section>
-<section id="joining" class="level4">
-<h4 class="anchored" data-anchor-id="joining">Joining</h4>
-<p>Joining combines data from the main dataset with additional data.</p>
+<section id="handling-dates" class="level3">
+<h3 class="anchored" data-anchor-id="handling-dates">Handling Dates</h3>
+<p>In some cases, it might be necessary to convert a <code>year</code> column from a numeric format (double) into a proper date format for time series analysis or plotting purposes. Here’s how you can do that in R using the <code>lubridate</code> package.</p>
+<section id="converting-year-to-a-date" class="level4">
+<h4 class="anchored" data-anchor-id="converting-year-to-a-date">Converting <code>year</code> to a Date</h4>
+<p>Let’s convert the <code>year</code> column into a date format, setting it as January 1st of that year.</p>
 <div id="qwebr-insertion-location-10"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1283,25 +1332,34 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
+  `# Ensure the lubridate package is loaded
 
-head(joinedData, 5)`, 
+# Convert the year column to a date format (January 1st of each year)
+countriesDs <- countriesDs %>%
+  mutate(year_date = ymd(paste0(year, "-01-01")))
+
+# Check the first few rows to see the new column
+head(countriesDs, 5)`, 
   10);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="joining-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="joining-challenges">Joining Challenges</h5>
+</section>
+<section id="explanation" class="level4">
+<h4 class="anchored" data-anchor-id="explanation">Explanation:</h4>
+<ul>
+<li><strong><code>paste0(year, "-01-01")</code></strong>: Combines the year with the string “-01-01” to create a date string like “2010-01-01”.</li>
+<li><strong><code>ymd()</code></strong>: Converts the resulting string into a date object in the “Year-Month-Day” format.</li>
+</ul>
+<p>This creates a new column, <code>year_date</code>, which is now in the proper date format.</p>
+</section>
+<section id="converting-year-to-date-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="converting-year-to-date-challenges">Converting Year to Date Challenges</h4>
 <ol type="1">
-<li><strong>Perform a left join</strong> on the main dataset and an additional dataset that contains information on urbanization rates by country.</li>
-<li><strong>Join the datasets</strong> to add <code>continent</code> and then filter for countries in a specific continent.</li>
-<li><strong>Create a new dataset</strong> by performing an inner join on <code>countriesDs</code> and <code>countriesExtraDs</code>, then analyze the countries present in both datasets.</li>
-<li><strong>Perform a full join</strong> to combine the datasets and identify countries that are missing from one dataset but present in the other.</li>
-<li><strong>Use an anti-join</strong> to find the countries in the main dataset that do not have corresponding information in the additional dataset.</li>
-</ol>
-</section>
-</section>
-<section id="combining-all-the-steps" class="level4">
-<h4 class="anchored" data-anchor-id="combining-all-the-steps">Combining All the Steps</h4>
+<li><strong>Convert year to end of year date</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, but set it as December 31st of that year.</li>
+<li><strong>Purpose</strong>: Useful for representing data that summarizes annual results.</li>
+</ul>
 <div id="qwebr-insertion-location-11"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1317,22 +1375,254 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `wrangledData <- countriesDs |>
-  filter(year >= 2010 & region == "Asia") |>
-  select(country, year, population, gdp_per_capita, life_expectancy) |>
-  mutate(gdp_total = gdp_per_capita * population) |>
-  group_by(country) |>
-  summarize(
-    total_population = sum(population),
-    avg_life_expectancy = mean(life_expectancy),
-    avg_gdp_per_capita = mean(gdp_per_capita)
+  `countriesDs <- countriesDs %>%
+  mutate(year_end_date = ymd(paste0(year, "-12-31")))
+
+head(countriesDs, 5)`, 
+  11);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><strong>Create a quarterly date</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the first quarter (e.g., “2010-03-31”).</li>
+<li><strong>Purpose</strong>: Useful for quarterly analysis.</li>
+</ul>
+<div id="qwebr-insertion-location-12"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-12");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    12
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs %>%
+  mutate(quarter_date = ymd(paste0(year, "-03-31")))
+
+head(countriesDs, 5)`, 
+  12);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><strong>Mid-year date conversion</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, setting it as June 30th of each year.</li>
+<li><strong>Purpose</strong>: Represents mid-year data points.</li>
+</ul>
+<div id="qwebr-insertion-location-13"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-13");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    13
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs %>%
+  mutate(mid_year_date = ymd(paste0(year, "-06-30")))
+
+head(countriesDs, 5)`, 
+  13);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><strong>Use year as a dynamic time period</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to represent the last day of a chosen month (e.g., November).</li>
+<li><strong>Purpose</strong>: Allows for flexibility depending on the analysis context.</li>
+</ul>
+<div id="qwebr-insertion-location-14"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-14");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    14
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `chosen_month <- "11"
+countriesDs <- countriesDs %>%
+  mutate(chosen_month_date = ymd(paste0(year, "-", chosen_month, "-30")))
+
+head(countriesDs, 5)`, 
+  14);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><strong>Convert year to fiscal year start date</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the start of the fiscal year (e.g., April 1st).</li>
+<li><strong>Purpose</strong>: Useful for financial and budgetary analyses.</li>
+</ul>
+<div id="qwebr-insertion-location-15"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-15");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    15
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs %>%
+  mutate(fiscal_year_start = ymd(paste0(year, "-04-01")))
+
+head(countriesDs, 5)`, 
+  15);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+</ol>
+</section>
+</section>
+<section id="joining" class="level3">
+<h3 class="anchored" data-anchor-id="joining">Joining</h3>
+<p>Joining combines data from the main dataset with additional data.</p>
+<div id="qwebr-insertion-location-16"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-16");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    16
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
+
+head(joinedData, 5)`, 
+  16);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="joining-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="joining-challenges">Joining Challenges</h4>
+<ol type="1">
+<li><strong>Perform a left join</strong> on the main dataset and an additional dataset that contains information on urbanization rates by country.</li>
+<li><strong>Join the datasets</strong> to add <code>continent</code> and then filter for countries in a specific continent.</li>
+<li><strong>Create a new dataset</strong> by performing an inner join on <code>countriesDs</code> and <code>countriesExtraDs</code>, then analyze the countries present in both datasets.</li>
+<li><strong>Perform a full join</strong> to combine the datasets and identify countries that are missing from one dataset but present in the other.</li>
+<li><strong>Use an anti-join</strong> to find the countries in the main dataset that do not have corresponding information in the additional dataset.</li>
+</ol>
+</section>
+</section>
+</section>
+<section id="mastering-data-wrangling-for-stunning-visualizations" class="level2">
+<h2 class="anchored" data-anchor-id="mastering-data-wrangling-for-stunning-visualizations">Mastering Data Wrangling for Stunning Visualizations</h2>
+<p>We’ll combine all the data wrangling techniques you’ve learned—<code>filtering</code>, <code>selecting</code>, <code>mutating</code>, <code>summarizing</code>, and <code>joining</code>—to perform a detailed analysis and produce a polished, publication-ready visualization.</p>
+<section id="creating-a-professional-quality-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="creating-a-professional-quality-visualization">Creating a Professional-Quality Visualization</h3>
+<p>Here’s a step-by-step guide to transform and visualize data from 10 countries in the dataset:</p>
+<div id="qwebr-insertion-location-17"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-17");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    17
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Step 1: Filter the dataset for Asian and European countries from 2020 to 2023
+filteredData <- countriesDs %>%
+  filter(year >= 2020 & year <= 2023)
+
+# Step 2: Join with the additional dataset to get continent information
+joinedData <- filteredData %>%
+  left_join(countriesExtraDs, by = "country")
+
+# Step 3: Select relevant columns for analysis
+selectedData <- joinedData %>%
+  select(country, year, population, gdp_per_capita, life_expectancy, birth_rate, continent)
+
+# Step 4: Mutate the data to create new metrics
+mutatedData <- selectedData %>%
+  mutate(
+    gdp_total = gdp_per_capita * population,
+    year_date = ymd(paste0(year, "-", ifelse(runif(n()) > 0.5, "06-30", "12-31")))
   )
 
-head(wrangledData, 5)`, 
-  11);
+# Step 5: Summarize the data to get average life expectancy, GDP per capita, and total population by country and continent
+summaryData <- mutatedData %>%
+  group_by(continent, country) %>%
+  summarize(
+    avg_life_expectancy = mean(life_expectancy, na.rm = TRUE),
+    avg_gdp_per_capita = mean(gdp_per_capita, na.rm = TRUE),
+    total_population_millions = sum(population, na.rm = TRUE) / 1e6  # Convert population to millions
+  ) %>%
+  ungroup()
+
+# Step 6: Create a publication-ready visualization
+ggplot(summaryData, aes(
+  x = avg_gdp_per_capita, 
+  y = avg_life_expectancy, 
+  size = total_population_millions,  # Use population in millions for size mapping
+  color = country
+)) +
+  geom_point(alpha = 0.4) +
+  scale_y_continuous(limits = c(min(summaryData$avg_life_expectancy) - 1, 66)) +  # Adjust y-axis scale to go up to 66
+  scale_size_continuous(
+    range = c(5, 15),  # Adjust the bubble size range
+    name = "Total Population (Millions)", 
+    breaks = c(50, 200, 500, 1000, 1500),  # Adjust based on realistic population ranges in millions
+    labels = c("50M", "200M", "500M", "1B", "1.5B")  # Correct labels in millions
+  ) +
+  scale_color_viridis_d(guide = "none") +  # Hide the color legend
+  labs(
+    title = "Relationship Between GDP per Capita and Life Expectancy Across Countries",
+    subtitle = "Bubble size represents total population across 2020-2023",
+    x = "Average GDP per Capita (USD)",
+    y = "Average Life Expectancy (Years)",
+    caption = "Data Source: Synthetic Dataset"
+  ) +
+  geom_text(aes(label = country), hjust = 0.5, size = 3, color = "black") + # Labels centered
+  theme_minimal() +
+  theme(
+    text = element_text(family = "Georgia"),
+    plot.title = element_text(size = 11, face = "bold"), 
+    plot.subtitle = element_text(size = 9, face = "italic"), 
+    axis.title = element_text(size = 8),
+    legend.title = element_text(size = 8), 
+    legend.text = element_text(size = 8), 
+    legend.position = "bottom"
+  )`, 
+  17);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
+<section id="visualization-review" class="level3">
+<h3 class="anchored" data-anchor-id="visualization-review">Visualization Review</h3>
+<p><strong>Visualization</strong>: The final product is a bubble plot that visually represents the relationship between GDP per capita (a key economic indicator) and life expectancy across the 10 countries. Each bubble corresponds to a country, with the size of the bubble reflecting its total population. This allows you to see not just how wealthy and healthy each country is, but also how large it is in terms of population.</p>
+<p><strong>Publication-Ready</strong>: The plot is designed to be clean, simple, and professional. We’ve used specific text styles for titles and subtitles to ensure clarity, and selected color schemes that are accessible to everyone, including those who are colorblind. This makes the visualization suitable for both academic presentations and professional reports.</p>
+<p>By mastering this approach, you’ll see how various data wrangling techniques can be combined to create a powerful and insightful visualization. This process transforms raw data into a compelling story that is both informative and visually appealing, whether you’re working on a class project or preparing a professional report.</p>
 </section>
 </section>
 
