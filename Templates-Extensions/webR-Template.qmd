@@ -1,0 +1,45 @@
+---
+title: ""
+subtitle: "ST 437 Data Visualization"
+author: 
+  - Erin Howard
+date: today
+date-format: long
+format: 
+    OSUstyle-html:
+        toc: true
+        toc-location: right
+        toc-depth: 5
+execute: 
+  echo: true
+  warning: false
+webr:
+  packages: ['lubridate', 'ggplot2', 'readr', 'dplyr', 'lubridate', 'tidyr'] # Install R packages on document open
+  show-startup-message: false    # Disable displaying status of webR initialization
+filters:
+- webr
+---
+
+
+### Download the Data Example
+
+```{webr-r}
+#| autorun: true
+# Specify the data URL using HTTPS
+url1 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countries.csv"
+url2 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countriesExtra.csv"
+
+# Download the data files from the HTTPS URL and save it as
+# countries.csv & countriesExtraInfo.csv
+cat("Downloading the data ...\n")
+download.file(url1, "countries.csv")
+download.file(url2, "countriesExtraInfo.csv")
+
+# Check for the data.
+cat("After downloading the data, we now have:\n")
+list.files()
+
+# Read the countries data into R
+countriesDs <- read_csv("countries.csv", show_col_types = FALSE)
+countriesExtraDs <- read_csv("countriesExtraInfo.csv", show_col_types = FALSE)
+```

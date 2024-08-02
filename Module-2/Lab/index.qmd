@@ -1,6 +1,9 @@
 ---
 title: "Lab 2: Data Wrangling in R"
-author: "Brian Cervantes Alvarez"
+subtitle: "ST 437 Data Visualization"
+author: 
+  - Erin Howard
+  - Brian Cervantes Alvarez
 date: today
 date-format: long
 format: 
