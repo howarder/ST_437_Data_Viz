@@ -720,7 +720,7 @@ globalThis.qwebrCreateNonInteractiveSetupElement = function(qwebrCounter) {
   <li><a href="#download-the-data" id="toc-download-the-data" class="nav-link" data-scroll-target="#download-the-data">Download the Data</a></li>
   <li><a href="#verify-dataset-with-head" id="toc-verify-dataset-with-head" class="nav-link" data-scroll-target="#verify-dataset-with-head">Verify Dataset with <code>head()</code></a></li>
   <li><a href="#important-tidyverse-functions" id="toc-important-tidyverse-functions" class="nav-link" data-scroll-target="#important-tidyverse-functions">Important Tidyverse Functions</a></li>
-  <li><a href="#diving-into-data-wrangling" id="toc-diving-into-data-wrangling" class="nav-link" data-scroll-target="#diving-into-data-wrangling">Diving into Data wrangling</a></li>
+  <li><a href="#diving-into-data-wrangling" id="toc-diving-into-data-wrangling" class="nav-link" data-scroll-target="#diving-into-data-wrangling">Diving into Data Wrangling</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -998,14 +998,14 @@ head(countriesExtraDs, 5)`,
 </ul>
 </section>
 <section id="diving-into-data-wrangling" class="level3">
-<h3 class="anchored" data-anchor-id="diving-into-data-wrangling">Diving into Data wrangling</h3>
+<h3 class="anchored" data-anchor-id="diving-into-data-wrangling">Diving into Data Wrangling</h3>
 <section id="filtering" class="level4">
 <h4 class="anchored" data-anchor-id="filtering">Filtering</h4>
-<p>Filtering is a powerful data wrangling tool, especially when it comes to data visualization. It helps in narrowing down the dataset to the most relevant information, making patterns easier to identify and interpret. Here are two scenarios illustrating the importance of filtering in data visualization.</p>
+<p>Filtering is essential for narrowing down datasets to the most relevant information, making patterns easier to identify. Here are updated scenarios for your students to practice filtering.</p>
+<section id="scenario-1" class="level5">
+<h5 class="anchored" data-anchor-id="scenario-1">Scenario 1:</h5>
+<p>You are tasked with visualizing trends in life expectancy in Asian countries between 2010 and 2020.</p>
 </section>
-<section id="scenario" class="level4">
-<h4 class="anchored" data-anchor-id="scenario">Scenario</h4>
-<p>You are tasked with visualizing trends in the number of cases where electrical services were interrupted in Asian countries between 2010 and 2020.</p>
 </section>
 <section id="filtering-process" class="level4">
 <h4 class="anchored" data-anchor-id="filtering-process">Filtering Process</h4>
@@ -1049,10 +1049,10 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `ggplot(filteredData, aes(x = factor(year), y = cases, fill = country)) +
-  geom_col(position = "dodge") +
-  labs(title = "Electrical Service Interruptions in Asia (2010-2020)",
-       x = "Year", y = "Number of Cases") +
+  `ggplot(filteredData, aes(x = factor(year), y = life_expectancy, color = country)) +
+  geom_line(size = 1) +
+  labs(title = "Life Expectancy Trends in Asia (2010-2020)",
+       x = "Year", y = "Life Expectancy") +
   theme_minimal()`, 
   4);
 </script>
@@ -1060,11 +1060,11 @@ qwebrCreateMonacoEditorInstance(
 </section>
 <section id="why-filtering-helps" class="level4">
 <h4 class="anchored" data-anchor-id="why-filtering-helps">Why Filtering Helps</h4>
-<p>By filtering the dataset to include only Asian countries and the specific years of interest, the resulting visualization becomes more focused and easier to interpret. Instead of being overwhelmed by global data spanning 23 years, the viewer can clearly see the trends and patterns within Asia for the given period. This makes the visualization more relevant for stakeholders interested in that specific region.</p>
+<p>By focusing on specific countries and years, filtering allows for more targeted and relevant visualizations, making it easier to analyze trends and patterns specific to the context.</p>
+<section id="scenario-2" class="level5">
+<h5 class="anchored" data-anchor-id="scenario-2">Scenario 2:</h5>
+<p>Analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.</p>
 </section>
-<section id="scenario-2" class="level4">
-<h4 class="anchored" data-anchor-id="scenario-2">Scenario 2:</h4>
-<p>You need to analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.</p>
 </section>
 <section id="filtering-process-1" class="level4">
 <h4 class="anchored" data-anchor-id="filtering-process-1">Filtering Process</h4>
@@ -1084,9 +1084,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `filteredData <- countriesDs %>%
-  filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000)
-
-filteredData <- filteredData %>%
+  filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000) %>%
   left_join(countriesExtraDs, by = "country")
 
 head(filteredData, 5)`, 
@@ -1111,31 +1109,19 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `# Step 1: Filter the dataset for the years 2015 and 2020
-slopeData <- filteredData %>%
-  filter(year %in% c(2015, 2020)) %>%
-  select(country, year, gdp_per_capita, avg_life_expectancy)
-
-# Step 2: Create a slope plot
-ggplot(slopeData, aes(x = year, y = avg_life_expectancy, group = country, color = country)) +
-  geom_line(size = 1.5) +
-  geom_point(size = 4) +
-  scale_x_continuous(breaks = c(2015, 2020)) +
-  labs(title = "Change in Life Expectancy vs. GDP per Capita (2015-2020)",
-       x = "Year", y = "Average Life Expectancy") +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  geom_text(data = slopeData %>% filter(year == 2015), aes(label = country), 
-            hjust = 1.1, size = 3) +
-  geom_text(data = slopeData %>% filter(year == 2020), aes(label = country), 
-            hjust = -0.1, size = 3)`, 
+  `ggplot(filteredData, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm") +
+  labs(title = "GDP per Capita vs. Life Expectancy in Europe (2015-2020)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()`, 
   6);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="why-filtering-helps-1" class="level4">
 <h4 class="anchored" data-anchor-id="why-filtering-helps-1">Why Filtering Helps</h4>
-<p>Filtering the dataset to include only countries in Europe with high GDP per capita focuses the analysis on a specific economic segment. This allows for a clearer investigation of the relationship between wealth and life expectancy, without the noise from countries with significantly different economic conditions. The visualization then highlights meaningful patterns and differences among the wealthier European countries.</p>
+<p>Filtering based on economic indicators allows for focused analysis on the relationship between wealth and life expectancy, removing noise from countries with different economic conditions.</p>
 <section id="filtering-challenges" class="level5">
 <h5 class="anchored" data-anchor-id="filtering-challenges">Filtering Challenges</h5>
 <ol type="1">
@@ -1149,27 +1135,27 @@ ggplot(slopeData, aes(x = year, y = avg_life_expectancy, group = country, color 
 <li><strong>Filter</strong>: Show data only for the years 2015-2020 for European countries with GDP per capita above $30,000.</li>
 <li><strong>Purpose</strong>: Focus on wealthy European countries during a specific period to study economic outcomes.</li>
 </ul></li>
-<li><strong>High-Case Countries in the Americas</strong>:
+<li><strong>High Birth Rates in Asia</strong>:
 <ul>
-<li><strong>Filter</strong>: Data for countries in the Americas with more than 100,000 cases.</li>
-<li><strong>Purpose</strong>: Analyze regions with significant case numbers, possibly indicating areas with frequent service interruptions.</li>
+<li><strong>Filter</strong>: Data for Asian countries where the birth rate is above 2.5.</li>
+<li><strong>Purpose</strong>: Analyze regions with high birth rates, possibly indicating population growth trends.</li>
 </ul></li>
 <li><strong>Cold Regions in Asia</strong>:
 <ul>
 <li><strong>Filter</strong>: Asian countries where the average temperature is below 10°C between 2010 and 2020.</li>
-<li><strong>Purpose</strong>: Focus on colder regions in Asia to study how temperature may correlate with service interruptions.</li>
+<li><strong>Purpose</strong>: Focus on colder regions in Asia to study how temperature may correlate with other demographic factors.</li>
 </ul></li>
 <li><strong>GDP Data with Missing Values</strong>:
 <ul>
-<li><strong>Filter</strong>: Remove any entries with missing <code>gdp_per_capita</code> values for the years 2000-2010.</li>
+<li><strong>Filter</strong>: Remove any entries with missing <code>gdp_per_capita</code> values for the years 2010-2020.</li>
 <li><strong>Purpose</strong>: Ensure clean data for economic analysis, removing incomplete records that could skew results.</li>
 </ul></li>
 </ol>
 </section>
 </section>
 <section id="selecting" class="level4">
-<h4 class="anchored" data-anchor-id="selecting">Selecting:</h4>
-<p>Select specific columns for analysis.</p>
+<h4 class="anchored" data-anchor-id="selecting">Selecting</h4>
+<p>Selecting allows you to focus on specific columns relevant to your analysis.</p>
 <div id="qwebr-insertion-location-7"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1186,17 +1172,17 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `selectedData <- filteredData %>%
-  select(country, year, cases, population)
+  select(country, year, gdp_per_capita, life_expectancy)
 
 head(selectedData, 5)`, 
   7);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <section id="selecting-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="selecting-challenges">Selecting Challenges:</h5>
+<h5 class="anchored" data-anchor-id="selecting-challenges">Selecting Challenges</h5>
 <ol type="1">
 <li><strong>Select columns</strong> related to economic indicators (e.g., <code>country</code>, <code>gdp_per_capita</code>, <code>population</code>) for further analysis.</li>
-<li><strong>Create a dataset</strong> with only the <code>year</code>, <code>cases</code>, and <code>temperature</code> columns for all countries and show the first 5 rows.</li>
+<li><strong>Create a dataset</strong> with only the <code>year</code>, <code>life_expectancy</code>, and <code>temperature</code> columns for all countries and show the first 5 rows.</li>
 <li><strong>Choose columns</strong> that exclude any geographical information and check the first 10 rows.</li>
 <li><strong>Select and rename</strong> the <code>country</code> and <code>population</code> columns to <code>nation</code> and <code>pop_size</code>, respectively.</li>
 <li><strong>Create a new dataset</strong> with only the <code>year</code>, <code>population</code>, and a newly created column, <code>population_in_millions</code> (which should be calculated as <code>population / 1e6</code>).</li>
@@ -1204,8 +1190,8 @@ head(selectedData, 5)`,
 </section>
 </section>
 <section id="mutating" class="level4">
-<h4 class="anchored" data-anchor-id="mutating">Mutating:</h4>
-<p>Create new columns, such as cases per 100,000 population.</p>
+<h4 class="anchored" data-anchor-id="mutating">Mutating</h4>
+<p>Mutating helps create new columns based on existing data.</p>
 <div id="qwebr-insertion-location-8"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1222,26 +1208,26 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `mutatedData <- countriesDs %>%
-  mutate(cases_per_100k = cases / population * 100000)
+  mutate(gdp_total = gdp_per_capita * population)
 
 head(mutatedData, 5)`, 
   8);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <section id="mutating-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="mutating-challenges">Mutating Challenges:</h5>
+<h5 class="anchored" data-anchor-id="mutating-challenges">Mutating Challenges</h5>
 <ol type="1">
 <li><strong>Create a new column</strong> called <code>gdp_total</code> that multiplies <code>gdp_per_capita</code> by <code>population</code>.</li>
-<li><strong>Generate a column</strong> that calculates cases per capita by dividing <code>cases</code> by <code>population</code> and multiplying by 100,000.</li>
-<li><strong>Add a new column</strong> that indicates whether a country’s GDP per capita is above or below the global average (use a logical indicator).</li>
-<li><strong>Create a <code>cases_per_million</code> column</strong> by dividing <code>cases</code> by the population and multiplying by 1,000,000.</li>
-<li><strong>Mutate the <code>date</code> column</strong> to create a new column, <code>year_month</code>, that extracts the year and month information.</li>
+<li><strong>Add a new column</strong> that indicates whether a country’s GDP per capita is above or below a certain threshold (e.g., $20,000).</li>
+<li><strong>Mutate the <code>temperature</code> column</strong> to create a new column, <code>temperature_f</code>, that converts Celsius to Fahrenheit.</li>
+<li><strong>Create a <code>population_density</code> column</strong> by dividing <code>population</code> by a given area (assuming you have area data).</li>
+<li><strong>Generate a column</strong> that calculates the ratio of birth rate to life expectancy for each country.</li>
 </ol>
 </section>
 </section>
 <section id="summarizing" class="level4">
-<h4 class="anchored" data-anchor-id="summarizing">Summarizing:</h4>
-<p>Aggregate data by country, year, or region.</p>
+<h4 class="anchored" data-anchor-id="summarizing">Summarizing</h4>
+<p>Summarizing aggregates data by country, year, or region to find totals and averages.</p>
 <div id="qwebr-insertion-location-9"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1260,8 +1246,8 @@ qwebrCreateMonacoEditorInstance(
   `summaryData <- countriesDs %>%
   group_by(country) %>%
   summarize(
-    total_cases = sum(cases),
-    avg_gdp_per_capita = mean(gdp_per_capita, na.rm = TRUE)
+    avg_life_expectancy = mean(life_expectancy, na.rm = TRUE),
+    total_population = sum(population, na.rm = TRUE)
   )
 
 head(summaryData, 5)`, 
@@ -1269,19 +1255,19 @@ head(summaryData, 5)`,
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <section id="summarizing-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="summarizing-challenges">Summarizing Challenges:</h5>
+<h5 class="anchored" data-anchor-id="summarizing-challenges">Summarizing Challenges</h5>
 <ol type="1">
 <li><strong>Summarize the dataset</strong> by finding the average temperature for each region.</li>
-<li><strong>Aggregate the data</strong> to find the total population and total cases for each continent.</li>
+<li><strong>Aggregate the data</strong> to find the total population and average life expectancy for each continent.</li>
 <li><strong>Group the data</strong> by country and summarize to find the maximum and minimum GDP per capita for each country.</li>
-<li><strong>Summarize by year</strong> to find the total number of cases and the average population size each year.</li>
-<li><strong>Create a summary</strong> that calculates the average life expectancy and total population for countries with a GDP per capita above $20,000.</li>
+<li><strong>Summarize by year</strong> to find the total population and average birth rate each year.</li>
+<li><strong>Create a summary</strong> that calculates the total population and average GDP per capita for countries classified as “First World.”</li>
 </ol>
 </section>
 </section>
 <section id="joining" class="level4">
-<h4 class="anchored" data-anchor-id="joining">Joining:</h4>
-<p>Combine main dataset with additional data based on the country.</p>
+<h4 class="anchored" data-anchor-id="joining">Joining</h4>
+<p>Joining combines data from the main dataset with additional data.</p>
 <div id="qwebr-insertion-location-10"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1304,10 +1290,10 @@ head(joinedData, 5)`,
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <section id="joining-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="joining-challenges">Joining Challenges:</h5>
+<h5 class="anchored" data-anchor-id="joining-challenges">Joining Challenges</h5>
 <ol type="1">
 <li><strong>Perform a left join</strong> on the main dataset and an additional dataset that contains information on urbanization rates by country.</li>
-<li><strong>Join the datasets</strong> to add <code>avg_life_expectancy</code> and then filter for countries where life expectancy is below 60 years.</li>
+<li><strong>Join the datasets</strong> to add <code>continent</code> and then filter for countries in a specific continent.</li>
 <li><strong>Create a new dataset</strong> by performing an inner join on <code>countriesDs</code> and <code>countriesExtraDs</code>, then analyze the countries present in both datasets.</li>
 <li><strong>Perform a full join</strong> to combine the datasets and identify countries that are missing from one dataset but present in the other.</li>
 <li><strong>Use an anti-join</strong> to find the countries in the main dataset that do not have corresponding information in the additional dataset.</li>
@@ -1315,7 +1301,7 @@ head(joinedData, 5)`,
 </section>
 </section>
 <section id="combining-all-the-steps" class="level4">
-<h4 class="anchored" data-anchor-id="combining-all-the-steps">Combining all the steps</h4>
+<h4 class="anchored" data-anchor-id="combining-all-the-steps">Combining All the Steps</h4>
 <div id="qwebr-insertion-location-11"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1331,25 +1317,18 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `# Combining the previous steps into one
-wrangledData <- countriesDs |>
+  `wrangledData <- countriesDs |>
   filter(year >= 2010 & region == "Asia") |>
-  select(country, year, cases, population, gdp_per_capita) |>
-  mutate(cases_per_100k = cases / population * 100000) |>
+  select(country, year, population, gdp_per_capita, life_expectancy) |>
+  mutate(gdp_total = gdp_per_capita * population) |>
   group_by(country) |>
   summarize(
-    total_cases = sum(cases),
-    avg_cases_per_100k = mean(cases_per_100k),
+    total_population = sum(population),
+    avg_life_expectancy = mean(life_expectancy),
     avg_gdp_per_capita = mean(gdp_per_capita)
   )
 
-# Print the first few rows of the datasets
-head(data, 5)
-head(wrangledData, 5)
-
-mean(data$cases)
-min(data$cases)
-max(data$cases)`, 
+head(wrangledData, 5)`, 
   11);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
