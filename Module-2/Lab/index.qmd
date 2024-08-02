@@ -120,7 +120,6 @@ head(countriesExtraDs, 5)
 - **Summarizing**: Aggregate data by country, year, or region to find totals and averages.
 - **Joining**: Combine the main dataset with the additional data based on country.
 
-
 ### Diving into Data wrangling
 
 #### Filtering: 
@@ -212,9 +211,6 @@ head(joinedData, 5)
 4. **Perform a full join** to combine the datasets and identify countries that are missing from one dataset but present in the other.
 5. **Use an anti-join** to find the countries in the main dataset that do not have corresponding information in the additional dataset.
 
-These challenges will help your students apply and extend their data wrangling skills, reinforcing the concepts you've introduced.
-
-
 #### Combining all the steps
 ```{webr-r}
 # Combining the previous steps into one
@@ -238,12 +234,6 @@ min(data$cases)
 max(data$cases)
 
 ```
-
-
-
-
-Here are five challenge questions for each of the data wrangling activities:
-
 
 
 
