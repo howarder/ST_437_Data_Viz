@@ -1111,13 +1111,24 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `ggplot(filteredData, aes(x = gdp_per_capita, y = avg_life_expectancy)) +
-  geom_point(aes(color = country), size = 3) +
-  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
-  labs(title = "GDP per Capita vs. Life Expectancy in Europe (2015-2020)",
-       x = "GDP per Capita", y = "Average Life Expectancy") +
-  theme_minimal()
-`, 
+  `# Step 1: Filter the dataset for the years 2015 and 2020
+slopeData <- filteredData %>%
+  filter(year %in% c(2015, 2020)) %>%
+  select(country, year, gdp_per_capita, avg_life_expectancy)
+
+# Step 2: Create a slope plot
+ggplot(slopeData, aes(x = year, y = avg_life_expectancy, group = country, color = country)) +
+  geom_line(size = 1.5) +
+  geom_point(size = 4) +
+  scale_x_continuous(breaks = c(2015, 2020)) +
+  labs(title = "Change in Life Expectancy vs. GDP per Capita (2015-2020)",
+       x = "Year", y = "Average Life Expectancy") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  geom_text(data = slopeData %>% filter(year == 2015), aes(label = country), 
+            hjust = 1.1, size = 3) +
+  geom_text(data = slopeData %>% filter(year == 2020), aes(label = country), 
+            hjust = -0.1, size = 3)`, 
   6);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>

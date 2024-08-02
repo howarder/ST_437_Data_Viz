@@ -97,22 +97,22 @@ head(countriesDs, 5)
 head(countriesExtraDs, 5)
 ```
 
-
 #### Description of the Dataset
-- **`id`**: Unique identifier for each row.
-- **`country`**: Country name from a predefined list.
-- **`year`**: Years between 2000 and 2023.
-- **`population`**: Population size between 1 million and 1.5 billion.
-- **`cases`**: Number of cases where electrical services were interrupted.
-- **`gdp_per_capita`**: GDP per capita.
-- **`date`**: Dates from 2000 and 2023.
-- **`temperature`**: Temperature in Celsius.
-- **`region`**: Region of the world
+- **`country`**: Country name from a predefined list of 10 countries.
+- **`year`**: Years between 2010 and 2023.
+- **`population`**: Real-world population size for each country and year.
+- **`gdp`**: Gross Domestic Product (GDP) in USD millions for each country and year.
+- **`gdp_per_capita`**: GDP per capita, calculated as GDP divided by population.
+- **`life_expectancy`**: Synthetic life expectancy values that generally increase over time, with slower growth after 2018.
+- **`birth_rate`**: Birth rate for each country and year, randomly generated within a range of 0.4 to 3.2.
+- **`temperature`**: Realistic temperature in Celsius, randomly generated within a plausible range for each country and year.
+- **`region`**: Geographical region corresponding to each country.
+- **`category`**: Classification of the country as "First World," "Second World," or "Third World."
 
-#### Additional Dataset
+#### Additional Dataset (`countriesExtra.csv`)
 - **`country`**: Matches the country names from the main dataset.
 - **`continent`**: Continent corresponding to each country.
-- **`avg_life_expectancy`**: Average life expectancy.
+- **`avg_life_expectancy`**: Synthetic average life expectancy values for each country, randomly generated within a realistic range.
 
 ### Important Tidyverse Functions
 - **Filtering**: Filter data based on conditions such as year, country, or region.
@@ -169,13 +169,24 @@ head(filteredData, 5)
 
 #### Visualization
 ```{webr-r}
-ggplot(filteredData, aes(x = gdp_per_capita, y = avg_life_expectancy)) +
-  geom_point(aes(color = country), size = 3) +
-  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
-  labs(title = "GDP per Capita vs. Life Expectancy in Europe (2015-2020)",
-       x = "GDP per Capita", y = "Average Life Expectancy") +
-  theme_minimal()
+# Step 1: Filter the dataset for the years 2015 and 2020
+slopeData <- filteredData %>%
+  filter(year %in% c(2015, 2020)) %>%
+  select(country, year, gdp_per_capita, avg_life_expectancy)
 
+# Step 2: Create a slope plot
+ggplot(slopeData, aes(x = year, y = avg_life_expectancy, group = country, color = country)) +
+  geom_line(size = 1.5) +
+  geom_point(size = 4) +
+  scale_x_continuous(breaks = c(2015, 2020)) +
+  labs(title = "Change in Life Expectancy vs. GDP per Capita (2015-2020)",
+       x = "Year", y = "Average Life Expectancy") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  geom_text(data = slopeData %>% filter(year == 2015), aes(label = country), 
+            hjust = 1.1, size = 3) +
+  geom_text(data = slopeData %>% filter(year == 2020), aes(label = country), 
+            hjust = -0.1, size = 3)
 
 ```
 
