@@ -58,7 +58,7 @@ Creating a large dataset that can be used across multiple examples requires a da
 
 ## Data wrangling 101
 
-First, ensure you have the necessary packages installed and loaded. We will use the `dplyr`, `lubridate`, `readr`, `stringr`, and `tidyr` packages for our examples.
+First, ensure you have the necessary packages installed and loaded. We will use the `dplyr`, `lubridate`, `readr`, `ggplot2`, and `tidyr` packages for our examples.
 ```{r}
 library(ggplot2)
 library(dplyr)
@@ -73,7 +73,7 @@ library(readr)
 #| autorun: true
 # Specify the data URL using HTTPS
 url1 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countries.csv"
-url2 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countriesExtraInfo.csv"
+url2 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countriesExtra.csv"
 
 # Download the data files from the HTTPS URL and save it as
 # countries.csv & countriesExtraInfo.csv
@@ -105,14 +105,13 @@ head(countriesExtraDs, 5)
 - **`gdp_per_capita`**: GDP per capita, calculated as GDP divided by population.
 - **`life_expectancy`**: Life expectancy of citzens
 - **`birth_rate`**: Birth rate for each country and year
-- **`temperature`**: Realistic temperature in Celsius, randomly generated within a plausible range for each country and year.
+- **`temperature`**: Average temperature in celsius per country
 - **`region`**: Geographical region corresponding to each country.
 - **`category`**: Classification of the country as "First World," "Second World," or "Third World."
 
 #### Additional Dataset (`countriesExtra.csv`)
 - **`country`**: Matches the country names from the main dataset.
 - **`continent`**: Continent corresponding to each country.
-- **`avg_life_expectancy`**: Average life expectancy values for each country
 
 ### Important Tidyverse Functions
 - **Filtering**: Filter data based on conditions such as year, country, or region.

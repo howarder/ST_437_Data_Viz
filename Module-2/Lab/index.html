@@ -896,7 +896,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 </section>
 <section id="data-wrangling-101" class="level2">
 <h2 class="anchored" data-anchor-id="data-wrangling-101">Data wrangling 101</h2>
-<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>stringr</code>, and <code>tidyr</code> packages for our examples.</p>
+<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>ggplot2</code>, and <code>tidyr</code> packages for our examples.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -923,7 +923,7 @@ currentDocumentLocation.appendChild(initializedElement);
 qwebrCreateMonacoEditorInstance(
   `# Specify the data URL using HTTPS
 url1 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countries.csv"
-url2 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countriesExtraInfo.csv"
+url2 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countriesExtra.csv"
 
 # Download the data files from the HTTPS URL and save it as
 # countries.csv & countriesExtraInfo.csv
@@ -967,23 +967,23 @@ head(countriesExtraDs, 5)`,
 <section id="description-of-the-dataset" class="level4">
 <h4 class="anchored" data-anchor-id="description-of-the-dataset">Description of the Dataset</h4>
 <ul>
-<li><strong><code>id</code></strong>: Unique identifier for each row.</li>
-<li><strong><code>country</code></strong>: Country name from a predefined list.</li>
-<li><strong><code>year</code></strong>: Years between 2000 and 2023.</li>
-<li><strong><code>population</code></strong>: Population size between 1 million and 1.5 billion.</li>
-<li><strong><code>cases</code></strong>: Number of cases where electrical services were interrupted.</li>
-<li><strong><code>gdp_per_capita</code></strong>: GDP per capita.</li>
-<li><strong><code>date</code></strong>: Dates from 2000 and 2023.</li>
-<li><strong><code>temperature</code></strong>: Temperature in Celsius.</li>
-<li><strong><code>region</code></strong>: Region of the world</li>
+<li><strong><code>country</code></strong>: Country name from a predefined list of 10 countries.</li>
+<li><strong><code>year</code></strong>: Years between 2010 and 2023.</li>
+<li><strong><code>population</code></strong>: Real-world population size for each country and year.</li>
+<li><strong><code>gdp</code></strong>: Gross Domestic Product (GDP) in USD millions for each country and year.</li>
+<li><strong><code>gdp_per_capita</code></strong>: GDP per capita, calculated as GDP divided by population.</li>
+<li><strong><code>life_expectancy</code></strong>: Life expectancy of citzens</li>
+<li><strong><code>birth_rate</code></strong>: Birth rate for each country and year</li>
+<li><strong><code>temperature</code></strong>: Average temperature in celsius per country</li>
+<li><strong><code>region</code></strong>: Geographical region corresponding to each country.</li>
+<li><strong><code>category</code></strong>: Classification of the country as “First World,” “Second World,” or “Third World.”</li>
 </ul>
 </section>
-<section id="additional-dataset" class="level4">
-<h4 class="anchored" data-anchor-id="additional-dataset">Additional Dataset</h4>
+<section id="additional-dataset-countriesextra.csv" class="level4">
+<h4 class="anchored" data-anchor-id="additional-dataset-countriesextra.csv">Additional Dataset (<code>countriesExtra.csv</code>)</h4>
 <ul>
 <li><strong><code>country</code></strong>: Matches the country names from the main dataset.</li>
 <li><strong><code>continent</code></strong>: Continent corresponding to each country.</li>
-<li><strong><code>avg_life_expectancy</code></strong>: Average life expectancy.</li>
 </ul>
 </section>
 </section>
