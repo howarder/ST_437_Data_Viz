@@ -78,11 +78,7 @@ write_csv(main_data, "countries.csv")
 additional_data <- tibble(
   country = country_info$country,
   continent = country_info$region,
-  avg_life_expectancy = round(runif(10, 60, 85), 1)  # Generate realistic life expectancy values
 )
-
-# Display the additional dataset
-print(additional_data)
 
 # Save the additional dataset to a CSV file
 write_csv(additional_data, "countriesExtra.csv")

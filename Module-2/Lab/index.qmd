@@ -103,8 +103,8 @@ head(countriesExtraDs, 5)
 - **`population`**: Real-world population size for each country and year.
 - **`gdp`**: Gross Domestic Product (GDP) in USD millions for each country and year.
 - **`gdp_per_capita`**: GDP per capita, calculated as GDP divided by population.
-- **`life_expectancy`**: Synthetic life expectancy values that generally increase over time, with slower growth after 2018.
-- **`birth_rate`**: Birth rate for each country and year, randomly generated within a range of 0.4 to 3.2.
+- **`life_expectancy`**: Life expectancy of citzens
+- **`birth_rate`**: Birth rate for each country and year
 - **`temperature`**: Realistic temperature in Celsius, randomly generated within a plausible range for each country and year.
 - **`region`**: Geographical region corresponding to each country.
 - **`category`**: Classification of the country as "First World," "Second World," or "Third World."
@@ -112,7 +112,7 @@ head(countriesExtraDs, 5)
 #### Additional Dataset (`countriesExtra.csv`)
 - **`country`**: Matches the country names from the main dataset.
 - **`continent`**: Continent corresponding to each country.
-- **`avg_life_expectancy`**: Synthetic average life expectancy values for each country, randomly generated within a realistic range.
+- **`avg_life_expectancy`**: Average life expectancy values for each country
 
 ### Important Tidyverse Functions
 - **Filtering**: Filter data based on conditions such as year, country, or region.
