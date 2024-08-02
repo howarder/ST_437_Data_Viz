@@ -11,7 +11,7 @@ execute:
   echo: true
   warning: false
 webr:
-  packages: ['readr', 'dplyr', 'lubridate', 'stringr', 'tidyr'] # Install R packages on document open
+  packages: ['ggplot2', 'readr', 'dplyr', 'lubridate', 'tidyr'] # Install R packages on document open
   show-startup-message: false    # Disable displaying status of webR initialization
 filters:
 - webr
@@ -60,9 +60,9 @@ Creating a large dataset that can be used across multiple examples requires a da
 
 First, ensure you have the necessary packages installed and loaded. We will use the `dplyr`, `lubridate`, `readr`, `stringr`, and `tidyr` packages for our examples.
 ```{r}
+library(ggplot2)
 library(dplyr)
 library(lubridate)
-library(stringr)
 library(tidyr)
 library(readr)
 ```
@@ -97,6 +97,7 @@ head(countriesDs, 5)
 head(countriesExtraDs, 5)
 ```
 
+
 #### Description of the Dataset
 - **`id`**: Unique identifier for each row.
 - **`country`**: Country name from a predefined list.
@@ -122,21 +123,89 @@ head(countriesExtraDs, 5)
 
 ### Diving into Data wrangling
 
-#### Filtering: 
-Filter data by year, country, or region.
+#### Filtering 
+
+Filtering is a powerful data wrangling tool, especially when it comes to data visualization. It helps in narrowing down the dataset to the most relevant information, making patterns easier to identify and interpret. Here are two scenarios illustrating the importance of filtering in data visualization.
+
+#### Scenario
+You are tasked with visualizing trends in the number of cases where electrical services were interrupted in Asian countries between 2010 and 2020.
+
+#### Filtering Process
 ```{webr-r}
 filteredData <- countriesDs %>%
-  filter(year >= 2010 & region == "Asia")
+  filter(year >= 2010 & year <= 2020 & region == "Asia")
 
 head(filteredData, 5)
 ```
 
-##### Filtering Challenges:
-1. **Filter the dataset** to include only countries from Africa where the population exceeds 50 million.
-2. **Filter data** to show only the years 2015-2020 for countries in Europe with GDP per capita above $30,000.
-3. **Create a subset** of the data for countries in the Americas with more than 100,000 cases and display the first 10 rows.
-4. **Identify the countries** in Asia where the average temperature is below 10°C between 2010 and 2020.
-5. **Filter out** any entries with missing values in the `gdp_per_capita` column for the years 2000-2010.
+#### Visualization
+```{webr-r}
+ggplot(filteredData, aes(x = factor(year), y = cases, fill = country)) +
+  geom_col(position = "dodge") +
+  labs(title = "Electrical Service Interruptions in Asia (2010-2020)",
+       x = "Year", y = "Number of Cases") +
+  theme_minimal()
+
+```
+
+#### Why Filtering Helps
+
+By filtering the dataset to include only Asian countries and the specific years of interest, the resulting visualization becomes more focused and easier to interpret. Instead of being overwhelmed by global data spanning 23 years, the viewer can clearly see the trends and patterns within Asia for the given period. This makes the visualization more relevant for stakeholders interested in that specific region.
+
+#### Scenario 2:
+
+You need to analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.
+
+#### Filtering Process
+```{webr-r}
+filteredData <- countriesDs %>%
+  filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000)
+
+filteredData <- filteredData %>%
+  left_join(countriesExtraDs, by = "country")
+
+head(filteredData, 5)
+```
+
+#### Visualization
+```{webr-r}
+ggplot(filteredData, aes(x = gdp_per_capita, y = avg_life_expectancy)) +
+  geom_point(aes(color = country), size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+  labs(title = "GDP per Capita vs. Life Expectancy in Europe (2015-2020)",
+       x = "GDP per Capita", y = "Average Life Expectancy") +
+  theme_minimal()
+
+
+```
+
+#### Why Filtering Helps
+
+Filtering the dataset to include only countries in Europe with high GDP per capita focuses the analysis on a specific economic segment. This allows for a clearer investigation of the relationship between wealth and life expectancy, without the noise from countries with significantly different economic conditions. The visualization then highlights meaningful patterns and differences among the wealthier European countries.
+
+
+##### Filtering Challenges
+
+1. **Population Size in Africa**:
+   - **Filter**: Only countries from Africa where the population exceeds 50 million.
+   - **Purpose**: Isolate data for large African nations to analyze trends specific to highly populated areas.
+
+2. **Economic Data in Europe**:
+   - **Filter**: Show data only for the years 2015-2020 for European countries with GDP per capita above $30,000.
+   - **Purpose**: Focus on wealthy European countries during a specific period to study economic outcomes.
+
+3. **High-Case Countries in the Americas**:
+   - **Filter**: Data for countries in the Americas with more than 100,000 cases.
+   - **Purpose**: Analyze regions with significant case numbers, possibly indicating areas with frequent service interruptions.
+
+4. **Cold Regions in Asia**:
+   - **Filter**: Asian countries where the average temperature is below 10°C between 2010 and 2020.
+   - **Purpose**: Focus on colder regions in Asia to study how temperature may correlate with service interruptions.
+
+5. **GDP Data with Missing Values**:
+   - **Filter**: Remove any entries with missing `gdp_per_capita` values for the years 2000-2010.
+   - **Purpose**: Ensure clean data for economic analysis, removing incomplete records that could skew results.
+
 
 
 #### Selecting: 

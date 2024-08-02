@@ -184,7 +184,7 @@ fieldset:disabled .qwebr-button-run {
 const initializeWebRTimerStart = performance.now();
 
 // Determine if we need to install R packages
-var installRPackagesList = ['readr', 'dplyr', 'lubridate', 'stringr', 'tidyr'];
+var installRPackagesList = ['ggplot2', 'readr', 'dplyr', 'lubridate', 'tidyr'];
 // Check to see if we have an empty array, if we do set to skip the installation.
 var setupRPackages = !(installRPackagesList.indexOf("") !== -1);
 var autoloadRPackages = true;
@@ -898,9 +898,9 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 <h2 class="anchored" data-anchor-id="data-wrangling-101">Data wrangling 101</h2>
 <p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>stringr</code>, and <code>tidyr</code> packages for our examples.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1000,8 +1000,15 @@ head(countriesExtraDs, 5)`,
 <section id="diving-into-data-wrangling" class="level3">
 <h3 class="anchored" data-anchor-id="diving-into-data-wrangling">Diving into Data wrangling</h3>
 <section id="filtering" class="level4">
-<h4 class="anchored" data-anchor-id="filtering">Filtering:</h4>
-<p>Filter data by year, country, or region.</p>
+<h4 class="anchored" data-anchor-id="filtering">Filtering</h4>
+<p>Filtering is a powerful data wrangling tool, especially when it comes to data visualization. It helps in narrowing down the dataset to the most relevant information, making patterns easier to identify and interpret. Here are two scenarios illustrating the importance of filtering in data visualization.</p>
+</section>
+<section id="scenario" class="level4">
+<h4 class="anchored" data-anchor-id="scenario">Scenario</h4>
+<p>You are tasked with visualizing trends in the number of cases where electrical services were interrupted in Asian countries between 2010 and 2020.</p>
+</section>
+<section id="filtering-process" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-process">Filtering Process</h4>
 <div id="qwebr-insertion-location-3"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1018,26 +1025,15 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `filteredData <- countriesDs %>%
-  filter(year >= 2010 & region == "Asia")
+  filter(year >= 2010 & year <= 2020 & region == "Asia")
 
 head(filteredData, 5)`, 
   3);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="filtering-challenges" class="level5">
-<h5 class="anchored" data-anchor-id="filtering-challenges">Filtering Challenges:</h5>
-<ol type="1">
-<li><strong>Filter the dataset</strong> to include only countries from Africa where the population exceeds 50 million.</li>
-<li><strong>Filter data</strong> to show only the years 2015-2020 for countries in Europe with GDP per capita above $30,000.</li>
-<li><strong>Create a subset</strong> of the data for countries in the Americas with more than 100,000 cases and display the first 10 rows.</li>
-<li><strong>Identify the countries</strong> in Asia where the average temperature is below 10°C between 2010 and 2020.</li>
-<li><strong>Filter out</strong> any entries with missing values in the <code>gdp_per_capita</code> column for the years 2000-2010.</li>
-</ol>
 </section>
-</section>
-<section id="selecting" class="level4">
-<h4 class="anchored" data-anchor-id="selecting">Selecting:</h4>
-<p>Select specific columns for analysis.</p>
+<section id="visualization" class="level4">
+<h4 class="anchored" data-anchor-id="visualization">Visualization</h4>
 <div id="qwebr-insertion-location-4"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1053,11 +1049,136 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
+  `ggplot(filteredData, aes(x = factor(year), y = cases, fill = country)) +
+  geom_col(position = "dodge") +
+  labs(title = "Electrical Service Interruptions in Asia (2010-2020)",
+       x = "Year", y = "Number of Cases") +
+  theme_minimal()`, 
+  4);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="why-filtering-helps" class="level4">
+<h4 class="anchored" data-anchor-id="why-filtering-helps">Why Filtering Helps</h4>
+<p>By filtering the dataset to include only Asian countries and the specific years of interest, the resulting visualization becomes more focused and easier to interpret. Instead of being overwhelmed by global data spanning 23 years, the viewer can clearly see the trends and patterns within Asia for the given period. This makes the visualization more relevant for stakeholders interested in that specific region.</p>
+</section>
+<section id="scenario-2" class="level4">
+<h4 class="anchored" data-anchor-id="scenario-2">Scenario 2:</h4>
+<p>You need to analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.</p>
+</section>
+<section id="filtering-process-1" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-process-1">Filtering Process</h4>
+<div id="qwebr-insertion-location-5"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-5");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    5
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `filteredData <- countriesDs %>%
+  filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000)
+
+filteredData <- filteredData %>%
+  left_join(countriesExtraDs, by = "country")
+
+head(filteredData, 5)`, 
+  5);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="visualization-1" class="level4">
+<h4 class="anchored" data-anchor-id="visualization-1">Visualization</h4>
+<div id="qwebr-insertion-location-6"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-6");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    6
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `ggplot(filteredData, aes(x = gdp_per_capita, y = avg_life_expectancy)) +
+  geom_point(aes(color = country), size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+  labs(title = "GDP per Capita vs. Life Expectancy in Europe (2015-2020)",
+       x = "GDP per Capita", y = "Average Life Expectancy") +
+  theme_minimal()
+`, 
+  6);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="why-filtering-helps-1" class="level4">
+<h4 class="anchored" data-anchor-id="why-filtering-helps-1">Why Filtering Helps</h4>
+<p>Filtering the dataset to include only countries in Europe with high GDP per capita focuses the analysis on a specific economic segment. This allows for a clearer investigation of the relationship between wealth and life expectancy, without the noise from countries with significantly different economic conditions. The visualization then highlights meaningful patterns and differences among the wealthier European countries.</p>
+<section id="filtering-challenges" class="level5">
+<h5 class="anchored" data-anchor-id="filtering-challenges">Filtering Challenges</h5>
+<ol type="1">
+<li><strong>Population Size in Africa</strong>:
+<ul>
+<li><strong>Filter</strong>: Only countries from Africa where the population exceeds 50 million.</li>
+<li><strong>Purpose</strong>: Isolate data for large African nations to analyze trends specific to highly populated areas.</li>
+</ul></li>
+<li><strong>Economic Data in Europe</strong>:
+<ul>
+<li><strong>Filter</strong>: Show data only for the years 2015-2020 for European countries with GDP per capita above $30,000.</li>
+<li><strong>Purpose</strong>: Focus on wealthy European countries during a specific period to study economic outcomes.</li>
+</ul></li>
+<li><strong>High-Case Countries in the Americas</strong>:
+<ul>
+<li><strong>Filter</strong>: Data for countries in the Americas with more than 100,000 cases.</li>
+<li><strong>Purpose</strong>: Analyze regions with significant case numbers, possibly indicating areas with frequent service interruptions.</li>
+</ul></li>
+<li><strong>Cold Regions in Asia</strong>:
+<ul>
+<li><strong>Filter</strong>: Asian countries where the average temperature is below 10°C between 2010 and 2020.</li>
+<li><strong>Purpose</strong>: Focus on colder regions in Asia to study how temperature may correlate with service interruptions.</li>
+</ul></li>
+<li><strong>GDP Data with Missing Values</strong>:
+<ul>
+<li><strong>Filter</strong>: Remove any entries with missing <code>gdp_per_capita</code> values for the years 2000-2010.</li>
+<li><strong>Purpose</strong>: Ensure clean data for economic analysis, removing incomplete records that could skew results.</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="selecting" class="level4">
+<h4 class="anchored" data-anchor-id="selecting">Selecting:</h4>
+<p>Select specific columns for analysis.</p>
+<div id="qwebr-insertion-location-7"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-7");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    7
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
   `selectedData <- filteredData %>%
   select(country, year, cases, population)
 
 head(selectedData, 5)`, 
-  4);
+  7);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <section id="selecting-challenges" class="level5">
@@ -1074,14 +1195,14 @@ head(selectedData, 5)`,
 <section id="mutating" class="level4">
 <h4 class="anchored" data-anchor-id="mutating">Mutating:</h4>
 <p>Create new columns, such as cases per 100,000 population.</p>
-<div id="qwebr-insertion-location-5"></div>
+<div id="qwebr-insertion-location-8"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-5");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-8");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    5
+    8
   );
 
 // Add the interactive element into the document scope
@@ -1093,7 +1214,7 @@ qwebrCreateMonacoEditorInstance(
   mutate(cases_per_100k = cases / population * 100000)
 
 head(mutatedData, 5)`, 
-  5);
+  8);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <section id="mutating-challenges" class="level5">
@@ -1110,14 +1231,14 @@ head(mutatedData, 5)`,
 <section id="summarizing" class="level4">
 <h4 class="anchored" data-anchor-id="summarizing">Summarizing:</h4>
 <p>Aggregate data by country, year, or region.</p>
-<div id="qwebr-insertion-location-6"></div>
+<div id="qwebr-insertion-location-9"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-6");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-9");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    6
+    9
   );
 
 // Add the interactive element into the document scope
@@ -1133,7 +1254,7 @@ qwebrCreateMonacoEditorInstance(
   )
 
 head(summaryData, 5)`, 
-  6);
+  9);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <section id="summarizing-challenges" class="level5">
@@ -1150,14 +1271,14 @@ head(summaryData, 5)`,
 <section id="joining" class="level4">
 <h4 class="anchored" data-anchor-id="joining">Joining:</h4>
 <p>Combine main dataset with additional data based on the country.</p>
-<div id="qwebr-insertion-location-7"></div>
+<div id="qwebr-insertion-location-10"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-7");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-10");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    7
+    10
   );
 
 // Add the interactive element into the document scope
@@ -1168,7 +1289,7 @@ qwebrCreateMonacoEditorInstance(
   `joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
 
 head(joinedData, 5)`, 
-  7);
+  10);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <section id="joining-challenges" class="level5">
@@ -1184,14 +1305,14 @@ head(joinedData, 5)`,
 </section>
 <section id="combining-all-the-steps" class="level4">
 <h4 class="anchored" data-anchor-id="combining-all-the-steps">Combining all the steps</h4>
-<div id="qwebr-insertion-location-8"></div>
+<div id="qwebr-insertion-location-11"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-8");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-11");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    8
+    11
   );
 
 // Add the interactive element into the document scope
@@ -1218,7 +1339,7 @@ head(wrangledData, 5)
 mean(data$cases)
 min(data$cases)
 max(data$cases)`, 
-  8);
+  11);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
