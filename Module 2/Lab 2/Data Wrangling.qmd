@@ -67,12 +67,34 @@ library(tidyr)
 library(readr)
 ```
 
-### Load the Data
+### Download the Data
 
-```{r}
-# Load datasets
-data <- read_csv("countries.csv")
-additionalData <- read_csv("countriesExtraInfo.csv")
+```{webr-r}
+#| autorun: true
+# Specify the data URL using HTTPS
+url1 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countries.csv"
+url2 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countriesExtraInfo.csv"
+
+# Download the data files from the HTTPS URL and save it as
+# countries.csv & countriesExtraInfo.csv
+cat("Downloading the data ...\n")
+download.file(url1, "countries.csv")
+download.file(url2, "countriesExtraInfo.csv")
+
+# Check for the data.
+cat("After downloading the data, we now have:\n")
+list.files()
+
+# Read the countries data into R
+countriesDs <- read_csv("countries.csv", show_col_types = FALSE)
+countriesExtraDs <- read_csv("countriesExtraInfo.csv", show_col_types = FALSE)
+```
+
+### Verify Dataset with `head()`
+
+```{webr-r}
+head(countriesDs, 5)
+head(countriesExtraDs, 5)
 ```
 
 #### Description of the Dataset
@@ -103,46 +125,56 @@ additionalData <- read_csv("countriesExtraInfo.csv")
 
 #### Filtering: 
 Filter data by year, country, or region.
-```{r}
-filteredData <- data %>%
+```{webr-r}
+filteredData <- countriesDs %>%
   filter(year >= 2010 & region == "Asia")
+
+head(filteredData, 5)
 ```
 
 #### Selecting: 
 Select specific columns for analysis.
-```{r}
+```{webr-r}
 selectedData <- filteredData %>%
   select(country, year, cases, population)
+
+head(selectedData, 5)
 ```
 
-##### Mutating: 
+#### Mutating: 
 Create new columns, such as cases per 100,000 population.
-```{r}
-mutatedData <- data %>%
+```{webr-r}
+mutatedData <- countriesDs %>%
   mutate(cases_per_100k = cases / population * 100000)
+
+head(mutatedData, 5)
 ```
 
 #### Summarizing: 
 Aggregate data by country, year, or region.
-```{r}
-summaryData <- data %>%
+```{webr-r}
+summaryData <- countriesDs %>%
   group_by(country) %>%
   summarize(
     total_cases = sum(cases),
     avg_gdp_per_capita = mean(gdp_per_capita, na.rm = TRUE)
   )
+
+head(summaryData, 5)
 ```
 
 #### Joining: 
 Combine main dataset with additional data based on the country.
-```{r}
-joinedData <- left_join(data, additionalData, by = "country")
+```{webr-r}
+joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
+
+head(joinedData, 5)
 ```
 
 #### Combining all the steps
-```{r}
+```{webr-r}
 # Combining the previous steps into one
-wrangledData <- data |>
+wrangledData <- countriesDs |>
   filter(year >= 2010 & region == "Asia") |>
   select(country, year, cases, population, gdp_per_capita) |>
   mutate(cases_per_100k = cases / population * 100000) |>
@@ -154,8 +186,8 @@ wrangledData <- data |>
   )
 
 # Print the first few rows of the datasets
-head(data, 10)
-head(wrangledData, 10)
+head(data, 5)
+head(wrangledData, 5)
 
 mean(data$cases)
 min(data$cases)
