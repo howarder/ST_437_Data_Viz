@@ -81,6 +81,15 @@ library(lubridate)
 
 ### Download the Data
 
+::: {.callout-tip}
+## Running Code Block Shortcuts
+
+`Mac users`: Use ⌘ + return to run single or highlighted line(s). Use shift + return to run entire code block
+
+`Windows users`: Use ctrl + enter to run single or highlighted line(s). Use shift + enter to run entire code block
+:::
+
+
 ```{webr-r}
 #| autorun: TRUE
 # Specify the data URL using HTTPS
