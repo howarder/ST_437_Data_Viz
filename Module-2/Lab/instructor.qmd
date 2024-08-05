@@ -46,7 +46,7 @@ Tidy data is a structured format that aligns the organization of a dataset with 
 - **Each observation has its own row:** Every row captures a single observation or data entry.
 - **Each cell contains a single value:** Each cell holds one distinct piece of information for a particular variable and observation.
 
-In most cases, you will import data using SQL to create narrower datasets. However, when given large datasets, you can use R to manipulate and create subset datasets for focused analysis.
+In most cases, data is often imported using SQL to create narrower datasets. While we won't cover SQL in this course, it's a valuable skill to learn in the future. For now, we'll focus on using R to manipulate and create subset datasets from larger datasets for focused analysis.
 
 ### What Causes Untidy Data?
 
