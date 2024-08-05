@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.55">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Student Name">
+<meta name="dcterms.date" content="2024-08-05">
+
+<title>Lab 2 | Data Wrangling in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Lab 2 Data Wrangling_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Lab 2 Data Wrangling_files/libs/quarto-html/quarto.js"></script>
+<script src="Lab 2 Data Wrangling_files/libs/quarto-html/popper.min.js"></script>
+<script src="Lab 2 Data Wrangling_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Lab 2 Data Wrangling_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Lab 2 Data Wrangling_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Lab 2 Data Wrangling_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Lab 2 Data Wrangling_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Lab 2 Data Wrangling_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Lab 2 Data Wrangling_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 2 | Data Wrangling in R</h1>
+<p class="subtitle lead">ST 437 Data Visualization</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Student Name </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 5, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
+<ol type="1">
+<li><strong>Understand the Importance of Data Wrangling</strong>: Recognize the critical role of data wrangling in preparing datasets for accurate and meaningful analysis.</li>
+<li><strong>Master Data Transformation Techniques</strong>: Develop the ability to convert raw, untidy data into a structured format suitable for analysis and visualization.</li>
+<li><strong>Emphasize Data Cleaning and Preparation</strong>: Learn to identify and correct common data issues such as missing values, inconsistent formats, and incorrect entries.</li>
+<li><strong>Ensure Data Accuracy and Consistency</strong>: Gain skills in validating and maintaining the integrity of data throughout the wrangling process.</li>
+<li><strong>Draw Reliable Conclusions</strong>: Build confidence in making well-supported decisions and insights based on meticulously prepared and clean data.</li>
+</ol>
+</section>
+<section id="what-is-data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-data-wrangling">What is Data Wrangling?</h2>
+<p>Data wrangling is the process of converting messy, untidy data into a tidy format, making it suitable for data visualization and analysis.</p>
+<ul>
+<li><strong>Data is often messy:</strong> Real-world data is rarely provided in a tidy format.</li>
+<li><strong>Industry challenges:</strong> Many industries have poorly designed data structures, requiring data preparation before visualization.</li>
+<li><strong>Rarely tidy datasets:</strong> It is uncommon to receive a dataset that is already tidy.</li>
+</ul>
+<section id="what-is-tidy-data" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-tidy-data">What is Tidy Data?</h3>
+<p>Tidy data is a structured format that aligns the organization of a dataset with its underlying meaning. In tidy data:</p>
+<ul>
+<li><strong>Each variable has its own column:</strong> Every column in the dataset corresponds to a specific variable or attribute.</li>
+<li><strong>Each observation has its own row:</strong> Every row captures a single observation or data entry.</li>
+<li><strong>Each cell contains a single value:</strong> Each cell holds one distinct piece of information for a particular variable and observation.</li>
+</ul>
+<p>In most cases, data is often imported using SQL to create narrower datasets. While we won’t cover SQL in this course, it’s a valuable skill to learn in the future. For now, we’ll focus on using R to manipulate and create subset datasets from larger datasets for focused analysis.</p>
+</section>
+<section id="what-causes-untidy-data" class="level3">
+<h3 class="anchored" data-anchor-id="what-causes-untidy-data">What Causes Untidy Data?</h3>
+<ul>
+<li><p><strong>Incorrect/Inconsistent Dates:</strong> Dates can be tricky because they might be formatted differently across datasets or have errors like typos or missing parts. For example, some data might use “MM/DD/YYYY” while others use “YYYY-MM-DD,” leading to confusion and potential errors when analyzing time-based data.</p></li>
+<li><p><strong>Wide Format Times:</strong> Time data is sometimes presented in a wide format, where each column represents a different time period. This structure can make it difficult to perform certain types of analysis, as many statistical and visualization tools prefer data in a long format, where each row represents a single observation at a specific time.</p></li>
+<li><p><strong>Void or Misspelled Descriptions:</strong> Descriptions and labels are often incomplete, missing, or contain typos. These errors can make it challenging to interpret the data correctly, especially when variables are not clearly defined or are inconsistent across different parts of the dataset.</p></li>
+<li><p><strong>Missing Values:</strong> Missing data is common and can occur in any part of a dataset, leading to gaps that can skew analysis or result in errors. Handling these missing values is crucial for ensuring that any conclusions drawn from the data are accurate.</p></li>
+<li><p><strong>Condensed or Incorrect Headers:</strong> Column names might be too short, unclear, or incorrectly labeled, leading to confusion about what the data actually represents. For example, a column labeled “Pop” might be ambiguous—does it refer to population, popularity, or something else?</p></li>
+<li><p><strong>Row Content Split:</strong> Sometimes, a single column contains data that should be divided into multiple columns, such as when a “Location” column includes both city and state. This issue can make it difficult to analyze the data separately or perform operations that rely on more granular details. These common issues contribute to untidy data, which can complicate analysis and lead to inaccurate results.</p></li>
+</ul>
+<p>Mastering data wrangling is crucial because you might have to handle datasets with millions of rows and hundreds of columns.</p>
+</section>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
+<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>ggplot2</code>, and <code>tidyr</code> packages for our examples.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Downloading R-packages
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use <code>install.packages('Name of Package')</code> to install an R package. Careful! Package names are case sensitive, so install.packages(‘GGplot2’) will not work, but <code>install.packages('ggplot2')</code> will.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="download-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="download-the-data">Download the Data</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Running Code Block Shortcuts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>Mac users</code>: Use ⌘ + return to run single or highlighted line(s). Use shift + return to run entire code block</p>
+<p><code>Windows users</code>: Use ctrl + enter to run single or highlighted line(s). Use shift + enter to run entire code block</p>
+</div>
+</div>
+<div class="cell" data-autorun="true">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the data URL using HTTPS</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>url1 <span class="ot">&lt;-</span> <span class="st">"https://howarder.github.io/ST_437_Data_Viz/Datasets/countries.csv"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>url2 <span class="ot">&lt;-</span> <span class="st">"https://howarder.github.io/ST_437_Data_Viz/Datasets/countriesExtra.csv"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Download the data files from the HTTPS URL and save it as</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># countries.csv &amp; countriesExtraInfo.csv</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Downloading the data ...</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url1, <span class="st">"countries.csv"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url2, <span class="st">"countriesExtraInfo.csv"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for the data.</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"After downloading the data, we now have:</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the countries data into R</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>countriesDs <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"countries.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>countriesExtraDs <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"countriesExtraInfo.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="verify-datasets-with-head" class="level4">
+<h4 class="anchored" data-anchor-id="verify-datasets-with-head">Verify Datasets with <code>head()</code></h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(countriesDs, <span class="dv">5</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(countriesExtraDs, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="description-of-the-dataset" class="level4">
+<h4 class="anchored" data-anchor-id="description-of-the-dataset">Description of the Dataset</h4>
+<ul>
+<li><strong><code>country</code></strong>: Country name from a predefined list of 10 countries.</li>
+<li><strong><code>year</code></strong>: Years between 2010 and 2023.</li>
+<li><strong><code>population</code></strong>: Real-world population size for each country and year.</li>
+<li><strong><code>gdp</code></strong>: Gross Domestic Product (GDP) in USD millions for each country and year.</li>
+<li><strong><code>gdp_per_capita</code></strong>: GDP per capita, calculated as GDP divided by population.</li>
+<li><strong><code>life_expectancy</code></strong>: Life expectancy of citzens</li>
+<li><strong><code>birth_rate</code></strong>: Birth rate for each country and year</li>
+<li><strong><code>temperature</code></strong>: Average temperature in celsius per country</li>
+<li><strong><code>region</code></strong>: Geographical region corresponding to each country.</li>
+<li><strong><code>category</code></strong>: Classification of the country as “First World,” “Second World,” or “Third World.”</li>
+</ul>
+</section>
+<section id="additional-dataset-countriesextra.csv" class="level4">
+<h4 class="anchored" data-anchor-id="additional-dataset-countriesextra.csv">Additional Dataset (<code>countriesExtra.csv</code>)</h4>
+<ul>
+<li><strong><code>country</code></strong>: Matches the country names from the main dataset.</li>
+<li><strong><code>continent</code></strong>: Continent corresponding to each country.</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="tidy-data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="tidy-data-wrangling">Tidy Data Wrangling</h2>
+<p><strong>Important Concepts</strong></p>
+<ul>
+<li><code>Filtering</code>: Filter data based on conditions such as year, country, or region.</li>
+<li><code>Selecting</code>: Select specific columns for focused analysis.</li>
+<li><code>Mutating</code>: Create new columns, such as cases per 100,000 population.</li>
+<li><code>Summarizing</code>: Aggregate data by country, year, or region to find totals and averages.</li>
+<li><code>Joining</code>: Combine the main dataset with the additional data based on country.</li>
+</ul>
+<section id="filtering" class="level3">
+<h3 class="anchored" data-anchor-id="filtering">Filtering</h3>
+<p>Filtering is essential for narrowing down datasets to the most relevant information, making patterns easier to identify.</p>
+<section id="example-1" class="level4">
+<h4 class="anchored" data-anchor-id="example-1">Example 1</h4>
+<p>You are tasked with visualizing trends in life expectancy in Asian countries between 2010 and 2020.</p>
+<section id="filtering-process" class="level5">
+<h5 class="anchored" data-anchor-id="filtering-process">Filtering Process</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>filteredData <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2010</span> <span class="sc">&amp;</span> year <span class="sc">&lt;=</span> <span class="dv">2020</span> <span class="sc">&amp;</span> region <span class="sc">==</span> <span class="st">"Asia"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(filteredData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualization" class="level5">
+<h5 class="anchored" data-anchor-id="visualization">Visualization</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(filteredData, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(year), <span class="at">y =</span> life_expectancy, <span class="at">color =</span> country)) <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Life Expectancy Trends in Asia (2010-2020)"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Life Expectancy"</span>) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="what-did-we-do-here" class="level5">
+<h5 class="anchored" data-anchor-id="what-did-we-do-here">What did we do here?</h5>
+<p>By focusing on specific countries and years, filtering allows for more targeted and relevant visualizations, making it easier to analyze trends and patterns specific to the context.</p>
+</section>
+</section>
+<section id="example-2" class="level4">
+<h4 class="anchored" data-anchor-id="example-2">Example 2</h4>
+<p>Analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.</p>
+<section id="filtering-process-1" class="level5">
+<h5 class="anchored" data-anchor-id="filtering-process-1">Filtering Process</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>filteredData <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2015</span> <span class="sc">&amp;</span> year <span class="sc">&lt;=</span> <span class="dv">2020</span> <span class="sc">&amp;</span> region <span class="sc">==</span> <span class="st">"Europe"</span> <span class="sc">&amp;</span> gdp_per_capita <span class="sc">&gt;</span> <span class="dv">30000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(countriesExtraDs, <span class="at">by =</span> <span class="st">"country"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(filteredData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualization-1" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-1">Visualization</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(filteredData, <span class="fu">aes</span>(<span class="at">x =</span> gdp_per_capita, <span class="at">y =</span> life_expectancy, <span class="at">color =</span> country)) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"GDP per Capita vs. Life Expectancy in Europe (2015-2020)"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"GDP per Capita"</span>, <span class="at">y =</span> <span class="st">"Life Expectancy"</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="what-did-we-do-here-1" class="level5">
+<h5 class="anchored" data-anchor-id="what-did-we-do-here-1">What did we do here?</h5>
+<p>Filtering based on economic indicators allows for focused analysis on the relationship between wealth and life expectancy, removing noise from countries with different economic conditions.</p>
+</section>
+</section>
+<section id="filtering-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-challenges">Filtering Challenges</h4>
+<ol type="1">
+<li><strong>Population Size in Africa</strong>:
+<ul>
+<li><strong>Filter</strong>: Only countries from Africa where the population exceeds 50 million.</li>
+<li><strong>Purpose</strong>: Isolate data for large African nations to analyze trends specific to highly populated areas.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li><strong>Economic Data in Europe</strong>:
+<ul>
+<li><strong>Filter</strong>: Show data only for the years 2015-2020 for European countries with GDP per capita above $30,000.</li>
+<li><strong>Purpose</strong>: Focus on wealthy European countries during a specific period to study economic outcomes.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li><strong>High Birth Rates in Asia</strong>:
+<ul>
+<li><strong>Filter</strong>: Data for Asian countries where the birth rate is above 2.5.</li>
+<li><strong>Purpose</strong>: Analyze regions with high birth rates, possibly indicating population growth trends.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li><strong>Cold Regions in Asia</strong>:
+<ul>
+<li><strong>Filter</strong>: Asian countries where the average temperature is below 10°C between 2010 and 2020.</li>
+<li><strong>Purpose</strong>: Focus on colder regions in Asia to study how temperature may correlate with other demographic factors.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li><strong>GDP Data with Missing Values</strong>:
+<ul>
+<li><strong>Filter</strong>: Remove any entries with missing <code>gdp_per_capita</code> values for the years 2010-2020.</li>
+<li><strong>Purpose</strong>: Ensure clean data for economic analysis, removing incomplete records that could skew results.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="selecting" class="level3">
+<h3 class="anchored" data-anchor-id="selecting">Selecting</h3>
+<p>Selecting allows you to focus on specific columns relevant to your analysis.</p>
+<section id="example" class="level4">
+<h4 class="anchored" data-anchor-id="example">Example</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>selectedData <span class="ot">&lt;-</span> filteredData <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, year, gdp_per_capita, life_expectancy)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(selectedData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="visualization-2" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-2">Visualization</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(selectedData, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(year), <span class="at">y =</span> gdp_per_capita, <span class="at">fill =</span> country)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"GDP per Capita Over Time in Selected European Countries"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"GDP per Capita"</span>) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="selecting-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="selecting-challenges">Selecting Challenges</h4>
+<ol type="1">
+<li><strong>Select columns</strong> related to economic indicators (e.g., <code>country</code>, <code>gdp_per_capita</code>, <code>population</code>) for further analysis.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li><strong>Create a dataset</strong> with only the <code>year</code>, <code>life_expectancy</code>, and <code>temperature</code> columns for all countries and show the first 5 rows.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li><strong>Choose columns</strong> that exclude any geographical information and check the first 10 rows.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li><strong>Select and rename</strong> the <code>country</code> and <code>population</code> columns to <code>nation</code> and <code>pop_size</code>, respectively.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li><strong>Create a new dataset</strong> with only the <code>year</code>, <code>population</code>, and a newly created column, <code>population_in_millions</code> (which should be calculated as <code>population / 1e6</code>).</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="mutating" class="level3">
+<h3 class="anchored" data-anchor-id="mutating">Mutating</h3>
+<p>Mutating helps create new columns based on existing data.</p>
+<section id="example-3" class="level4">
+<h4 class="anchored" data-anchor-id="example-3">Example</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mutatedData <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gdp_total =</span> gdp_per_capita <span class="sc">*</span> population)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mutatedData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="visualization-3" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-3">Visualization</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mutatedData, <span class="fu">aes</span>(<span class="at">x =</span> population, <span class="at">y =</span> gdp_total, <span class="at">color =</span> region)) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population vs. Total GDP by Region"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Population"</span>, <span class="at">y =</span> <span class="st">"Total GDP"</span>) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="mutating-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="mutating-challenges">Mutating Challenges</h4>
+<ol type="1">
+<li><strong>Create a new column</strong> called <code>gdp_total</code> that multiplies <code>gdp_per_capita</code> by <code>population</code>.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li><strong>Add a new column</strong> that indicates whether a country’s GDP per capita is above or below a certain threshold (e.g., $20,000).</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li><strong>Mutate the <code>temperature</code> column</strong> to create a new column, <code>temperature_f</code>, that converts Celsius to Fahrenheit.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li><strong>Create an <code>avg_region_birthrate</code> column</strong> by summing the birth rates of each country within the same region and dividing by the number of countries in that region.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li><strong>Generate a column</strong> that calculates the ratio of birth rate to life expectancy for each country.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="summarizing" class="level3">
+<h3 class="anchored" data-anchor-id="summarizing">Summarizing</h3>
+<p>Summarizing aggregates data by country, year, or region to find totals and averages.</p>
+<section id="example-4" class="level4">
+<h4 class="anchored" data-anchor-id="example-4">Example</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>summaryData <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_life_expectancy =</span> <span class="fu">mean</span>(life_expectancy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_population =</span> <span class="fu">sum</span>(population, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(summaryData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="visualization-4" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-4">Visualization</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(summaryData, <span class="fu">aes</span>(<span class="at">x =</span> total_population, <span class="at">y =</span> avg_life_expectancy, <span class="at">label =</span> country)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total Population vs. Average Life Expectancy by Country"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Total Population"</span>, <span class="at">y =</span> <span class="st">"Average Life Expectancy"</span>) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="summarizing-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="summarizing-challenges">Summarizing Challenges</h4>
+<ol type="1">
+<li><strong>Summarize the dataset</strong> by finding the average temperature for each region.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li><strong>Aggregate the data</strong> to find the total population and average life expectancy for each continent.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li><strong>Group the data</strong> by country and summarize to find the maximum and minimum GDP per capita for each country.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li><strong>Summarize by year</strong> to find the total population and average birth rate each year.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li><strong>Create a summary</strong> that calculates the total population and average GDP per capita for countries classified as “First World.”</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="joining" class="level3">
+<h3 class="anchored" data-anchor-id="joining">Joining</h3>
+<p>Joining combines data from the main dataset with additional data.</p>
+<section id="example-5" class="level4">
+<h4 class="anchored" data-anchor-id="example-5">Example</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>joinedData <span class="ot">&lt;-</span> <span class="fu">left_join</span>(countriesDs, countriesExtraDs, <span class="at">by =</span> <span class="st">"country"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(joinedData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="visualization-5" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-5">Visualization</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(joinedData, <span class="fu">aes</span>(<span class="at">x =</span> continent, <span class="at">y =</span> gdp_per_capita, <span class="at">fill =</span> region)) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"GDP per Capita Distribution by Continent and Region"</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Continent"</span>, <span class="at">y =</span> <span class="st">"GDP per Capita"</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="joining-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="joining-challenges">Joining Challenges</h4>
+<ol type="1">
+<li><strong>Perform a left join</strong> on the main dataset and an additional dataset that contains information on urbanization rates by country.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li><strong>Join the datasets</strong> to add <code>continent</code> and then filter for countries in a specific continent.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li><strong>Create a new dataset</strong> by performing an inner join on <code>countriesDs</code> and <code>countriesExtraDs</code>, then analyze the countries present in both datasets.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li><strong>Perform a full join</strong> to combine the datasets and identify countries that are missing from one dataset but present in the other.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li><strong>Use an anti-join</strong> to find the countries in the main dataset that do not have corresponding information in the additional dataset.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="untidy-data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="untidy-data-wrangling">Untidy Data Wrangling</h2>
+<section id="handling-wide-vs.-long-formats" class="level3">
+<h3 class="anchored" data-anchor-id="handling-wide-vs.-long-formats">Handling Wide vs.&nbsp;Long Formats</h3>
+<p>Untidy data often comes in a “wide” format, where multiple variables are stored across columns rather than in a long format where each observation is a row.</p>
+<section id="creating-an-untidy-version" class="level4">
+<h4 class="anchored" data-anchor-id="creating-an-untidy-version">Creating an Untidy Version</h4>
+<p>To demonstrate this, let’s take our dataset and convert it into a wide format, then back to a long format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a wide format from the existing long format</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>wideData <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> year, <span class="at">values_from =</span> <span class="fu">c</span>(population, gdp))</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the wide data</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wideData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, let’s convert this wide data back to a long format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the wide format back to long format</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>longData <span class="ot">&lt;-</span> wideData <span class="sc">%&gt;%</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="fu">c</span>(<span class="st">"population"</span>, <span class="st">"gdp"</span>)),</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"year"</span>),</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the long data</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(longData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This process shows how data can be reshaped for different analytical needs. Wide format is useful for certain analyses but often needs to be converted to long format for modeling and visualization.</p>
+</section>
+</section>
+<section id="handling-misspelled-header-column-names" class="level3">
+<h3 class="anchored" data-anchor-id="handling-misspelled-header-column-names">Handling Misspelled Header Column Names</h3>
+<p>Sometimes datasets come with misspelled or inconsistent column names, which can lead to errors in data manipulation.</p>
+<section id="creating-misspelled-header-names" class="level4">
+<h4 class="anchored" data-anchor-id="creating-misspelled-header-names">Creating Misspelled Header Names</h4>
+<p>Let’s create a dataset with intentionally misspelled column names and then fix them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dataset with misspelled column names</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>misspelledHeaders <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">poplation =</span> population,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">gdp_pper_capita =</span> gdp_per_capita,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lif_expectancy =</span> life_expectancy</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the dataset with misspelled headers</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(misspelledHeaders, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fixing-the-misspelled-column-names" class="level4">
+<h4 class="anchored" data-anchor-id="fixing-the-misspelled-column-names">Fixing the Misspelled Column Names</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct the misspelled column names</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>correctedHeaders <span class="ot">&lt;-</span> misspelledHeaders <span class="sc">%&gt;%</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">population =</span> poplation,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">gdp_per_capita =</span> gdp_pper_capita,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">life_expectancy =</span> lif_expectancy</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the corrected dataset</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(correctedHeaders, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This illustrates how to identify and correct misspelled column names, which is a crucial step in data cleaning.</p>
+</section>
+</section>
+<section id="handling-row-content-split-and-reverse" class="level3">
+<h3 class="anchored" data-anchor-id="handling-row-content-split-and-reverse">Handling Row Content Split and Reverse</h3>
+<p>Sometimes, data stored in a single column needs to be split into multiple columns or vice versa.</p>
+<section id="merging-two-columns-into-one" class="level4">
+<h4 class="anchored" data-anchor-id="merging-two-columns-into-one">Merging Two Columns into One</h4>
+<p>Let’s take the <code>country</code> and <code>year</code> columns and merge them into a single column.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine 'country' and 'year' into a single column</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>mergedData <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">"country_year"</span>, country, year, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the merged dataset</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mergedData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="splitting-the-merged-column-back-into-two" class="level4">
+<h4 class="anchored" data-anchor-id="splitting-the-merged-column-back-into-two">Splitting the Merged Column Back into Two</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the 'country_year' column back into 'country' and 'year'</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>splitData <span class="ot">&lt;-</span> mergedData <span class="sc">%&gt;%</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(country_year, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"country"</span>, <span class="st">"year"</span>), <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the split dataset</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(splitData, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This demonstrates how to handle situations where data needs to be recombined or separated for different purposes.</p>
+</section>
+</section>
+<section id="handling-dates" class="level3">
+<h3 class="anchored" data-anchor-id="handling-dates">Handling Dates</h3>
+<p>In some cases, it might be necessary to convert a <code>year</code> column from a numeric format (double) into a proper date format for time series analysis or plotting purposes. Here’s how you can do that in R using the <code>lubridate</code> package.</p>
+<section id="example-6" class="level4">
+<h4 class="anchored" data-anchor-id="example-6">Example</h4>
+<section id="converting-year-to-a-date" class="level5">
+<h5 class="anchored" data-anchor-id="converting-year-to-a-date">Converting <code>year</code> to a Date</h5>
+<p>Let’s convert the <code>year</code> column into a date format, setting it as January 1st of that year.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure the lubridate package is loaded</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the year column to a date format (January 1st of each year)</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>countriesDs <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year_date =</span> <span class="fu">ymd</span>(<span class="fu">paste0</span>(year, <span class="st">"-01-01"</span>)))</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the first few rows to see the new column</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(countriesDs, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="what-did-we-do-here-2" class="level5">
+<h5 class="anchored" data-anchor-id="what-did-we-do-here-2">What did we do here?</h5>
+<ul>
+<li><strong><code>paste0(year, "-01-01")</code></strong>: Combines the year with the string “-01-01” to create a date string like “2010-01-01”.</li>
+<li><strong><code>ymd()</code></strong>: Converts the resulting string into a date object in the “Year-Month-Day” format.</li>
+</ul>
+<p>This creates a new column, <code>year_date</code>, which is now in the proper date format.</p>
+</section>
+<section id="visualization-6" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-6">Visualization</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(countriesDs, <span class="fu">aes</span>(<span class="at">x =</span> year_date, <span class="at">y =</span> population, <span class="at">color =</span> country)) <span class="sc">+</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Population Trends Over Time by Country"</span>,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Population"</span>) <span class="sc">+</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="challenges" class="level4">
+<h4 class="anchored" data-anchor-id="challenges">Challenges</h4>
+<ol type="1">
+<li><strong>Convert year to end of year date</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, but set it as December 31st of that year.</li>
+<li><strong>Purpose</strong>: Useful for representing data that summarizes annual results.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li><strong>Create a quarterly date</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the first quarter (e.g., “2010-03-31”).</li>
+<li><strong>Purpose</strong>: Useful for quarterly analysis.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li><strong>Mid-year date conversion</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, setting it as June 30th of each year.</li>
+<li><strong>Purpose</strong>: Represents mid-year data points.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li><strong>Use year as a dynamic time period</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to represent the last day of a chosen month (e.g., November).</li>
+<li><strong>Purpose</strong>: Allows for flexibility depending on the analysis context.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="5" type="1">
+<li><strong>Convert year to fiscal year start date</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the start of the fiscal year (e.g., April 1st).</li>
+<li><strong>Purpose</strong>: Useful for financial and budgetary analyses.</li>
+</ul></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code goes here...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="handling-missing-data" class="level3">
+<h3 class="anchored" data-anchor-id="handling-missing-data">Handling Missing Data</h3>
+<p>Dealing with missing data is a crucial aspect of data wrangling. Missing data can occur for various reasons, and understanding the nature of these missing values is essential for appropriate handling.</p>
+<section id="types-of-missing-data" class="level4">
+<h4 class="anchored" data-anchor-id="types-of-missing-data">Types of Missing Data</h4>
+<ul>
+<li><strong>MCAR (Missing Completely at Random)</strong>: Data is missing entirely at random, with no relationship between the missing data and any other observed or unobserved data. The analysis remains unbiased if this missing data is ignored.</li>
+<li><strong>MAR (Missing at Random)</strong>: The likelihood of missing data on a variable is related to other observed variables but not to the value of the variable itself.</li>
+<li><strong>MNAR (Missing Not at Random)</strong>: The missingness is related to the unobserved data itself, meaning the missing values are related to the actual value that is missing.</li>
+</ul>
+</section>
+<section id="simulating-mar-data" class="level4">
+<h4 class="anchored" data-anchor-id="simulating-mar-data">Simulating MAR Data</h4>
+<p>We’ll create a scenario where <code>gdp_per_capita</code> is more likely to be missing if the population is below a certain threshold, making it “missing at random” based on population size.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">10</span>)  <span class="co"># For reproducibility</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Directly introduce missing values in a random sample of rows</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>mar_data <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">gdp_per_capita =</span> <span class="fu">ifelse</span>(<span class="fu">runif</span>(<span class="fu">n</span>()) <span class="sc">&lt;</span> <span class="fl">0.4</span>, <span class="cn">NA</span>, gdp_per_capita)  <span class="co"># 20% chance of being NA</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mar_data<span class="sc">$</span>gdp_per_capita)  <span class="co"># Provides a summary of the column, including missing values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="simulating-mnar-data" class="level4">
+<h4 class="anchored" data-anchor-id="simulating-mnar-data">Simulating MNAR Data</h4>
+<p>We’ll simulate a scenario where the likelihood of <code>life_expectancy</code> being missing is higher if life expectancy is lower than 60 years, making it “missing not at random.”</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">456</span>)  <span class="co"># For reproducibility</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>mnar_data <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">life_expectancy =</span> <span class="fu">ifelse</span>(life_expectancy <span class="sc">&lt;</span> <span class="dv">60</span> <span class="sc">&amp;</span> <span class="fu">runif</span>(<span class="fu">n</span>()) <span class="sc">&lt;</span> <span class="fl">0.4</span>, <span class="cn">NA</span>, life_expectancy)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mnar_data<span class="sc">$</span>life_expectancy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="missing-data-before-wrangling" class="level4">
+<h4 class="anchored" data-anchor-id="missing-data-before-wrangling">Missing Data | Before Wrangling</h4>
+<section id="before-handling-missing-data" class="level5">
+<h5 class="anchored" data-anchor-id="before-handling-missing-data">Before Handling Missing Data</h5>
+<p>Let’s visualize the data before handling missing values, focusing on the relationship between GDP per capita and life expectancy.</p>
+</section>
+<section id="visualization-with-mar-data" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mar-data">Visualization with MAR Data</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mar_data, <span class="fu">aes</span>(<span class="at">x =</span> gdp_per_capita, <span class="at">y =</span> life_expectancy, <span class="at">color =</span> country)) <span class="sc">+</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"GDP per Capita vs. Life Expectancy (with MAR)"</span>,</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"GDP per Capita"</span>, <span class="at">y =</span> <span class="st">"Life Expectancy"</span>) <span class="sc">+</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualization-with-mnar-data" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mnar-data">Visualization with MNAR Data</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mnar_data, <span class="fu">aes</span>(<span class="at">x =</span> gdp_per_capita, <span class="at">y =</span> life_expectancy, <span class="at">color =</span> country)) <span class="sc">+</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"GDP per Capita vs. Life Expectancy (with MNAR)"</span>,</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"GDP per Capita"</span>, <span class="at">y =</span> <span class="st">"Life Expectancy"</span>) <span class="sc">+</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="missing-data-how-to-wrangle" class="level4">
+<h4 class="anchored" data-anchor-id="missing-data-how-to-wrangle">Missing Data | How to Wrangle</h4>
+<p>To handle the missing data, we’ll apply a simple imputation strategy, filling in missing values with the median of the respective variable.</p>
+<section id="imputing-missing-values-for-mar-data" class="level5">
+<h5 class="anchored" data-anchor-id="imputing-missing-values-for-mar-data">Imputing Missing Values for MAR Data</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>mar_data_imputed <span class="ot">&lt;-</span> mar_data <span class="sc">%&gt;%</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">gdp_per_capita =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(gdp_per_capita), <span class="fu">median</span>(gdp_per_capita, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), gdp_per_capita)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check imputation</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mar_data_imputed<span class="sc">$</span>gdp_per_capita)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="imputing-missing-values-for-mnar-data" class="level5">
+<h5 class="anchored" data-anchor-id="imputing-missing-values-for-mnar-data">Imputing Missing Values for MNAR Data</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>mnar_data_imputed <span class="ot">&lt;-</span> mnar_data <span class="sc">%&gt;%</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">life_expectancy =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(life_expectancy), <span class="fu">median</span>(life_expectancy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), life_expectancy)</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check imputation</span></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mnar_data_imputed<span class="sc">$</span>life_expectancy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="missing-data-after-wrangling" class="level4">
+<h4 class="anchored" data-anchor-id="missing-data-after-wrangling">Missing Data | After Wrangling</h4>
+<p>Let’s visualize the data again after imputing the missing values.</p>
+<section id="visualization-with-mar-data-imputed" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mar-data-imputed">Visualization with MAR Data (Imputed)</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mar_data_imputed, <span class="fu">aes</span>(<span class="at">x =</span> gdp_per_capita, <span class="at">y =</span> life_expectancy, <span class="at">color =</span> country)) <span class="sc">+</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"GDP per Capita vs. Life Expectancy (after MAR Imputation)"</span>,</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"GDP per Capita"</span>, <span class="at">y =</span> <span class="st">"Life Expectancy"</span>) <span class="sc">+</span></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualization-with-mnar-data-imputed" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mnar-data-imputed">Visualization with MNAR Data (Imputed)</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mnar_data_imputed, <span class="fu">aes</span>(<span class="at">x =</span> gdp_per_capita, <span class="at">y =</span> life_expectancy, <span class="at">color =</span> country)) <span class="sc">+</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"GDP per Capita vs. Life Expectancy (after MNAR Imputation)"</span>,</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"GDP per Capita"</span>, <span class="at">y =</span> <span class="st">"Life Expectancy"</span>) <span class="sc">+</span></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="summary" class="level4">
+<h4 class="anchored" data-anchor-id="summary">Summary</h4>
+<p>Understanding the different types of missing data—MCAR, MAR, and MNAR—is crucial for choosing the right approach to handle them. We explored how to simulate and visualize MAR and MNAR scenarios in our dataset, highlighting the importance of addressing missing data for accurate analysis. By comparing visualizations before and after imputation, students can grasp the significant impact missing data can have on their results and learn effective strategies to mitigate these issues.</p>
+</section>
+</section>
+</section>
+<section id="creating-a-pseudo-publication-ready-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="creating-a-pseudo-publication-ready-visualization">Creating a Pseudo-Publication Ready Visualization</h2>
+<p>We’ll combine all the data wrangling techniques you’ve learned—<code>filtering</code>, <code>selecting</code>, <code>mutating</code>, <code>summarizing</code>, and <code>joining</code>—to perform a detailed analysis and produce a polished, publication-ready visualization.</p>
+<section id="creating-a-professional-quality-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="creating-a-professional-quality-visualization">Creating a Professional-Quality Visualization</h3>
+<p>Here’s a step-by-step guide to transform and visualize data from 10 countries in the dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Filter the dataset for Asian and European countries from 2020 to 2023</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>filteredData <span class="ot">&lt;-</span> countriesDs <span class="sc">%&gt;%</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2020</span> <span class="sc">&amp;</span> year <span class="sc">&lt;=</span> <span class="dv">2023</span>)</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Join with the additional dataset to get continent information</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>joinedData <span class="ot">&lt;-</span> filteredData <span class="sc">%&gt;%</span></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(countriesExtraDs, <span class="at">by =</span> <span class="st">"country"</span>)</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Select relevant columns for analysis</span></span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>selectedData <span class="ot">&lt;-</span> joinedData <span class="sc">%&gt;%</span></span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(country, year, population, gdp_per_capita, life_expectancy, birth_rate, continent)</span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Mutate the data to create new metrics</span></span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>mutatedData <span class="ot">&lt;-</span> selectedData <span class="sc">%&gt;%</span></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">gdp_total =</span> gdp_per_capita <span class="sc">*</span> population,</span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">year_date =</span> <span class="fu">ymd</span>(<span class="fu">paste0</span>(year, <span class="st">"-"</span>, <span class="fu">ifelse</span>(<span class="fu">runif</span>(<span class="fu">n</span>()) <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="st">"06-30"</span>, <span class="st">"12-31"</span>)))</span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 5: Summarize the data to get average life expectancy, GDP per capita, and total population by country and continent</span></span>
+<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>summaryData <span class="ot">&lt;-</span> mutatedData <span class="sc">%&gt;%</span></span>
+<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(continent, country) <span class="sc">%&gt;%</span></span>
+<span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb62-24"><a href="#cb62-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_life_expectancy =</span> <span class="fu">mean</span>(life_expectancy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb62-25"><a href="#cb62-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_gdp_per_capita =</span> <span class="fu">mean</span>(gdp_per_capita, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb62-26"><a href="#cb62-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_population_millions =</span> <span class="fu">sum</span>(population, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fl">1e6</span>  <span class="co"># Convert population to millions</span></span>
+<span id="cb62-27"><a href="#cb62-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb62-28"><a href="#cb62-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb62-29"><a href="#cb62-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-30"><a href="#cb62-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 6: Create a publication-ready visualization</span></span>
+<span id="cb62-31"><a href="#cb62-31" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(summaryData, <span class="fu">aes</span>(</span>
+<span id="cb62-32"><a href="#cb62-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> avg_gdp_per_capita, </span>
+<span id="cb62-33"><a href="#cb62-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> avg_life_expectancy, </span>
+<span id="cb62-34"><a href="#cb62-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">size =</span> total_population_millions,  <span class="co"># Use population in millions for size mapping</span></span>
+<span id="cb62-35"><a href="#cb62-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> country</span>
+<span id="cb62-36"><a href="#cb62-36" aria-hidden="true" tabindex="-1"></a>)) <span class="sc">+</span></span>
+<span id="cb62-37"><a href="#cb62-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb62-38"><a href="#cb62-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="fu">min</span>(summaryData<span class="sc">$</span>avg_life_expectancy) <span class="sc">-</span> <span class="dv">1</span>, <span class="dv">66</span>)) <span class="sc">+</span>  <span class="co"># Adjust y-axis scale to go up to 66</span></span>
+<span id="cb62-39"><a href="#cb62-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(</span>
+<span id="cb62-40"><a href="#cb62-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">15</span>),  <span class="co"># Adjust the bubble size range</span></span>
+<span id="cb62-41"><a href="#cb62-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Total Population (Millions)"</span>, </span>
+<span id="cb62-42"><a href="#cb62-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">200</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">1500</span>),  <span class="co"># Adjust based on realistic population ranges in millions</span></span>
+<span id="cb62-43"><a href="#cb62-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"50M"</span>, <span class="st">"200M"</span>, <span class="st">"500M"</span>, <span class="st">"1B"</span>, <span class="st">"1.5B"</span>)  <span class="co"># Correct labels in millions</span></span>
+<span id="cb62-44"><a href="#cb62-44" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb62-45"><a href="#cb62-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>(<span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span>  <span class="co"># Hide the color legend</span></span>
+<span id="cb62-46"><a href="#cb62-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb62-47"><a href="#cb62-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Relationship Between GDP per Capita and Life Expectancy Across Countries"</span>,</span>
+<span id="cb62-48"><a href="#cb62-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Bubble size represents total population across 2020-2023"</span>,</span>
+<span id="cb62-49"><a href="#cb62-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Average GDP per Capita (USD)"</span>,</span>
+<span id="cb62-50"><a href="#cb62-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Average Life Expectancy (Years)"</span>,</span>
+<span id="cb62-51"><a href="#cb62-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Data Source: Synthetic Dataset"</span></span>
+<span id="cb62-52"><a href="#cb62-52" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb62-53"><a href="#cb62-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> country), <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span> <span class="co"># Labels centered</span></span>
+<span id="cb62-54"><a href="#cb62-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb62-55"><a href="#cb62-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb62-56"><a href="#cb62-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"Georgia"</span>),</span>
+<span id="cb62-57"><a href="#cb62-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>), </span>
+<span id="cb62-58"><a href="#cb62-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">face =</span> <span class="st">"italic"</span>), </span>
+<span id="cb62-59"><a href="#cb62-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb62-60"><a href="#cb62-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>), </span>
+<span id="cb62-61"><a href="#cb62-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>), </span>
+<span id="cb62-62"><a href="#cb62-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span></span>
+<span id="cb62-63"><a href="#cb62-63" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="review-scrutinize" class="level3">
+<h3 class="anchored" data-anchor-id="review-scrutinize">Review &amp; Scrutinize</h3>
+<p><strong>What is this visualization?</strong>: Write a brief paragraph describing the design, purpose, and key message of the plot. Explain what the visualization is intended to show and how it effectively communicates the data.</p>
+<p><strong>Why is this visualization nearly publication-ready?</strong>: In 2-3 sentences, discuss what makes the plot polished and professional, highlighting any elements that could make it suitable for publication.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

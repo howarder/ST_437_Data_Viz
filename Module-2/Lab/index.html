@@ -832,7 +832,6 @@ globalThis.qwebrCreateNonInteractiveSetupElement = function(qwebrCounter) {
   <li><a href="#creating-a-professional-quality-visualization" id="toc-creating-a-professional-quality-visualization" class="nav-link" data-scroll-target="#creating-a-professional-quality-visualization">Creating a Professional-Quality Visualization</a></li>
   <li><a href="#review-scrutinize" id="toc-review-scrutinize" class="nav-link" data-scroll-target="#review-scrutinize">Review &amp; Scrutinize</a></li>
   </ul></li>
-  <li><a href="#missing-images" id="toc-missing-images" class="nav-link" data-scroll-target="#missing-images">MISSING: IMAGES</a></li>
   </ul>
 </nav>
 </div>
@@ -1008,7 +1007,20 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 </section>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
-<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>ggplot2</code>, and <code>tidyr</code> packages for our examples. Since we are using webR, this document will automatically download the packages. If you are having an issue, double check your internet.</p>
+<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>ggplot2</code>, and <code>tidyr</code> packages for our examples.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Downloading R-packages
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use <code>install.packages('Name of Package')</code> to install an R package. Careful! Package names are case sensitive, so install.packages(‘GGplot2’) will not work, but <code>install.packages('ggplot2')</code> will.</p>
+</div>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -2282,15 +2294,9 @@ ggplot(summaryData, aes(
 </section>
 <section id="review-scrutinize" class="level3">
 <h3 class="anchored" data-anchor-id="review-scrutinize">Review &amp; Scrutinize</h3>
-<p>I say, let students do a discussion on this!</p>
-<p><strong>What is this visualization?</strong>: The final product is a bubble plot that visually represents the relationship between GDP per capita (a key economic indicator) and life expectancy across the 10 countries. Each bubble corresponds to a country, with the size of the bubble reflecting its total population. This allows you to see not just how wealthy and healthy each country is, but also how large it is in terms of population.</p>
-<p><strong>Is this Publication-Ready?</strong>: The plot is designed to be clean, simple, and professional. We’ve used specific text styles for titles and subtitles to ensure clarity, and selected color schemes that are accessible to everyone, including those who are colorblind. This makes the visualization suitable for both academic presentations and professional reports.</p>
-<p>By mastering this approach, you’ll see how various data wrangling techniques can be combined to create a powerful and insightful visualization. This process transforms raw data into a compelling story that is both informative and visually appealing, whether you’re working on a class project or preparing a professional report.</p>
+<p><strong>What is this visualization?</strong>: Write a brief paragraph describing the design, purpose, and key message of the plot. Explain what the visualization is intended to show and how it effectively communicates the data.</p>
+<p><strong>Why is this visualization nearly publication-ready?</strong>: In 2-3 sentences, discuss what makes the plot polished and professional, highlighting any elements that could make it suitable for publication.</p>
 </section>
-</section>
-<section id="missing-images" class="level1">
-<h1>MISSING: IMAGES</h1>
-<p>WORK IN PROGRESS: GET IMAGES AND CITE THEM FROM THE TEXTBOOKS</p>
 </section>
 
 </main>
