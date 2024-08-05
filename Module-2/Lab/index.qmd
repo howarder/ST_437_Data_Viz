@@ -1,5 +1,5 @@
 ---
-title: "Lab 2: Data Wrangling in R"
+title: "Lab 2 | Data Wrangling in R"
 subtitle: "ST 437 Data Visualization"
 author: 
   - Erin Howard
@@ -23,11 +23,11 @@ filters:
 
 ## Learning Objectives
 
-1. Understand the importance of data wrangling in the data analysis process.
-2. Transform and map raw data into a more suitable format for analysis.
-3. Emphasize the significance of data cleaning and preparation.
-4. Ensure data accuracy and consistency.
-5. Make reliable and valid conclusions based on well-prepared data.
+1. **Understand the Importance of Data Wrangling**: Recognize the critical role of data wrangling in preparing datasets for accurate and meaningful analysis.
+2. **Master Data Transformation Techniques**: Develop the ability to convert raw, untidy data into a structured format suitable for analysis and visualization.
+3. **Emphasize Data Cleaning and Preparation**: Learn to identify and correct common data issues such as missing values, inconsistent formats, and incorrect entries.
+4. **Ensure Data Accuracy and Consistency**: Gain skills in validating and maintaining the integrity of data throughout the wrangling process.
+5. **Draw Reliable Conclusions**: Build confidence in making well-supported decisions and insights based on meticulously prepared and clean data.
 
 ## What is Data Wrangling?
 
@@ -37,20 +37,8 @@ Data wrangling is the process of converting messy, untidy data into a tidy forma
 - **Industry challenges:** Many industries have poorly designed data structures, requiring data preparation before visualization.
 - **Rarely tidy datasets:** It is uncommon to receive a dataset that is already tidy.
 
-## What Causes Untidy Data?
 
-- **Incorrect/Inconsistent dates:** Dates can often be a headache due to inconsistencies.
-- **Wide format times:** Time data is often given in a wide format instead of long.
-- **Void or misspelled descriptions:** Descriptions can have gaps or missing/misspelled characters.
-- **Missing values:** Many datasets have missing values in some rows or columns.
-- **Condensed or incorrect headers:** Column names are often too short or mislabeled.
-- **Row content split:** Sometimes, data in a single row needs to be divided into multiple columns.
-
-Mastering data wrangling is crucial because you might have to handle datasets with millions of rows and hundreds of columns. 
-
-In most cases, you will import data using SQL to create narrower datasets. However, when given large datasets, you can use R to manipulate and create subset datasets for focused analysis.
-
-## Tidy Data
+### What is Tidy Data?
 
 Tidy data is a structured format that aligns the organization of a dataset with its underlying meaning. In tidy data:
 
@@ -58,10 +46,30 @@ Tidy data is a structured format that aligns the organization of a dataset with 
 - **Each observation has its own row:** Every row captures a single observation or data entry.
 - **Each cell contains a single value:** Each cell holds one distinct piece of information for a particular variable and observation.
 
+In most cases, you will import data using SQL to create narrower datasets. However, when given large datasets, you can use R to manipulate and create subset datasets for focused analysis.
 
-## Getting stated with tidying data
+### What Causes Untidy Data?
 
-First, ensure you have the necessary packages installed and loaded. We will use the `dplyr`, `lubridate`, `readr`, `ggplot2`, and `tidyr` packages for our examples.
+- **Incorrect/Inconsistent Dates:** Dates can be tricky because they might be formatted differently across datasets or have errors like typos or missing parts. For example, some data might use "MM/DD/YYYY" while others use "YYYY-MM-DD," leading to confusion and potential errors when analyzing time-based data.
+
+- **Wide Format Times:** Time data is sometimes presented in a wide format, where each column represents a different time period. This structure can make it difficult to perform certain types of analysis, as many statistical and visualization tools prefer data in a long format, where each row represents a single observation at a specific time.
+
+- **Void or Misspelled Descriptions:** Descriptions and labels are often incomplete, missing, or contain typos. These errors can make it challenging to interpret the data correctly, especially when variables are not clearly defined or are inconsistent across different parts of the dataset.
+
+- **Missing Values:** Missing data is common and can occur in any part of a dataset, leading to gaps that can skew analysis or result in errors. Handling these missing values is crucial for ensuring that any conclusions drawn from the data are accurate.
+
+- **Condensed or Incorrect Headers:** Column names might be too short, unclear, or incorrectly labeled, leading to confusion about what the data actually represents. For example, a column labeled "Pop" might be ambiguous—does it refer to population, popularity, or something else?
+
+- **Row Content Split:** Sometimes, a single column contains data that should be divided into multiple columns, such as when a "Location" column includes both city and state. This issue can make it difficult to analyze the data separately or perform operations that rely on more granular details.
+These common issues contribute to untidy data, which can complicate analysis and lead to inaccurate results. 
+
+
+Mastering data wrangling is crucial because you might have to handle datasets with millions of rows and hundreds of columns. 
+
+
+## Getting Started
+
+First, ensure you have the necessary packages installed and loaded. We will use the `dplyr`, `lubridate`, `readr`, `ggplot2`, and `tidyr` packages for our examples. Since we are using webR, this document will automatically download the packages. If you are having an issue, double check your internet.
 ```{r}
 library(ggplot2)
 library(dplyr)
@@ -74,7 +82,7 @@ library(lubridate)
 ### Download the Data
 
 ```{webr-r}
-#| autorun: true
+#| autorun: TRUE
 # Specify the data URL using HTTPS
 url1 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countries.csv"
 url2 <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/countriesExtra.csv"
@@ -94,7 +102,7 @@ countriesDs <- read_csv("countries.csv", show_col_types = FALSE)
 countriesExtraDs <- read_csv("countriesExtraInfo.csv", show_col_types = FALSE)
 ```
 
-### Verify Dataset with `head()`
+#### Verify Datasets with `head()`
 
 ```{webr-r}
 head(countriesDs, 5)
@@ -117,23 +125,26 @@ head(countriesExtraDs, 5)
 - **`country`**: Matches the country names from the main dataset.
 - **`continent`**: Continent corresponding to each country.
 
-### Important Tidyverse Functions
-- **Filtering**: Filter data based on conditions such as year, country, or region.
-- **Selecting**: Select specific columns for focused analysis.
-- **Mutating**: Create new columns, such as cases per 100,000 population.
-- **Summarizing**: Aggregate data by country, year, or region to find totals and averages.
-- **Joining**: Combine the main dataset with the additional data based on country.
 
-## Diving into Data Wrangling
+
+## Tidy Data Wrangling
+
+**Important Concepts**
+
+- `Filtering`: Filter data based on conditions such as year, country, or region.
+- `Selecting`: Select specific columns for focused analysis.
+- `Mutating`: Create new columns, such as cases per 100,000 population.
+- `Summarizing`: Aggregate data by country, year, or region to find totals and averages.
+- `Joining`: Combine the main dataset with the additional data based on country.
 
 ### Filtering
 
 Filtering is essential for narrowing down datasets to the most relevant information, making patterns easier to identify.
 
-#### Scenario 1:
+#### Example 1
 You are tasked with visualizing trends in life expectancy in Asian countries between 2010 and 2020.
 
-#### Filtering Process
+##### Filtering Process
 ```{webr-r}
 filteredData <- countriesDs %>%
   filter(year >= 2010 & year <= 2020 & region == "Asia")
@@ -141,7 +152,7 @@ filteredData <- countriesDs %>%
 head(filteredData, 5)
 ```
 
-#### Visualization
+##### Visualization
 ```{webr-r}
 ggplot(filteredData, aes(x = factor(year), y = life_expectancy, color = country)) +
   geom_point(size = 2) +
@@ -150,14 +161,14 @@ ggplot(filteredData, aes(x = factor(year), y = life_expectancy, color = country)
   theme_minimal()
 ```
 
-#### Why Filtering Helps
+##### What did we do here?
 
 By focusing on specific countries and years, filtering allows for more targeted and relevant visualizations, making it easier to analyze trends and patterns specific to the context.
 
-#### Scenario 2:
+#### Example 2
 Analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.
 
-#### Filtering Process
+##### Filtering Process
 ```{webr-r}
 filteredData <- countriesDs %>%
   filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000) %>%
@@ -166,7 +177,7 @@ filteredData <- countriesDs %>%
 head(filteredData, 5)
 ```
 
-#### Visualization
+##### Visualization
 ```{webr-r}
 ggplot(filteredData, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
   geom_point(size = 2) +
@@ -176,7 +187,7 @@ ggplot(filteredData, aes(x = gdp_per_capita, y = life_expectancy, color = countr
   theme_minimal()
 ```
 
-#### Why Filtering Helps
+##### What did we do here?
 
 Filtering based on economic indicators allows for focused analysis on the relationship between wealth and life expectancy, removing noise from countries with different economic conditions.
 
@@ -205,11 +216,22 @@ Filtering based on economic indicators allows for focused analysis on the relati
 
 Selecting allows you to focus on specific columns relevant to your analysis.
 
+#### Example 1
+
 ```{webr-r}
 selectedData <- filteredData %>%
   select(country, year, gdp_per_capita, life_expectancy)
 
 head(selectedData, 5)
+```
+
+##### Visualization
+```{webr-r}
+ggplot(selectedData, aes(x = factor(year), y = gdp_per_capita, fill = country)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "GDP per Capita Over Time in Selected European Countries",
+       x = "Year", y = "GDP per Capita") +
+  theme_minimal()
 ```
 
 #### Selecting Challenges
@@ -223,11 +245,22 @@ head(selectedData, 5)
 
 Mutating helps create new columns based on existing data.
 
+#### Example 1
+
 ```{webr-r}
 mutatedData <- countriesDs %>%
   mutate(gdp_total = gdp_per_capita * population)
 
 head(mutatedData, 5)
+```
+
+##### Visualization
+```{webr-r}
+ggplot(mutatedData, aes(x = population, y = gdp_total, color = region)) +
+  geom_point(size = 2) +
+  labs(title = "Population vs. Total GDP by Region",
+       x = "Population", y = "Total GDP") +
+  theme_minimal()
 ```
 
 #### Mutating Challenges
@@ -241,6 +274,8 @@ head(mutatedData, 5)
 
 Summarizing aggregates data by country, year, or region to find totals and averages.
 
+#### Example 1
+
 ```{webr-r}
 summaryData <- countriesDs %>%
   group_by(country) %>%
@@ -252,6 +287,18 @@ summaryData <- countriesDs %>%
 head(summaryData, 5)
 ```
 
+##### Visualization
+
+```{webr-r}
+ggplot(summaryData, aes(x = total_population, y = avg_life_expectancy, label = country)) +
+  geom_point(size = 2) +
+  geom_text(vjust = -0.5) +
+  labs(title = "Total Population vs. Average Life Expectancy by Country",
+       x = "Total Population", y = "Average Life Expectancy") +
+  theme_minimal()
+```
+
+
 #### Summarizing Challenges
 1. **Summarize the dataset** by finding the average temperature for each region.
 2. **Aggregate the data** to find the total population and average life expectancy for each continent.
@@ -259,18 +306,152 @@ head(summaryData, 5)
 4. **Summarize by year** to find the total population and average birth rate each year.
 5. **Create a summary** that calculates the total population and average GDP per capita for countries classified as "First World."
 
+### Joining
+
+Joining combines data from the main dataset with additional data.
+
+#### Example 1
+
+```{webr-r}
+joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
+
+head(joinedData, 5)
+```
+
+##### Visualization
+
+```{webr-r}
+ggplot(joinedData, aes(x = continent, y = gdp_per_capita, fill = region)) +
+  geom_boxplot() +
+  labs(title = "GDP per Capita Distribution by Continent and Region",
+       x = "Continent", y = "GDP per Capita") +
+  theme_minimal()
+```
+
+
+#### Joining Challenges
+1. **Perform a left join** on the main dataset and an additional dataset that contains information on urbanization rates by country.
+2. **Join the datasets** to add `continent` and then filter for countries in a specific continent.
+3. **Create a new dataset** by performing an inner join on `countriesDs` and `countriesExtraDs`, then analyze the countries present in both datasets.
+4. **Perform a full join** to combine the datasets and identify countries that are missing from one dataset but present in the other.
+5. **Use an anti-join** to find the countries in the main dataset that do not have corresponding information in the additional dataset.
+
+
+## Untidy Data Wrangling
+
+
+### Handling Wide vs. Long Formats
+
+Untidy data often comes in a "wide" format, where multiple variables are stored across columns rather than in a long format where each observation is a row.
+
+#### Creating an Untidy Version
+
+To demonstrate this, let's take our dataset and convert it into a wide format, then back to a long format.
+
+```{webr-r}
+# Create a wide format from the existing long format
+wideData <- countriesDs %>%
+  pivot_wider(names_from = year, values_from = c(population, gdp))
+
+# Preview the wide data
+head(wideData, 5)
+```
+
+Now, let's convert this wide data back to a long format.
+
+```{webr-r}
+# Convert the wide format back to long format
+longData <- wideData %>%
+  pivot_longer(cols = starts_with(c("population", "gdp")),
+               names_to = c(".value", "year"),
+               names_sep = "_")
+
+# Preview the long data
+head(longData, 5)
+```
+
+This process shows how data can be reshaped for different analytical needs. Wide format is useful for certain analyses but often needs to be converted to long format for modeling and visualization.
+
+### Handling Misspelled Header Column Names
+
+Sometimes datasets come with misspelled or inconsistent column names, which can lead to errors in data manipulation.
+
+#### Creating Misspelled Header Names
+
+Let's create a dataset with intentionally misspelled column names and then fix them.
+
+```{webr-r}
+# Create a dataset with misspelled column names
+misspelledHeaders <- countriesDs %>%
+  rename(
+    poplation = population,
+    gdp_pper_capita = gdp_per_capita,
+    lif_expectancy = life_expectancy
+  )
+
+# Preview the dataset with misspelled headers
+head(misspelledHeaders, 5)
+```
+
+#### Fixing the Misspelled Column Names
+
+```{webr-r}
+# Correct the misspelled column names
+correctedHeaders <- misspelledHeaders %>%
+  rename(
+    population = poplation,
+    gdp_per_capita = gdp_pper_capita,
+    life_expectancy = lif_expectancy
+  )
+
+# Preview the corrected dataset
+head(correctedHeaders, 5)
+```
+
+This illustrates how to identify and correct misspelled column names, which is a crucial step in data cleaning.
+
+### Handling Row Content Split and Reverse
+
+Sometimes, data stored in a single column needs to be split into multiple columns or vice versa.
+
+#### Merging Two Columns into One
+
+Let's take the `country` and `year` columns and merge them into a single column.
+
+```{webr-r}
+# Combine 'country' and 'year' into a single column
+mergedData <- countriesDs %>%
+  unite("country_year", country, year, sep = "_")
+
+# Preview the merged dataset
+head(mergedData, 5)
+```
+
+#### Splitting the Merged Column Back into Two
+
+```{webr-r}
+# Split the 'country_year' column back into 'country' and 'year'
+splitData <- mergedData %>%
+  separate(country_year, into = c("country", "year"), sep = "_")
+
+# Preview the split dataset
+head(splitData, 5)
+```
+
+This demonstrates how to handle situations where data needs to be recombined or separated for different purposes.
 
 ### Handling Dates
 
 In some cases, it might be necessary to convert a `year` column from a numeric format (double) into a proper date format for time series analysis or plotting purposes. Here’s how you can do that in R using the `lubridate` package.
 
-#### Converting `year` to a Date
+#### Example 1
+
+##### Converting `year` to a Date
 
 Let's convert the `year` column into a date format, setting it as January 1st of that year.
 
 ```{webr-r}
 # Ensure the lubridate package is loaded
-
 # Convert the year column to a date format (January 1st of each year)
 countriesDs <- countriesDs %>%
   mutate(year_date = ymd(paste0(year, "-01-01")))
@@ -279,13 +460,13 @@ countriesDs <- countriesDs %>%
 head(countriesDs, 5)
 ```
 
-#### Explanation:
+##### What did we do here?
 - **`paste0(year, "-01-01")`**: Combines the year with the string "-01-01" to create a date string like "2010-01-01".
 - **`ymd()`**: Converts the resulting string into a date object in the "Year-Month-Day" format.
 
 This creates a new column, `year_date`, which is now in the proper date format.
 
-#### Converting Year to Date Challenges
+#### Challenges [Solutions]
 
 1. **Convert year to end of year date**:
    - **Task**: Convert the `year` column to a date format, but set it as December 31st of that year.
@@ -343,26 +524,132 @@ This creates a new column, `year_date`, which is now in the proper date format.
    head(countriesDs, 5)
    ```
 
-
-### Joining
-
-Joining combines data from the main dataset with additional data.
-
 ```{webr-r}
-joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
-
-head(joinedData, 5)
+ggplot(countriesDs, aes(x = year_date, y = population, color = country)) +
+  geom_line(size = 1) +
+  labs(title = "Population Trends Over Time by Country",
+       x = "Year", y = "Population") +
+  theme_minimal()
 ```
 
-#### Joining Challenges
-1. **Perform a left join** on the main dataset and an additional dataset that contains information on urbanization rates by country.
-2. **Join the datasets** to add `continent` and then filter for countries in a specific continent.
-3. **Create a new dataset** by performing an inner join on `countriesDs` and `countriesExtraDs`, then analyze the countries present in both datasets.
-4. **Perform a full join** to combine the datasets and identify countries that are missing from one dataset but present in the other.
-5. **Use an anti-join** to find the countries in the main dataset that do not have corresponding information in the additional dataset.
+
+### Handling Missing Data
+
+Dealing with missing data is a crucial aspect of data wrangling. Missing data can occur for various reasons, and understanding the nature of these missing values is essential for appropriate handling.
+
+#### Types of Missing Data
+- **MCAR (Missing Completely at Random)**: Data is missing entirely at random, with no relationship between the missing data and any other observed or unobserved data. The analysis remains unbiased if this missing data is ignored.
+- **MAR (Missing at Random)**: The likelihood of missing data on a variable is related to other observed variables but not to the value of the variable itself.
+- **MNAR (Missing Not at Random)**: The missingness is related to the unobserved data itself, meaning the missing values are related to the actual value that is missing.
 
 
-## Mastering Data Wrangling for Stunning Visualizations
+#### Simulating MAR Data
+We'll create a scenario where `gdp_per_capita` is more likely to be missing if the population is below a certain threshold, making it "missing at random" based on population size.
+
+```{webr-r}
+set.seed(10)  # For reproducibility
+# Directly introduce missing values in a random sample of rows
+mar_data <- countriesDs %>%
+  mutate(
+    gdp_per_capita = ifelse(runif(n()) < 0.4, NA, gdp_per_capita)  # 20% chance of being NA
+  )
+# Check for missing values
+summary(mar_data$gdp_per_capita)  # Provides a summary of the column, including missing values
+```
+
+#### Simulating MNAR Data
+We'll simulate a scenario where the likelihood of `life_expectancy` being missing is higher if life expectancy is lower than 60 years, making it "missing not at random."
+
+```{webr-r}
+set.seed(456)  # For reproducibility
+
+mnar_data <- countriesDs %>%
+  mutate(
+    life_expectancy = ifelse(life_expectancy < 60 & runif(n()) < 0.4, NA, life_expectancy)
+  )
+# Check for missing values
+summary(mnar_data$life_expectancy)
+```
+
+#### Missing Data | Before Wrangling
+
+##### Before Handling Missing Data
+
+Let's visualize the data before handling missing values, focusing on the relationship between GDP per capita and life expectancy.
+
+##### Visualization with MAR Data
+```{webr-r}
+ggplot(mar_data, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (with MAR)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()
+```
+
+##### Visualization with MNAR Data
+```{webr-r}
+ggplot(mnar_data, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (with MNAR)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()
+```
+
+#### Missing Data | How to Wrangle
+
+To handle the missing data, we'll apply a simple imputation strategy, filling in missing values with the median of the respective variable.
+
+##### Imputing Missing Values for MAR Data
+```{webr-r}
+mar_data_imputed <- mar_data %>%
+  mutate(
+    gdp_per_capita = ifelse(is.na(gdp_per_capita), median(gdp_per_capita, na.rm = TRUE), gdp_per_capita)
+  )
+# Check imputation
+summary(mar_data_imputed$gdp_per_capita)
+```
+
+##### Imputing Missing Values for MNAR Data
+```{webr-r}
+mnar_data_imputed <- mnar_data %>%
+  mutate(
+    life_expectancy = ifelse(is.na(life_expectancy), median(life_expectancy, na.rm = TRUE), life_expectancy)
+  )
+# Check imputation
+summary(mnar_data_imputed$life_expectancy)
+```
+
+#### Missing Data | After Wrangling
+
+Let's visualize the data again after imputing the missing values.
+
+##### Visualization with MAR Data (Imputed)
+```{webr-r}
+ggplot(mar_data_imputed, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (after MAR Imputation)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()
+```
+
+##### Visualization with MNAR Data (Imputed)
+```{webr-r}
+ggplot(mnar_data_imputed, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (after MNAR Imputation)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()
+```
+
+#### Summary
+
+Understanding the different types of missing data—MCAR, MAR, and MNAR—is crucial for choosing the right approach to handle them. We explored how to simulate and visualize MAR and MNAR scenarios in our dataset, highlighting the importance of addressing missing data for accurate analysis. By comparing visualizations before and after imputation, students can grasp the significant impact missing data can have on their results and learn effective strategies to mitigate these issues.
+
+
+
+
+
+## Creating a Pseudo-Publication Ready Visualization
 
 We’ll combine all the data wrangling techniques you’ve learned—`filtering`, `selecting`, `mutating`, `summarizing`, and `joining`—to perform a detailed analysis and produce a polished, publication-ready visualization.
 
@@ -436,10 +723,18 @@ ggplot(summaryData, aes(
   )
 ```
 
-### Visualization Review
+### Review & Scrutinize 
 
-**Visualization**: The final product is a bubble plot that visually represents the relationship between GDP per capita (a key economic indicator) and life expectancy across the 10 countries. Each bubble corresponds to a country, with the size of the bubble reflecting its total population. This allows you to see not just how wealthy and healthy each country is, but also how large it is in terms of population.
+I say, let students do a discussion on this!
 
-**Publication-Ready**: The plot is designed to be clean, simple, and professional. We’ve used specific text styles for titles and subtitles to ensure clarity, and selected color schemes that are accessible to everyone, including those who are colorblind. This makes the visualization suitable for both academic presentations and professional reports.
+**What is this visualization?**: The final product is a bubble plot that visually represents the relationship between GDP per capita (a key economic indicator) and life expectancy across the 10 countries. Each bubble corresponds to a country, with the size of the bubble reflecting its total population. This allows you to see not just how wealthy and healthy each country is, but also how large it is in terms of population.
+
+**Is this Publication-Ready?**: The plot is designed to be clean, simple, and professional. We’ve used specific text styles for titles and subtitles to ensure clarity, and selected color schemes that are accessible to everyone, including those who are colorblind. This makes the visualization suitable for both academic presentations and professional reports.
 
 By mastering this approach, you'll see how various data wrangling techniques can be combined to create a powerful and insightful visualization. This process transforms raw data into a compelling story that is both informative and visually appealing, whether you’re working on a class project or preparing a professional report.
+
+
+
+# MISSING: IMAGES
+
+WORK IN PROGRESS: GET IMAGES AND CITE THEM FROM THE TEXTBOOKS

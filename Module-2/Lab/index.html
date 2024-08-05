@@ -8,9 +8,9 @@
 
 <meta name="author" content="Erin Howard">
 <meta name="author" content="Brian Cervantes Alvarez">
-<meta name="dcterms.date" content="2024-08-02">
+<meta name="dcterms.date" content="2024-08-05">
 
-<title>Lab 2: Data Wrangling in R</title>
+<title>Lab 2 | Data Wrangling in R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -713,61 +713,126 @@ globalThis.qwebrCreateNonInteractiveSetupElement = function(qwebrCounter) {
    
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
-  <li><a href="#what-is-data-wrangling" id="toc-what-is-data-wrangling" class="nav-link" data-scroll-target="#what-is-data-wrangling">What is Data Wrangling?</a></li>
+  <li><a href="#what-is-data-wrangling" id="toc-what-is-data-wrangling" class="nav-link" data-scroll-target="#what-is-data-wrangling">What is Data Wrangling?</a>
+  <ul>
+  <li><a href="#what-is-tidy-data" id="toc-what-is-tidy-data" class="nav-link" data-scroll-target="#what-is-tidy-data">What is Tidy Data?</a></li>
   <li><a href="#what-causes-untidy-data" id="toc-what-causes-untidy-data" class="nav-link" data-scroll-target="#what-causes-untidy-data">What Causes Untidy Data?</a></li>
-  <li><a href="#tidy-data" id="toc-tidy-data" class="nav-link" data-scroll-target="#tidy-data">Tidy Data</a></li>
-  <li><a href="#getting-stated-with-tidying-data" id="toc-getting-stated-with-tidying-data" class="nav-link" data-scroll-target="#getting-stated-with-tidying-data">Getting stated with tidying data</a>
+  </ul></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a>
   <ul>
-  <li><a href="#download-the-data" id="toc-download-the-data" class="nav-link" data-scroll-target="#download-the-data">Download the Data</a></li>
-  <li><a href="#verify-dataset-with-head" id="toc-verify-dataset-with-head" class="nav-link" data-scroll-target="#verify-dataset-with-head">Verify Dataset with <code>head()</code></a>
+  <li><a href="#download-the-data" id="toc-download-the-data" class="nav-link" data-scroll-target="#download-the-data">Download the Data</a>
   <ul>
+  <li><a href="#verify-datasets-with-head" id="toc-verify-datasets-with-head" class="nav-link" data-scroll-target="#verify-datasets-with-head">Verify Datasets with <code>head()</code></a></li>
   <li><a href="#description-of-the-dataset" id="toc-description-of-the-dataset" class="nav-link" data-scroll-target="#description-of-the-dataset">Description of the Dataset</a></li>
   <li><a href="#additional-dataset-countriesextra.csv" id="toc-additional-dataset-countriesextra.csv" class="nav-link" data-scroll-target="#additional-dataset-countriesextra.csv">Additional Dataset (<code>countriesExtra.csv</code>)</a></li>
   </ul></li>
-  <li><a href="#important-tidyverse-functions" id="toc-important-tidyverse-functions" class="nav-link" data-scroll-target="#important-tidyverse-functions">Important Tidyverse Functions</a></li>
   </ul></li>
-  <li><a href="#diving-into-data-wrangling" id="toc-diving-into-data-wrangling" class="nav-link" data-scroll-target="#diving-into-data-wrangling">Diving into Data Wrangling</a>
+  <li><a href="#tidy-data-wrangling" id="toc-tidy-data-wrangling" class="nav-link" data-scroll-target="#tidy-data-wrangling">Tidy Data Wrangling</a>
   <ul>
   <li><a href="#filtering" id="toc-filtering" class="nav-link" data-scroll-target="#filtering">Filtering</a>
   <ul>
-  <li><a href="#scenario-1" id="toc-scenario-1" class="nav-link" data-scroll-target="#scenario-1">Scenario 1:</a></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example 1</a>
+  <ul class="collapse">
   <li><a href="#filtering-process" id="toc-filtering-process" class="nav-link" data-scroll-target="#filtering-process">Filtering Process</a></li>
   <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
-  <li><a href="#why-filtering-helps" id="toc-why-filtering-helps" class="nav-link" data-scroll-target="#why-filtering-helps">Why Filtering Helps</a></li>
-  <li><a href="#scenario-2" id="toc-scenario-2" class="nav-link" data-scroll-target="#scenario-2">Scenario 2:</a></li>
+  <li><a href="#what-did-we-do-here" id="toc-what-did-we-do-here" class="nav-link" data-scroll-target="#what-did-we-do-here">What did we do here?</a></li>
+  </ul></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2">Example 2</a>
+  <ul class="collapse">
   <li><a href="#filtering-process-1" id="toc-filtering-process-1" class="nav-link" data-scroll-target="#filtering-process-1">Filtering Process</a></li>
   <li><a href="#visualization-1" id="toc-visualization-1" class="nav-link" data-scroll-target="#visualization-1">Visualization</a></li>
-  <li><a href="#why-filtering-helps-1" id="toc-why-filtering-helps-1" class="nav-link" data-scroll-target="#why-filtering-helps-1">Why Filtering Helps</a></li>
+  <li><a href="#what-did-we-do-here-1" id="toc-what-did-we-do-here-1" class="nav-link" data-scroll-target="#what-did-we-do-here-1">What did we do here?</a></li>
+  </ul></li>
   <li><a href="#filtering-challenges" id="toc-filtering-challenges" class="nav-link" data-scroll-target="#filtering-challenges">Filtering Challenges</a></li>
   </ul></li>
   <li><a href="#selecting" id="toc-selecting" class="nav-link" data-scroll-target="#selecting">Selecting</a>
   <ul>
+  <li><a href="#example-1-1" id="toc-example-1-1" class="nav-link" data-scroll-target="#example-1-1">Example 1</a>
+  <ul class="collapse">
+  <li><a href="#visualization-2" id="toc-visualization-2" class="nav-link" data-scroll-target="#visualization-2">Visualization</a></li>
+  </ul></li>
   <li><a href="#selecting-challenges" id="toc-selecting-challenges" class="nav-link" data-scroll-target="#selecting-challenges">Selecting Challenges</a></li>
   </ul></li>
   <li><a href="#mutating" id="toc-mutating" class="nav-link" data-scroll-target="#mutating">Mutating</a>
   <ul>
+  <li><a href="#example-1-2" id="toc-example-1-2" class="nav-link" data-scroll-target="#example-1-2">Example 1</a>
+  <ul class="collapse">
+  <li><a href="#visualization-3" id="toc-visualization-3" class="nav-link" data-scroll-target="#visualization-3">Visualization</a></li>
+  </ul></li>
   <li><a href="#mutating-challenges" id="toc-mutating-challenges" class="nav-link" data-scroll-target="#mutating-challenges">Mutating Challenges</a></li>
   </ul></li>
   <li><a href="#summarizing" id="toc-summarizing" class="nav-link" data-scroll-target="#summarizing">Summarizing</a>
   <ul>
-  <li><a href="#summarizing-challenges" id="toc-summarizing-challenges" class="nav-link" data-scroll-target="#summarizing-challenges">Summarizing Challenges</a></li>
+  <li><a href="#example-1-3" id="toc-example-1-3" class="nav-link" data-scroll-target="#example-1-3">Example 1</a>
+  <ul class="collapse">
+  <li><a href="#visualization-4" id="toc-visualization-4" class="nav-link" data-scroll-target="#visualization-4">Visualization</a></li>
   </ul></li>
-  <li><a href="#handling-dates" id="toc-handling-dates" class="nav-link" data-scroll-target="#handling-dates">Handling Dates</a>
-  <ul>
-  <li><a href="#converting-year-to-a-date" id="toc-converting-year-to-a-date" class="nav-link" data-scroll-target="#converting-year-to-a-date">Converting <code>year</code> to a Date</a></li>
-  <li><a href="#explanation" id="toc-explanation" class="nav-link" data-scroll-target="#explanation">Explanation:</a></li>
-  <li><a href="#converting-year-to-date-challenges" id="toc-converting-year-to-date-challenges" class="nav-link" data-scroll-target="#converting-year-to-date-challenges">Converting Year to Date Challenges</a></li>
+  <li><a href="#summarizing-challenges" id="toc-summarizing-challenges" class="nav-link" data-scroll-target="#summarizing-challenges">Summarizing Challenges</a></li>
   </ul></li>
   <li><a href="#joining" id="toc-joining" class="nav-link" data-scroll-target="#joining">Joining</a>
   <ul>
+  <li><a href="#example-1-4" id="toc-example-1-4" class="nav-link" data-scroll-target="#example-1-4">Example 1</a>
+  <ul class="collapse">
+  <li><a href="#visualization-5" id="toc-visualization-5" class="nav-link" data-scroll-target="#visualization-5">Visualization</a></li>
+  </ul></li>
   <li><a href="#joining-challenges" id="toc-joining-challenges" class="nav-link" data-scroll-target="#joining-challenges">Joining Challenges</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#mastering-data-wrangling-for-stunning-visualizations" id="toc-mastering-data-wrangling-for-stunning-visualizations" class="nav-link" data-scroll-target="#mastering-data-wrangling-for-stunning-visualizations">Mastering Data Wrangling for Stunning Visualizations</a>
+  <li><a href="#untidy-data-wrangling" id="toc-untidy-data-wrangling" class="nav-link" data-scroll-target="#untidy-data-wrangling">Untidy Data Wrangling</a>
+  <ul>
+  <li><a href="#handling-wide-vs.-long-formats" id="toc-handling-wide-vs.-long-formats" class="nav-link" data-scroll-target="#handling-wide-vs.-long-formats">Handling Wide vs.&nbsp;Long Formats</a>
+  <ul>
+  <li><a href="#creating-an-untidy-version" id="toc-creating-an-untidy-version" class="nav-link" data-scroll-target="#creating-an-untidy-version">Creating an Untidy Version</a></li>
+  </ul></li>
+  <li><a href="#handling-misspelled-header-column-names" id="toc-handling-misspelled-header-column-names" class="nav-link" data-scroll-target="#handling-misspelled-header-column-names">Handling Misspelled Header Column Names</a>
+  <ul>
+  <li><a href="#creating-misspelled-header-names" id="toc-creating-misspelled-header-names" class="nav-link" data-scroll-target="#creating-misspelled-header-names">Creating Misspelled Header Names</a></li>
+  <li><a href="#fixing-the-misspelled-column-names" id="toc-fixing-the-misspelled-column-names" class="nav-link" data-scroll-target="#fixing-the-misspelled-column-names">Fixing the Misspelled Column Names</a></li>
+  </ul></li>
+  <li><a href="#handling-row-content-split-and-reverse" id="toc-handling-row-content-split-and-reverse" class="nav-link" data-scroll-target="#handling-row-content-split-and-reverse">Handling Row Content Split and Reverse</a>
+  <ul>
+  <li><a href="#merging-two-columns-into-one" id="toc-merging-two-columns-into-one" class="nav-link" data-scroll-target="#merging-two-columns-into-one">Merging Two Columns into One</a></li>
+  <li><a href="#splitting-the-merged-column-back-into-two" id="toc-splitting-the-merged-column-back-into-two" class="nav-link" data-scroll-target="#splitting-the-merged-column-back-into-two">Splitting the Merged Column Back into Two</a></li>
+  </ul></li>
+  <li><a href="#handling-dates" id="toc-handling-dates" class="nav-link" data-scroll-target="#handling-dates">Handling Dates</a>
+  <ul>
+  <li><a href="#example-1-5" id="toc-example-1-5" class="nav-link" data-scroll-target="#example-1-5">Example 1</a>
+  <ul class="collapse">
+  <li><a href="#converting-year-to-a-date" id="toc-converting-year-to-a-date" class="nav-link" data-scroll-target="#converting-year-to-a-date">Converting <code>year</code> to a Date</a></li>
+  <li><a href="#what-did-we-do-here-2" id="toc-what-did-we-do-here-2" class="nav-link" data-scroll-target="#what-did-we-do-here-2">What did we do here?</a></li>
+  </ul></li>
+  <li><a href="#challenges-solutions" id="toc-challenges-solutions" class="nav-link" data-scroll-target="#challenges-solutions">Challenges [Solutions]</a></li>
+  </ul></li>
+  <li><a href="#handling-missing-data" id="toc-handling-missing-data" class="nav-link" data-scroll-target="#handling-missing-data">Handling Missing Data</a>
+  <ul>
+  <li><a href="#types-of-missing-data" id="toc-types-of-missing-data" class="nav-link" data-scroll-target="#types-of-missing-data">Types of Missing Data</a></li>
+  <li><a href="#simulating-mar-data" id="toc-simulating-mar-data" class="nav-link" data-scroll-target="#simulating-mar-data">Simulating MAR Data</a></li>
+  <li><a href="#simulating-mnar-data" id="toc-simulating-mnar-data" class="nav-link" data-scroll-target="#simulating-mnar-data">Simulating MNAR Data</a></li>
+  <li><a href="#missing-data-before-wrangling" id="toc-missing-data-before-wrangling" class="nav-link" data-scroll-target="#missing-data-before-wrangling">Missing Data | Before Wrangling</a>
+  <ul class="collapse">
+  <li><a href="#before-handling-missing-data" id="toc-before-handling-missing-data" class="nav-link" data-scroll-target="#before-handling-missing-data">Before Handling Missing Data</a></li>
+  <li><a href="#visualization-with-mar-data" id="toc-visualization-with-mar-data" class="nav-link" data-scroll-target="#visualization-with-mar-data">Visualization with MAR Data</a></li>
+  <li><a href="#visualization-with-mnar-data" id="toc-visualization-with-mnar-data" class="nav-link" data-scroll-target="#visualization-with-mnar-data">Visualization with MNAR Data</a></li>
+  </ul></li>
+  <li><a href="#missing-data-how-to-wrangle" id="toc-missing-data-how-to-wrangle" class="nav-link" data-scroll-target="#missing-data-how-to-wrangle">Missing Data | How to Wrangle</a>
+  <ul class="collapse">
+  <li><a href="#imputing-missing-values-for-mar-data" id="toc-imputing-missing-values-for-mar-data" class="nav-link" data-scroll-target="#imputing-missing-values-for-mar-data">Imputing Missing Values for MAR Data</a></li>
+  <li><a href="#imputing-missing-values-for-mnar-data" id="toc-imputing-missing-values-for-mnar-data" class="nav-link" data-scroll-target="#imputing-missing-values-for-mnar-data">Imputing Missing Values for MNAR Data</a></li>
+  </ul></li>
+  <li><a href="#missing-data-after-wrangling" id="toc-missing-data-after-wrangling" class="nav-link" data-scroll-target="#missing-data-after-wrangling">Missing Data | After Wrangling</a>
+  <ul class="collapse">
+  <li><a href="#visualization-with-mar-data-imputed" id="toc-visualization-with-mar-data-imputed" class="nav-link" data-scroll-target="#visualization-with-mar-data-imputed">Visualization with MAR Data (Imputed)</a></li>
+  <li><a href="#visualization-with-mnar-data-imputed" id="toc-visualization-with-mnar-data-imputed" class="nav-link" data-scroll-target="#visualization-with-mnar-data-imputed">Visualization with MNAR Data (Imputed)</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#creating-a-pseudo-publication-ready-visualization" id="toc-creating-a-pseudo-publication-ready-visualization" class="nav-link" data-scroll-target="#creating-a-pseudo-publication-ready-visualization">Creating a Pseudo-Publication Ready Visualization</a>
   <ul>
   <li><a href="#creating-a-professional-quality-visualization" id="toc-creating-a-professional-quality-visualization" class="nav-link" data-scroll-target="#creating-a-professional-quality-visualization">Creating a Professional-Quality Visualization</a></li>
-  <li><a href="#visualization-review" id="toc-visualization-review" class="nav-link" data-scroll-target="#visualization-review">Visualization Review</a></li>
+  <li><a href="#review-scrutinize" id="toc-review-scrutinize" class="nav-link" data-scroll-target="#review-scrutinize">Review &amp; Scrutinize</a></li>
   </ul></li>
+  <li><a href="#missing-images" id="toc-missing-images" class="nav-link" data-scroll-target="#missing-images">MISSING: IMAGES</a></li>
   </ul>
 </nav>
 </div>
@@ -869,7 +934,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Lab 2: Data Wrangling in R</h1>
+<h1 class="title">Lab 2 | Data Wrangling in R</h1>
 <p class="subtitle lead">ST 437 Data Visualization</p>
 </div>
 
@@ -888,7 +953,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 2, 2024</p>
+      <p class="date">August 5, 2024</p>
     </div>
   </div>
   
@@ -903,11 +968,11 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
 <ol type="1">
-<li>Understand the importance of data wrangling in the data analysis process.</li>
-<li>Transform and map raw data into a more suitable format for analysis.</li>
-<li>Emphasize the significance of data cleaning and preparation.</li>
-<li>Ensure data accuracy and consistency.</li>
-<li>Make reliable and valid conclusions based on well-prepared data.</li>
+<li><strong>Understand the Importance of Data Wrangling</strong>: Recognize the critical role of data wrangling in preparing datasets for accurate and meaningful analysis.</li>
+<li><strong>Master Data Transformation Techniques</strong>: Develop the ability to convert raw, untidy data into a structured format suitable for analysis and visualization.</li>
+<li><strong>Emphasize Data Cleaning and Preparation</strong>: Learn to identify and correct common data issues such as missing values, inconsistent formats, and incorrect entries.</li>
+<li><strong>Ensure Data Accuracy and Consistency</strong>: Gain skills in validating and maintaining the integrity of data throughout the wrangling process.</li>
+<li><strong>Draw Reliable Conclusions</strong>: Build confidence in making well-supported decisions and insights based on meticulously prepared and clean data.</li>
 </ol>
 </section>
 <section id="what-is-data-wrangling" class="level2">
@@ -918,32 +983,32 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 <li><strong>Industry challenges:</strong> Many industries have poorly designed data structures, requiring data preparation before visualization.</li>
 <li><strong>Rarely tidy datasets:</strong> It is uncommon to receive a dataset that is already tidy.</li>
 </ul>
-</section>
-<section id="what-causes-untidy-data" class="level2">
-<h2 class="anchored" data-anchor-id="what-causes-untidy-data">What Causes Untidy Data?</h2>
-<ul>
-<li><strong>Incorrect/Inconsistent dates:</strong> Dates can often be a headache due to inconsistencies.</li>
-<li><strong>Wide format times:</strong> Time data is often given in a wide format instead of long.</li>
-<li><strong>Void or misspelled descriptions:</strong> Descriptions can have gaps or missing/misspelled characters.</li>
-<li><strong>Missing values:</strong> Many datasets have missing values in some rows or columns.</li>
-<li><strong>Condensed or incorrect headers:</strong> Column names are often too short or mislabeled.</li>
-<li><strong>Row content split:</strong> Sometimes, data in a single row needs to be divided into multiple columns.</li>
-</ul>
-<p>Mastering data wrangling is crucial because you might have to handle datasets with millions of rows and hundreds of columns.</p>
-<p>In most cases, you will import data using SQL to create narrower datasets. However, when given large datasets, you can use R to manipulate and create subset datasets for focused analysis.</p>
-</section>
-<section id="tidy-data" class="level2">
-<h2 class="anchored" data-anchor-id="tidy-data">Tidy Data</h2>
+<section id="what-is-tidy-data" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-tidy-data">What is Tidy Data?</h3>
 <p>Tidy data is a structured format that aligns the organization of a dataset with its underlying meaning. In tidy data:</p>
 <ul>
 <li><strong>Each variable has its own column:</strong> Every column in the dataset corresponds to a specific variable or attribute.</li>
 <li><strong>Each observation has its own row:</strong> Every row captures a single observation or data entry.</li>
 <li><strong>Each cell contains a single value:</strong> Each cell holds one distinct piece of information for a particular variable and observation.</li>
 </ul>
+<p>In most cases, you will import data using SQL to create narrower datasets. However, when given large datasets, you can use R to manipulate and create subset datasets for focused analysis.</p>
 </section>
-<section id="getting-stated-with-tidying-data" class="level2">
-<h2 class="anchored" data-anchor-id="getting-stated-with-tidying-data">Getting stated with tidying data</h2>
-<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>ggplot2</code>, and <code>tidyr</code> packages for our examples.</p>
+<section id="what-causes-untidy-data" class="level3">
+<h3 class="anchored" data-anchor-id="what-causes-untidy-data">What Causes Untidy Data?</h3>
+<ul>
+<li><p><strong>Incorrect/Inconsistent Dates:</strong> Dates can be tricky because they might be formatted differently across datasets or have errors like typos or missing parts. For example, some data might use “MM/DD/YYYY” while others use “YYYY-MM-DD,” leading to confusion and potential errors when analyzing time-based data.</p></li>
+<li><p><strong>Wide Format Times:</strong> Time data is sometimes presented in a wide format, where each column represents a different time period. This structure can make it difficult to perform certain types of analysis, as many statistical and visualization tools prefer data in a long format, where each row represents a single observation at a specific time.</p></li>
+<li><p><strong>Void or Misspelled Descriptions:</strong> Descriptions and labels are often incomplete, missing, or contain typos. These errors can make it challenging to interpret the data correctly, especially when variables are not clearly defined or are inconsistent across different parts of the dataset.</p></li>
+<li><p><strong>Missing Values:</strong> Missing data is common and can occur in any part of a dataset, leading to gaps that can skew analysis or result in errors. Handling these missing values is crucial for ensuring that any conclusions drawn from the data are accurate.</p></li>
+<li><p><strong>Condensed or Incorrect Headers:</strong> Column names might be too short, unclear, or incorrectly labeled, leading to confusion about what the data actually represents. For example, a column labeled “Pop” might be ambiguous—does it refer to population, popularity, or something else?</p></li>
+<li><p><strong>Row Content Split:</strong> Sometimes, a single column contains data that should be divided into multiple columns, such as when a “Location” column includes both city and state. This issue can make it difficult to analyze the data separately or perform operations that rely on more granular details. These common issues contribute to untidy data, which can complicate analysis and lead to inaccurate results.</p></li>
+</ul>
+<p>Mastering data wrangling is crucial because you might have to handle datasets with millions of rows and hundreds of columns.</p>
+</section>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
+<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>ggplot2</code>, and <code>tidyr</code> packages for our examples. Since we are using webR, this document will automatically download the packages. If you are having an issue, double check your internet.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -989,9 +1054,8 @@ countriesExtraDs <- read_csv("countriesExtraInfo.csv", show_col_types = FALSE)`,
   1);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-<section id="verify-dataset-with-head" class="level3">
-<h3 class="anchored" data-anchor-id="verify-dataset-with-head">Verify Dataset with <code>head()</code></h3>
+<section id="verify-datasets-with-head" class="level4">
+<h4 class="anchored" data-anchor-id="verify-datasets-with-head">Verify Datasets with <code>head()</code></h4>
 <div id="qwebr-insertion-location-2"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1012,6 +1076,7 @@ head(countriesExtraDs, 5)`,
   2);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
 <section id="description-of-the-dataset" class="level4">
 <h4 class="anchored" data-anchor-id="description-of-the-dataset">Description of the Dataset</h4>
 <ul>
@@ -1035,28 +1100,25 @@ head(countriesExtraDs, 5)`,
 </ul>
 </section>
 </section>
-<section id="important-tidyverse-functions" class="level3">
-<h3 class="anchored" data-anchor-id="important-tidyverse-functions">Important Tidyverse Functions</h3>
+</section>
+<section id="tidy-data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="tidy-data-wrangling">Tidy Data Wrangling</h2>
+<p><strong>Important Concepts</strong></p>
 <ul>
-<li><strong>Filtering</strong>: Filter data based on conditions such as year, country, or region.</li>
-<li><strong>Selecting</strong>: Select specific columns for focused analysis.</li>
-<li><strong>Mutating</strong>: Create new columns, such as cases per 100,000 population.</li>
-<li><strong>Summarizing</strong>: Aggregate data by country, year, or region to find totals and averages.</li>
-<li><strong>Joining</strong>: Combine the main dataset with the additional data based on country.</li>
+<li><code>Filtering</code>: Filter data based on conditions such as year, country, or region.</li>
+<li><code>Selecting</code>: Select specific columns for focused analysis.</li>
+<li><code>Mutating</code>: Create new columns, such as cases per 100,000 population.</li>
+<li><code>Summarizing</code>: Aggregate data by country, year, or region to find totals and averages.</li>
+<li><code>Joining</code>: Combine the main dataset with the additional data based on country.</li>
 </ul>
-</section>
-</section>
-<section id="diving-into-data-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="diving-into-data-wrangling">Diving into Data Wrangling</h2>
 <section id="filtering" class="level3">
 <h3 class="anchored" data-anchor-id="filtering">Filtering</h3>
 <p>Filtering is essential for narrowing down datasets to the most relevant information, making patterns easier to identify.</p>
-<section id="scenario-1" class="level4">
-<h4 class="anchored" data-anchor-id="scenario-1">Scenario 1:</h4>
+<section id="example-1" class="level4">
+<h4 class="anchored" data-anchor-id="example-1">Example 1</h4>
 <p>You are tasked with visualizing trends in life expectancy in Asian countries between 2010 and 2020.</p>
-</section>
-<section id="filtering-process" class="level4">
-<h4 class="anchored" data-anchor-id="filtering-process">Filtering Process</h4>
+<section id="filtering-process" class="level5">
+<h5 class="anchored" data-anchor-id="filtering-process">Filtering Process</h5>
 <div id="qwebr-insertion-location-3"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1080,8 +1142,8 @@ head(filteredData, 5)`,
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="visualization" class="level4">
-<h4 class="anchored" data-anchor-id="visualization">Visualization</h4>
+<section id="visualization" class="level5">
+<h5 class="anchored" data-anchor-id="visualization">Visualization</h5>
 <div id="qwebr-insertion-location-4"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1106,16 +1168,16 @@ qwebrCreateMonacoEditorInstance(
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="why-filtering-helps" class="level4">
-<h4 class="anchored" data-anchor-id="why-filtering-helps">Why Filtering Helps</h4>
+<section id="what-did-we-do-here" class="level5">
+<h5 class="anchored" data-anchor-id="what-did-we-do-here">What did we do here?</h5>
 <p>By focusing on specific countries and years, filtering allows for more targeted and relevant visualizations, making it easier to analyze trends and patterns specific to the context.</p>
 </section>
-<section id="scenario-2" class="level4">
-<h4 class="anchored" data-anchor-id="scenario-2">Scenario 2:</h4>
-<p>Analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.</p>
 </section>
-<section id="filtering-process-1" class="level4">
-<h4 class="anchored" data-anchor-id="filtering-process-1">Filtering Process</h4>
+<section id="example-2" class="level4">
+<h4 class="anchored" data-anchor-id="example-2">Example 2</h4>
+<p>Analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above $30,000 for the years 2015-2020.</p>
+<section id="filtering-process-1" class="level5">
+<h5 class="anchored" data-anchor-id="filtering-process-1">Filtering Process</h5>
 <div id="qwebr-insertion-location-5"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1140,8 +1202,8 @@ head(filteredData, 5)`,
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="visualization-1" class="level4">
-<h4 class="anchored" data-anchor-id="visualization-1">Visualization</h4>
+<section id="visualization-1" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-1">Visualization</h5>
 <div id="qwebr-insertion-location-6"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1167,9 +1229,10 @@ qwebrCreateMonacoEditorInstance(
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="why-filtering-helps-1" class="level4">
-<h4 class="anchored" data-anchor-id="why-filtering-helps-1">Why Filtering Helps</h4>
+<section id="what-did-we-do-here-1" class="level5">
+<h5 class="anchored" data-anchor-id="what-did-we-do-here-1">What did we do here?</h5>
 <p>Filtering based on economic indicators allows for focused analysis on the relationship between wealth and life expectancy, removing noise from countries with different economic conditions.</p>
+</section>
 </section>
 <section id="filtering-challenges" class="level4">
 <h4 class="anchored" data-anchor-id="filtering-challenges">Filtering Challenges</h4>
@@ -1205,6 +1268,8 @@ qwebrCreateMonacoEditorInstance(
 <section id="selecting" class="level3">
 <h3 class="anchored" data-anchor-id="selecting">Selecting</h3>
 <p>Selecting allows you to focus on specific columns relevant to your analysis.</p>
+<section id="example-1-1" class="level4">
+<h4 class="anchored" data-anchor-id="example-1-1">Example 1</h4>
 <div id="qwebr-insertion-location-7"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1227,20 +1292,8 @@ head(selectedData, 5)`,
   7);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="selecting-challenges" class="level4">
-<h4 class="anchored" data-anchor-id="selecting-challenges">Selecting Challenges</h4>
-<ol type="1">
-<li><strong>Select columns</strong> related to economic indicators (e.g., <code>country</code>, <code>gdp_per_capita</code>, <code>population</code>) for further analysis.</li>
-<li><strong>Create a dataset</strong> with only the <code>year</code>, <code>life_expectancy</code>, and <code>temperature</code> columns for all countries and show the first 5 rows.</li>
-<li><strong>Choose columns</strong> that exclude any geographical information and check the first 10 rows.</li>
-<li><strong>Select and rename</strong> the <code>country</code> and <code>population</code> columns to <code>nation</code> and <code>pop_size</code>, respectively.</li>
-<li><strong>Create a new dataset</strong> with only the <code>year</code>, <code>population</code>, and a newly created column, <code>population_in_millions</code> (which should be calculated as <code>population / 1e6</code>).</li>
-</ol>
-</section>
-</section>
-<section id="mutating" class="level3">
-<h3 class="anchored" data-anchor-id="mutating">Mutating</h3>
-<p>Mutating helps create new columns based on existing data.</p>
+<section id="visualization-2" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-2">Visualization</h5>
 <div id="qwebr-insertion-location-8"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1256,27 +1309,32 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `mutatedData <- countriesDs %>%
-  mutate(gdp_total = gdp_per_capita * population)
-
-head(mutatedData, 5)`, 
+  `ggplot(selectedData, aes(x = factor(year), y = gdp_per_capita, fill = country)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "GDP per Capita Over Time in Selected European Countries",
+       x = "Year", y = "GDP per Capita") +
+  theme_minimal()`, 
   8);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="mutating-challenges" class="level4">
-<h4 class="anchored" data-anchor-id="mutating-challenges">Mutating Challenges</h4>
+</section>
+</section>
+<section id="selecting-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="selecting-challenges">Selecting Challenges</h4>
 <ol type="1">
-<li><strong>Create a new column</strong> called <code>gdp_total</code> that multiplies <code>gdp_per_capita</code> by <code>population</code>.</li>
-<li><strong>Add a new column</strong> that indicates whether a country’s GDP per capita is above or below a certain threshold (e.g., $20,000).</li>
-<li><strong>Mutate the <code>temperature</code> column</strong> to create a new column, <code>temperature_f</code>, that converts Celsius to Fahrenheit.</li>
-<li><strong>Create a <code>population_density</code> column</strong> by dividing <code>population</code> by a given area (assuming you have area data).</li>
-<li><strong>Generate a column</strong> that calculates the ratio of birth rate to life expectancy for each country.</li>
+<li><strong>Select columns</strong> related to economic indicators (e.g., <code>country</code>, <code>gdp_per_capita</code>, <code>population</code>) for further analysis.</li>
+<li><strong>Create a dataset</strong> with only the <code>year</code>, <code>life_expectancy</code>, and <code>temperature</code> columns for all countries and show the first 5 rows.</li>
+<li><strong>Choose columns</strong> that exclude any geographical information and check the first 10 rows.</li>
+<li><strong>Select and rename</strong> the <code>country</code> and <code>population</code> columns to <code>nation</code> and <code>pop_size</code>, respectively.</li>
+<li><strong>Create a new dataset</strong> with only the <code>year</code>, <code>population</code>, and a newly created column, <code>population_in_millions</code> (which should be calculated as <code>population / 1e6</code>).</li>
 </ol>
 </section>
 </section>
-<section id="summarizing" class="level3">
-<h3 class="anchored" data-anchor-id="summarizing">Summarizing</h3>
-<p>Summarizing aggregates data by country, year, or region to find totals and averages.</p>
+<section id="mutating" class="level3">
+<h3 class="anchored" data-anchor-id="mutating">Mutating</h3>
+<p>Mutating helps create new columns based on existing data.</p>
+<section id="example-1-2" class="level4">
+<h4 class="anchored" data-anchor-id="example-1-2">Example 1</h4>
 <div id="qwebr-insertion-location-9"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1292,34 +1350,15 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `summaryData <- countriesDs %>%
-  group_by(country) %>%
-  summarize(
-    avg_life_expectancy = mean(life_expectancy, na.rm = TRUE),
-    total_population = sum(population, na.rm = TRUE)
-  )
+  `mutatedData <- countriesDs %>%
+  mutate(gdp_total = gdp_per_capita * population)
 
-head(summaryData, 5)`, 
+head(mutatedData, 5)`, 
   9);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="summarizing-challenges" class="level4">
-<h4 class="anchored" data-anchor-id="summarizing-challenges">Summarizing Challenges</h4>
-<ol type="1">
-<li><strong>Summarize the dataset</strong> by finding the average temperature for each region.</li>
-<li><strong>Aggregate the data</strong> to find the total population and average life expectancy for each continent.</li>
-<li><strong>Group the data</strong> by country and summarize to find the maximum and minimum GDP per capita for each country.</li>
-<li><strong>Summarize by year</strong> to find the total population and average birth rate each year.</li>
-<li><strong>Create a summary</strong> that calculates the total population and average GDP per capita for countries classified as “First World.”</li>
-</ol>
-</section>
-</section>
-<section id="handling-dates" class="level3">
-<h3 class="anchored" data-anchor-id="handling-dates">Handling Dates</h3>
-<p>In some cases, it might be necessary to convert a <code>year</code> column from a numeric format (double) into a proper date format for time series analysis or plotting purposes. Here’s how you can do that in R using the <code>lubridate</code> package.</p>
-<section id="converting-year-to-a-date" class="level4">
-<h4 class="anchored" data-anchor-id="converting-year-to-a-date">Converting <code>year</code> to a Date</h4>
-<p>Let’s convert the <code>year</code> column into a date format, setting it as January 1st of that year.</p>
+<section id="visualization-3" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-3">Visualization</h5>
 <div id="qwebr-insertion-location-10"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1335,34 +1374,32 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `# Ensure the lubridate package is loaded
-
-# Convert the year column to a date format (January 1st of each year)
-countriesDs <- countriesDs %>%
-  mutate(year_date = ymd(paste0(year, "-01-01")))
-
-# Check the first few rows to see the new column
-head(countriesDs, 5)`, 
+  `ggplot(mutatedData, aes(x = population, y = gdp_total, color = region)) +
+  geom_point(size = 2) +
+  labs(title = "Population vs. Total GDP by Region",
+       x = "Population", y = "Total GDP") +
+  theme_minimal()`, 
   10);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="explanation" class="level4">
-<h4 class="anchored" data-anchor-id="explanation">Explanation:</h4>
-<ul>
-<li><strong><code>paste0(year, "-01-01")</code></strong>: Combines the year with the string “-01-01” to create a date string like “2010-01-01”.</li>
-<li><strong><code>ymd()</code></strong>: Converts the resulting string into a date object in the “Year-Month-Day” format.</li>
-</ul>
-<p>This creates a new column, <code>year_date</code>, which is now in the proper date format.</p>
 </section>
-<section id="converting-year-to-date-challenges" class="level4">
-<h4 class="anchored" data-anchor-id="converting-year-to-date-challenges">Converting Year to Date Challenges</h4>
+<section id="mutating-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="mutating-challenges">Mutating Challenges</h4>
 <ol type="1">
-<li><strong>Convert year to end of year date</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, but set it as December 31st of that year.</li>
-<li><strong>Purpose</strong>: Useful for representing data that summarizes annual results.</li>
-</ul>
+<li><strong>Create a new column</strong> called <code>gdp_total</code> that multiplies <code>gdp_per_capita</code> by <code>population</code>.</li>
+<li><strong>Add a new column</strong> that indicates whether a country’s GDP per capita is above or below a certain threshold (e.g., $20,000).</li>
+<li><strong>Mutate the <code>temperature</code> column</strong> to create a new column, <code>temperature_f</code>, that converts Celsius to Fahrenheit.</li>
+<li><strong>Create a <code>population_density</code> column</strong> by dividing <code>population</code> by a given area (assuming you have area data).</li>
+<li><strong>Generate a column</strong> that calculates the ratio of birth rate to life expectancy for each country.</li>
+</ol>
+</section>
+</section>
+<section id="summarizing" class="level3">
+<h3 class="anchored" data-anchor-id="summarizing">Summarizing</h3>
+<p>Summarizing aggregates data by country, year, or region to find totals and averages.</p>
+<section id="example-1-3" class="level4">
+<h4 class="anchored" data-anchor-id="example-1-3">Example 1</h4>
 <div id="qwebr-insertion-location-11"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1378,18 +1415,19 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs %>%
-  mutate(year_end_date = ymd(paste0(year, "-12-31")))
+  `summaryData <- countriesDs %>%
+  group_by(country) %>%
+  summarize(
+    avg_life_expectancy = mean(life_expectancy, na.rm = TRUE),
+    total_population = sum(population, na.rm = TRUE)
+  )
 
-head(countriesDs, 5)`, 
+head(summaryData, 5)`, 
   11);
 </script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-<li><strong>Create a quarterly date</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the first quarter (e.g., “2010-03-31”).</li>
-<li><strong>Purpose</strong>: Useful for quarterly analysis.</li>
-</ul>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="visualization-4" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-4">Visualization</h5>
 <div id="qwebr-insertion-location-12"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1405,18 +1443,33 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs %>%
-  mutate(quarter_date = ymd(paste0(year, "-03-31")))
-
-head(countriesDs, 5)`, 
+  `ggplot(summaryData, aes(x = total_population, y = avg_life_expectancy, label = country)) +
+  geom_point(size = 2) +
+  geom_text(vjust = -0.5) +
+  labs(title = "Total Population vs. Average Life Expectancy by Country",
+       x = "Total Population", y = "Average Life Expectancy") +
+  theme_minimal()`, 
   12);
 </script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-<li><strong>Mid-year date conversion</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, setting it as June 30th of each year.</li>
-<li><strong>Purpose</strong>: Represents mid-year data points.</li>
-</ul>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+</section>
+<section id="summarizing-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="summarizing-challenges">Summarizing Challenges</h4>
+<ol type="1">
+<li><strong>Summarize the dataset</strong> by finding the average temperature for each region.</li>
+<li><strong>Aggregate the data</strong> to find the total population and average life expectancy for each continent.</li>
+<li><strong>Group the data</strong> by country and summarize to find the maximum and minimum GDP per capita for each country.</li>
+<li><strong>Summarize by year</strong> to find the total population and average birth rate each year.</li>
+<li><strong>Create a summary</strong> that calculates the total population and average GDP per capita for countries classified as “First World.”</li>
+</ol>
+</section>
+</section>
+<section id="joining" class="level3">
+<h3 class="anchored" data-anchor-id="joining">Joining</h3>
+<p>Joining combines data from the main dataset with additional data.</p>
+<section id="example-1-4" class="level4">
+<h4 class="anchored" data-anchor-id="example-1-4">Example 1</h4>
 <div id="qwebr-insertion-location-13"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1432,18 +1485,14 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs %>%
-  mutate(mid_year_date = ymd(paste0(year, "-06-30")))
+  `joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
 
-head(countriesDs, 5)`, 
+head(joinedData, 5)`, 
   13);
 </script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-<li><strong>Use year as a dynamic time period</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column to represent the last day of a chosen month (e.g., November).</li>
-<li><strong>Purpose</strong>: Allows for flexibility depending on the analysis context.</li>
-</ul>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="visualization-5" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-5">Visualization</h5>
 <div id="qwebr-insertion-location-14"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1459,19 +1508,36 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `chosen_month <- "11"
-countriesDs <- countriesDs %>%
-  mutate(chosen_month_date = ymd(paste0(year, "-", chosen_month, "-30")))
-
-head(countriesDs, 5)`, 
+  `ggplot(joinedData, aes(x = continent, y = gdp_per_capita, fill = region)) +
+  geom_boxplot() +
+  labs(title = "GDP per Capita Distribution by Continent and Region",
+       x = "Continent", y = "GDP per Capita") +
+  theme_minimal()`, 
   14);
 </script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-<li><strong>Convert year to fiscal year start date</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the start of the fiscal year (e.g., April 1st).</li>
-<li><strong>Purpose</strong>: Useful for financial and budgetary analyses.</li>
-</ul>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+</section>
+<section id="joining-challenges" class="level4">
+<h4 class="anchored" data-anchor-id="joining-challenges">Joining Challenges</h4>
+<ol type="1">
+<li><strong>Perform a left join</strong> on the main dataset and an additional dataset that contains information on urbanization rates by country.</li>
+<li><strong>Join the datasets</strong> to add <code>continent</code> and then filter for countries in a specific continent.</li>
+<li><strong>Create a new dataset</strong> by performing an inner join on <code>countriesDs</code> and <code>countriesExtraDs</code>, then analyze the countries present in both datasets.</li>
+<li><strong>Perform a full join</strong> to combine the datasets and identify countries that are missing from one dataset but present in the other.</li>
+<li><strong>Use an anti-join</strong> to find the countries in the main dataset that do not have corresponding information in the additional dataset.</li>
+</ol>
+</section>
+</section>
+</section>
+<section id="untidy-data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="untidy-data-wrangling">Untidy Data Wrangling</h2>
+<section id="handling-wide-vs.-long-formats" class="level3">
+<h3 class="anchored" data-anchor-id="handling-wide-vs.-long-formats">Handling Wide vs.&nbsp;Long Formats</h3>
+<p>Untidy data often comes in a “wide” format, where multiple variables are stored across columns rather than in a long format where each observation is a row.</p>
+<section id="creating-an-untidy-version" class="level4">
+<h4 class="anchored" data-anchor-id="creating-an-untidy-version">Creating an Untidy Version</h4>
+<p>To demonstrate this, let’s take our dataset and convert it into a wide format, then back to a long format.</p>
 <div id="qwebr-insertion-location-15"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1487,19 +1553,16 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs %>%
-  mutate(fiscal_year_start = ymd(paste0(year, "-04-01")))
+  `# Create a wide format from the existing long format
+wideData <- countriesDs %>%
+  pivot_wider(names_from = year, values_from = c(population, gdp))
 
-head(countriesDs, 5)`, 
+# Preview the wide data
+head(wideData, 5)`, 
   15);
 </script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-</ol>
-</section>
-</section>
-<section id="joining" class="level3">
-<h3 class="anchored" data-anchor-id="joining">Joining</h3>
-<p>Joining combines data from the main dataset with additional data.</p>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>Now, let’s convert this wide data back to a long format.</p>
 <div id="qwebr-insertion-location-16"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1515,30 +1578,26 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
+  `# Convert the wide format back to long format
+longData <- wideData %>%
+  pivot_longer(cols = starts_with(c("population", "gdp")),
+               names_to = c(".value", "year"),
+               names_sep = "_")
 
-head(joinedData, 5)`, 
+# Preview the long data
+head(longData, 5)`, 
   16);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="joining-challenges" class="level4">
-<h4 class="anchored" data-anchor-id="joining-challenges">Joining Challenges</h4>
-<ol type="1">
-<li><strong>Perform a left join</strong> on the main dataset and an additional dataset that contains information on urbanization rates by country.</li>
-<li><strong>Join the datasets</strong> to add <code>continent</code> and then filter for countries in a specific continent.</li>
-<li><strong>Create a new dataset</strong> by performing an inner join on <code>countriesDs</code> and <code>countriesExtraDs</code>, then analyze the countries present in both datasets.</li>
-<li><strong>Perform a full join</strong> to combine the datasets and identify countries that are missing from one dataset but present in the other.</li>
-<li><strong>Use an anti-join</strong> to find the countries in the main dataset that do not have corresponding information in the additional dataset.</li>
-</ol>
+<p>This process shows how data can be reshaped for different analytical needs. Wide format is useful for certain analyses but often needs to be converted to long format for modeling and visualization.</p>
 </section>
 </section>
-</section>
-<section id="mastering-data-wrangling-for-stunning-visualizations" class="level2">
-<h2 class="anchored" data-anchor-id="mastering-data-wrangling-for-stunning-visualizations">Mastering Data Wrangling for Stunning Visualizations</h2>
-<p>We’ll combine all the data wrangling techniques you’ve learned—<code>filtering</code>, <code>selecting</code>, <code>mutating</code>, <code>summarizing</code>, and <code>joining</code>—to perform a detailed analysis and produce a polished, publication-ready visualization.</p>
-<section id="creating-a-professional-quality-visualization" class="level3">
-<h3 class="anchored" data-anchor-id="creating-a-professional-quality-visualization">Creating a Professional-Quality Visualization</h3>
-<p>Here’s a step-by-step guide to transform and visualize data from 10 countries in the dataset:</p>
+<section id="handling-misspelled-header-column-names" class="level3">
+<h3 class="anchored" data-anchor-id="handling-misspelled-header-column-names">Handling Misspelled Header Column Names</h3>
+<p>Sometimes datasets come with misspelled or inconsistent column names, which can lead to errors in data manipulation.</p>
+<section id="creating-misspelled-header-names" class="level4">
+<h4 class="anchored" data-anchor-id="creating-misspelled-header-names">Creating Misspelled Header Names</h4>
+<p>Let’s create a dataset with intentionally misspelled column names and then fix them.</p>
 <div id="qwebr-insertion-location-17"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1547,6 +1606,592 @@ const currentDocumentLocation = document.getElementById("qwebr-insertion-locatio
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
     17
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Create a dataset with misspelled column names
+misspelledHeaders <- countriesDs %>%
+  rename(
+    poplation = population,
+    gdp_pper_capita = gdp_per_capita,
+    lif_expectancy = life_expectancy
+  )
+
+# Preview the dataset with misspelled headers
+head(misspelledHeaders, 5)`, 
+  17);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="fixing-the-misspelled-column-names" class="level4">
+<h4 class="anchored" data-anchor-id="fixing-the-misspelled-column-names">Fixing the Misspelled Column Names</h4>
+<div id="qwebr-insertion-location-18"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-18");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    18
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Correct the misspelled column names
+correctedHeaders <- misspelledHeaders %>%
+  rename(
+    population = poplation,
+    gdp_per_capita = gdp_pper_capita,
+    life_expectancy = lif_expectancy
+  )
+
+# Preview the corrected dataset
+head(correctedHeaders, 5)`, 
+  18);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>This illustrates how to identify and correct misspelled column names, which is a crucial step in data cleaning.</p>
+</section>
+</section>
+<section id="handling-row-content-split-and-reverse" class="level3">
+<h3 class="anchored" data-anchor-id="handling-row-content-split-and-reverse">Handling Row Content Split and Reverse</h3>
+<p>Sometimes, data stored in a single column needs to be split into multiple columns or vice versa.</p>
+<section id="merging-two-columns-into-one" class="level4">
+<h4 class="anchored" data-anchor-id="merging-two-columns-into-one">Merging Two Columns into One</h4>
+<p>Let’s take the <code>country</code> and <code>year</code> columns and merge them into a single column.</p>
+<div id="qwebr-insertion-location-19"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-19");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    19
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Combine 'country' and 'year' into a single column
+mergedData <- countriesDs %>%
+  unite("country_year", country, year, sep = "_")
+
+# Preview the merged dataset
+head(mergedData, 5)`, 
+  19);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="splitting-the-merged-column-back-into-two" class="level4">
+<h4 class="anchored" data-anchor-id="splitting-the-merged-column-back-into-two">Splitting the Merged Column Back into Two</h4>
+<div id="qwebr-insertion-location-20"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-20");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    20
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Split the 'country_year' column back into 'country' and 'year'
+splitData <- mergedData %>%
+  separate(country_year, into = c("country", "year"), sep = "_")
+
+# Preview the split dataset
+head(splitData, 5)`, 
+  20);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>This demonstrates how to handle situations where data needs to be recombined or separated for different purposes.</p>
+</section>
+</section>
+<section id="handling-dates" class="level3">
+<h3 class="anchored" data-anchor-id="handling-dates">Handling Dates</h3>
+<p>In some cases, it might be necessary to convert a <code>year</code> column from a numeric format (double) into a proper date format for time series analysis or plotting purposes. Here’s how you can do that in R using the <code>lubridate</code> package.</p>
+<section id="example-1-5" class="level4">
+<h4 class="anchored" data-anchor-id="example-1-5">Example 1</h4>
+<section id="converting-year-to-a-date" class="level5">
+<h5 class="anchored" data-anchor-id="converting-year-to-a-date">Converting <code>year</code> to a Date</h5>
+<p>Let’s convert the <code>year</code> column into a date format, setting it as January 1st of that year.</p>
+<div id="qwebr-insertion-location-21"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-21");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    21
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Ensure the lubridate package is loaded
+# Convert the year column to a date format (January 1st of each year)
+countriesDs <- countriesDs %>%
+  mutate(year_date = ymd(paste0(year, "-01-01")))
+
+# Check the first few rows to see the new column
+head(countriesDs, 5)`, 
+  21);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="what-did-we-do-here-2" class="level5">
+<h5 class="anchored" data-anchor-id="what-did-we-do-here-2">What did we do here?</h5>
+<ul>
+<li><strong><code>paste0(year, "-01-01")</code></strong>: Combines the year with the string “-01-01” to create a date string like “2010-01-01”.</li>
+<li><strong><code>ymd()</code></strong>: Converts the resulting string into a date object in the “Year-Month-Day” format.</li>
+</ul>
+<p>This creates a new column, <code>year_date</code>, which is now in the proper date format.</p>
+</section>
+</section>
+<section id="challenges-solutions" class="level4">
+<h4 class="anchored" data-anchor-id="challenges-solutions">Challenges [Solutions]</h4>
+<ol type="1">
+<li><strong>Convert year to end of year date</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, but set it as December 31st of that year.</li>
+<li><strong>Purpose</strong>: Useful for representing data that summarizes annual results.</li>
+</ul>
+<div id="qwebr-insertion-location-22"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-22");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    22
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs %>%
+  mutate(year_end_date = ymd(paste0(year, "-12-31")))
+
+head(countriesDs, 5)`, 
+  22);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><strong>Create a quarterly date</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the first quarter (e.g., “2010-03-31”).</li>
+<li><strong>Purpose</strong>: Useful for quarterly analysis.</li>
+</ul>
+<div id="qwebr-insertion-location-23"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-23");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    23
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs %>%
+  mutate(quarter_date = ymd(paste0(year, "-03-31")))
+
+head(countriesDs, 5)`, 
+  23);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><strong>Mid-year date conversion</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, setting it as June 30th of each year.</li>
+<li><strong>Purpose</strong>: Represents mid-year data points.</li>
+</ul>
+<div id="qwebr-insertion-location-24"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-24");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    24
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs %>%
+  mutate(mid_year_date = ymd(paste0(year, "-06-30")))
+
+head(countriesDs, 5)`, 
+  24);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><strong>Use year as a dynamic time period</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to represent the last day of a chosen month (e.g., November).</li>
+<li><strong>Purpose</strong>: Allows for flexibility depending on the analysis context.</li>
+</ul>
+<div id="qwebr-insertion-location-25"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-25");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    25
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `chosen_month <- "11"
+countriesDs <- countriesDs %>%
+  mutate(chosen_month_date = ymd(paste0(year, "-", chosen_month, "-30")))
+
+head(countriesDs, 5)`, 
+  25);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><strong>Convert year to fiscal year start date</strong>:
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the start of the fiscal year (e.g., April 1st).</li>
+<li><strong>Purpose</strong>: Useful for financial and budgetary analyses.</li>
+</ul>
+<div id="qwebr-insertion-location-26"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-26");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    26
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs %>%
+  mutate(fiscal_year_start = ymd(paste0(year, "-04-01")))
+
+head(countriesDs, 5)`, 
+  26);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+</ol>
+<div id="qwebr-insertion-location-27"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-27");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    27
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `ggplot(countriesDs, aes(x = year_date, y = population, color = country)) +
+  geom_line(size = 1) +
+  labs(title = "Population Trends Over Time by Country",
+       x = "Year", y = "Population") +
+  theme_minimal()`, 
+  27);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+</section>
+<section id="handling-missing-data" class="level3">
+<h3 class="anchored" data-anchor-id="handling-missing-data">Handling Missing Data</h3>
+<p>Dealing with missing data is a crucial aspect of data wrangling. Missing data can occur for various reasons, and understanding the nature of these missing values is essential for appropriate handling.</p>
+<section id="types-of-missing-data" class="level4">
+<h4 class="anchored" data-anchor-id="types-of-missing-data">Types of Missing Data</h4>
+<ul>
+<li><strong>MCAR (Missing Completely at Random)</strong>: Data is missing entirely at random, with no relationship between the missing data and any other observed or unobserved data. The analysis remains unbiased if this missing data is ignored.</li>
+<li><strong>MAR (Missing at Random)</strong>: The likelihood of missing data on a variable is related to other observed variables but not to the value of the variable itself.</li>
+<li><strong>MNAR (Missing Not at Random)</strong>: The missingness is related to the unobserved data itself, meaning the missing values are related to the actual value that is missing.</li>
+</ul>
+</section>
+<section id="simulating-mar-data" class="level4">
+<h4 class="anchored" data-anchor-id="simulating-mar-data">Simulating MAR Data</h4>
+<p>We’ll create a scenario where <code>gdp_per_capita</code> is more likely to be missing if the population is below a certain threshold, making it “missing at random” based on population size.</p>
+<div id="qwebr-insertion-location-28"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-28");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    28
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `set.seed(10)  # For reproducibility
+# Directly introduce missing values in a random sample of rows
+mar_data <- countriesDs %>%
+  mutate(
+    gdp_per_capita = ifelse(runif(n()) < 0.4, NA, gdp_per_capita)  # 20% chance of being NA
+  )
+# Check for missing values
+summary(mar_data$gdp_per_capita)  # Provides a summary of the column, including missing values`, 
+  28);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="simulating-mnar-data" class="level4">
+<h4 class="anchored" data-anchor-id="simulating-mnar-data">Simulating MNAR Data</h4>
+<p>We’ll simulate a scenario where the likelihood of <code>life_expectancy</code> being missing is higher if life expectancy is lower than 60 years, making it “missing not at random.”</p>
+<div id="qwebr-insertion-location-29"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-29");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    29
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `set.seed(456)  # For reproducibility
+
+mnar_data <- countriesDs %>%
+  mutate(
+    life_expectancy = ifelse(life_expectancy < 60 & runif(n()) < 0.4, NA, life_expectancy)
+  )
+# Check for missing values
+summary(mnar_data$life_expectancy)`, 
+  29);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="missing-data-before-wrangling" class="level4">
+<h4 class="anchored" data-anchor-id="missing-data-before-wrangling">Missing Data | Before Wrangling</h4>
+<section id="before-handling-missing-data" class="level5">
+<h5 class="anchored" data-anchor-id="before-handling-missing-data">Before Handling Missing Data</h5>
+<p>Let’s visualize the data before handling missing values, focusing on the relationship between GDP per capita and life expectancy.</p>
+</section>
+<section id="visualization-with-mar-data" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mar-data">Visualization with MAR Data</h5>
+<div id="qwebr-insertion-location-30"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-30");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    30
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `ggplot(mar_data, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (with MAR)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()`, 
+  30);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="visualization-with-mnar-data" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mnar-data">Visualization with MNAR Data</h5>
+<div id="qwebr-insertion-location-31"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-31");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    31
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `ggplot(mnar_data, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (with MNAR)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()`, 
+  31);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+</section>
+<section id="missing-data-how-to-wrangle" class="level4">
+<h4 class="anchored" data-anchor-id="missing-data-how-to-wrangle">Missing Data | How to Wrangle</h4>
+<p>To handle the missing data, we’ll apply a simple imputation strategy, filling in missing values with the median of the respective variable.</p>
+<section id="imputing-missing-values-for-mar-data" class="level5">
+<h5 class="anchored" data-anchor-id="imputing-missing-values-for-mar-data">Imputing Missing Values for MAR Data</h5>
+<div id="qwebr-insertion-location-32"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-32");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    32
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `mar_data_imputed <- mar_data %>%
+  mutate(
+    gdp_per_capita = ifelse(is.na(gdp_per_capita), median(gdp_per_capita, na.rm = TRUE), gdp_per_capita)
+  )
+# Check imputation
+summary(mar_data_imputed$gdp_per_capita)`, 
+  32);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="imputing-missing-values-for-mnar-data" class="level5">
+<h5 class="anchored" data-anchor-id="imputing-missing-values-for-mnar-data">Imputing Missing Values for MNAR Data</h5>
+<div id="qwebr-insertion-location-33"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-33");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    33
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `mnar_data_imputed <- mnar_data %>%
+  mutate(
+    life_expectancy = ifelse(is.na(life_expectancy), median(life_expectancy, na.rm = TRUE), life_expectancy)
+  )
+# Check imputation
+summary(mnar_data_imputed$life_expectancy)`, 
+  33);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+</section>
+<section id="missing-data-after-wrangling" class="level4">
+<h4 class="anchored" data-anchor-id="missing-data-after-wrangling">Missing Data | After Wrangling</h4>
+<p>Let’s visualize the data again after imputing the missing values.</p>
+<section id="visualization-with-mar-data-imputed" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mar-data-imputed">Visualization with MAR Data (Imputed)</h5>
+<div id="qwebr-insertion-location-34"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-34");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    34
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `ggplot(mar_data_imputed, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (after MAR Imputation)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()`, 
+  34);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="visualization-with-mnar-data-imputed" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mnar-data-imputed">Visualization with MNAR Data (Imputed)</h5>
+<div id="qwebr-insertion-location-35"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-35");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    35
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `ggplot(mnar_data_imputed, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (after MNAR Imputation)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()`, 
+  35);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+</section>
+<section id="summary" class="level4">
+<h4 class="anchored" data-anchor-id="summary">Summary</h4>
+<p>Understanding the different types of missing data—MCAR, MAR, and MNAR—is crucial for choosing the right approach to handle them. We explored how to simulate and visualize MAR and MNAR scenarios in our dataset, highlighting the importance of addressing missing data for accurate analysis. By comparing visualizations before and after imputation, students can grasp the significant impact missing data can have on their results and learn effective strategies to mitigate these issues.</p>
+</section>
+</section>
+</section>
+<section id="creating-a-pseudo-publication-ready-visualization" class="level2">
+<h2 class="anchored" data-anchor-id="creating-a-pseudo-publication-ready-visualization">Creating a Pseudo-Publication Ready Visualization</h2>
+<p>We’ll combine all the data wrangling techniques you’ve learned—<code>filtering</code>, <code>selecting</code>, <code>mutating</code>, <code>summarizing</code>, and <code>joining</code>—to perform a detailed analysis and produce a polished, publication-ready visualization.</p>
+<section id="creating-a-professional-quality-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="creating-a-professional-quality-visualization">Creating a Professional-Quality Visualization</h3>
+<p>Here’s a step-by-step guide to transform and visualize data from 10 countries in the dataset:</p>
+<div id="qwebr-insertion-location-36"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-36");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    36
   );
 
 // Add the interactive element into the document scope
@@ -1617,16 +2262,21 @@ ggplot(summaryData, aes(
     legend.text = element_text(size = 8), 
     legend.position = "bottom"
   )`, 
-  17);
+  36);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="visualization-review" class="level3">
-<h3 class="anchored" data-anchor-id="visualization-review">Visualization Review</h3>
-<p><strong>Visualization</strong>: The final product is a bubble plot that visually represents the relationship between GDP per capita (a key economic indicator) and life expectancy across the 10 countries. Each bubble corresponds to a country, with the size of the bubble reflecting its total population. This allows you to see not just how wealthy and healthy each country is, but also how large it is in terms of population.</p>
-<p><strong>Publication-Ready</strong>: The plot is designed to be clean, simple, and professional. We’ve used specific text styles for titles and subtitles to ensure clarity, and selected color schemes that are accessible to everyone, including those who are colorblind. This makes the visualization suitable for both academic presentations and professional reports.</p>
+<section id="review-scrutinize" class="level3">
+<h3 class="anchored" data-anchor-id="review-scrutinize">Review &amp; Scrutinize</h3>
+<p>I say, let students do a discussion on this!</p>
+<p><strong>What is this visualization?</strong>: The final product is a bubble plot that visually represents the relationship between GDP per capita (a key economic indicator) and life expectancy across the 10 countries. Each bubble corresponds to a country, with the size of the bubble reflecting its total population. This allows you to see not just how wealthy and healthy each country is, but also how large it is in terms of population.</p>
+<p><strong>Is this Publication-Ready?</strong>: The plot is designed to be clean, simple, and professional. We’ve used specific text styles for titles and subtitles to ensure clarity, and selected color schemes that are accessible to everyone, including those who are colorblind. This makes the visualization suitable for both academic presentations and professional reports.</p>
 <p>By mastering this approach, you’ll see how various data wrangling techniques can be combined to create a powerful and insightful visualization. This process transforms raw data into a compelling story that is both informative and visually appealing, whether you’re working on a class project or preparing a professional report.</p>
 </section>
+</section>
+<section id="missing-images" class="level1">
+<h1>MISSING: IMAGES</h1>
+<p>WORK IN PROGRESS: GET IMAGES AND CITE THEM FROM THE TEXTBOOKS</p>
 </section>
 
 </main>
