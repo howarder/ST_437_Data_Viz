@@ -197,7 +197,7 @@ fieldset:disabled .qwebr-button-run {
 const initializeWebRTimerStart = performance.now();
 
 // Determine if we need to install R packages
-var installRPackagesList = ['ggplot2', 'dplyr', 'sf', 'leaflet', 'readr'];
+var installRPackagesList = ['ggplot2', 'dplyr', 'sf', 'leaflet', 'readr', 'rnaturalearth', 'rnaturalearthdata'];
 // Check to see if we have an empty array, if we do set to skip the installation.
 var setupRPackages = !(installRPackagesList.indexOf("") !== -1);
 var autoloadRPackages = true;
@@ -728,12 +728,15 @@ globalThis.qwebrCreateNonInteractiveSetupElement = function(qwebrCounter) {
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
   </ul></li>
-  <li><a href="#example-1-static-map-with-ggplot2-and-sf" id="toc-example-1-static-map-with-ggplot2-and-sf" class="nav-link" data-scroll-target="#example-1-static-map-with-ggplot2-and-sf">Example 1: Static Map with <code>ggplot2</code> and <code>sf</code></a>
+  <li><a href="#example-1-static-map-with-ggplot2-and-sf" id="toc-example-1-static-map-with-ggplot2-and-sf" class="nav-link" data-scroll-target="#example-1-static-map-with-ggplot2-and-sf">Example 1 | Static Map with <code>ggplot2</code> and <code>sf</code></a>
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#step-1-load-and-explore-spatial-data" id="toc-step-1-load-and-explore-spatial-data" class="nav-link" data-scroll-target="#step-1-load-and-explore-spatial-data">Step 1: Load and Explore Spatial Data</a></li>
-  <li><a href="#step-2-basic-map-plotting" id="toc-step-2-basic-map-plotting" class="nav-link" data-scroll-target="#step-2-basic-map-plotting">Step 2: Basic Map Plotting</a></li>
-  <li><a href="#step-3-adding-layers-and-customization" id="toc-step-3-adding-layers-and-customization" class="nav-link" data-scroll-target="#step-3-adding-layers-and-customization">Step 3: Adding Layers and Customization</a></li>
+  <li><a href="#step-0-load-correct-libraries" id="toc-step-0-load-correct-libraries" class="nav-link" data-scroll-target="#step-0-load-correct-libraries">Step 0 | Load correct libraries</a></li>
+  <li><a href="#step-1-load-and-explore-spatial-data" id="toc-step-1-load-and-explore-spatial-data" class="nav-link" data-scroll-target="#step-1-load-and-explore-spatial-data">Step 1 | Load and Explore Spatial Data</a></li>
+  <li><a href="#step-2-combine-population.csv-and-world" id="toc-step-2-combine-population.csv-and-world" class="nav-link" data-scroll-target="#step-2-combine-population.csv-and-world">Step 2 | Combine <code>population.csv</code> and <code>world</code></a></li>
+  <li><a href="#instructor-only" id="toc-instructor-only" class="nav-link" data-scroll-target="#instructor-only">INSTRUCTOR ONLY</a></li>
+  <li><a href="#step-3-basic-map-plotting" id="toc-step-3-basic-map-plotting" class="nav-link" data-scroll-target="#step-3-basic-map-plotting">Step 3 | Basic Map Plotting</a></li>
+  <li><a href="#step-4-adding-layers-and-customization" id="toc-step-4-adding-layers-and-customization" class="nav-link" data-scroll-target="#step-4-adding-layers-and-customization">Step 4 | Adding Layers and Customization</a></li>
   </ul></li>
   <li><a href="#example-2-interactive-map-with-leaflet" id="toc-example-2-interactive-map-with-leaflet" class="nav-link" data-scroll-target="#example-2-interactive-map-with-leaflet">Example 2: Interactive Map with <code>leaflet</code></a>
   <ul>
@@ -876,427 +879,32 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
-<ol type="1">
-<li><strong>Understand the Basics of Spatial Data</strong>: Learn to work with spatial data formats and structures in R.</li>
-<li><strong>Create Static Maps</strong>: Generate high-quality static maps using ggplot2 and sf.</li>
-<li><strong>Develop Interactive Maps</strong>: Build interactive maps using the leaflet package.</li>
-<li><strong>Design Publication-Ready Maps</strong>: Produce polished, publication-ready maps with the tmap package.</li>
-</ol>
+<p>Pending</p>
 <section id="overview" class="level3">
 <h3 class="anchored" data-anchor-id="overview">Overview</h3>
 <p>Spatial visualization is crucial for analyzing geographic data, allowing for the representation of information on maps. This lab will guide you through creating static, interactive, and publication-ready maps using R.</p>
 </section>
 </section>
 <section id="example-1-static-map-with-ggplot2-and-sf" class="level2">
-<h2 class="anchored" data-anchor-id="example-1-static-map-with-ggplot2-and-sf">Example 1: Static Map with <code>ggplot2</code> and <code>sf</code></h2>
+<h2 class="anchored" data-anchor-id="example-1-static-map-with-ggplot2-and-sf">Example 1 | Static Map with <code>ggplot2</code> and <code>sf</code></h2>
 <section id="introduction" class="level3">
 <h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
 <p>Static maps are powerful tools for presenting spatial data in a clear and concise manner. In this example, we’ll visualize global population data using the World Bank’s World Development Indicators dataset.</p>
 </section>
-<section id="step-1-load-and-explore-spatial-data" class="level3">
-<h3 class="anchored" data-anchor-id="step-1-load-and-explore-spatial-data">Step 1: Load and Explore Spatial Data</h3>
-<p>We’ll start by loading the World Development Indicators dataset, focusing on population data, and then join it with a spatial dataset containing country boundaries.</p>
+<section id="step-0-load-correct-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="step-0-load-correct-libraries">Step 0 | Load correct libraries</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load world boundaries shapefile (from the Natural Earth dataset via the sf package)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">system.file</span>(<span class="st">"shape/nc.shp"</span>, <span class="at">package =</span> <span class="st">"sf"</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the data URL using HTTPS</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/datasets/population/master/data/population.csv"</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Downloading the data ...</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Downloading the data ...</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url, <span class="st">"population.csv"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for the data.</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"After downloading the data, we now have:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>After downloading the data, we now have:</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "_extensions"           "_quarto.yml"           "index_files"          
-[4] "index.html"            "index.qmd"             "index.rmarkdown"      
-[7] "population.csv"        "webr-serviceworker.js" "webr-worker.js"       </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the population data into R</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pop_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"population.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter for the most recent year available</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pop_recent <span class="ot">&lt;-</span> pop_data <span class="sc">%&gt;%</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">==</span> <span class="fu">max</span>(Year))</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for mismatches between the country names</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>world_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(world<span class="sc">$</span>NAME)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>pop_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(pop_recent<span class="sc">$</span><span class="st">`</span><span class="at">Country Name</span><span class="st">`</span>)</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>mismatches <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(world_names, pop_names)</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Countries in 'world' not in 'pop_recent':</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Countries in 'world' not in 'pop_recent':</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mismatches)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  [1] "Ashe"         "Alleghany"    "Surry"        "Currituck"    "Northampton" 
-  [6] "Hertford"     "Camden"       "Gates"        "Warren"       "Stokes"      
- [11] "Caswell"      "Rockingham"   "Granville"    "Person"       "Vance"       
- [16] "Halifax"      "Pasquotank"   "Wilkes"       "Watauga"      "Perquimans"  
- [21] "Chowan"       "Avery"        "Yadkin"       "Franklin"     "Forsyth"     
- [26] "Guilford"     "Alamance"     "Bertie"       "Orange"       "Durham"      
- [31] "Nash"         "Mitchell"     "Edgecombe"    "Caldwell"     "Yancey"      
- [36] "Martin"       "Wake"         "Madison"      "Iredell"      "Davie"       
- [41] "Alexander"    "Davidson"     "Burke"        "Washington"   "Tyrrell"     
- [46] "McDowell"     "Randolph"     "Chatham"      "Wilson"       "Rowan"       
- [51] "Pitt"         "Catawba"      "Buncombe"     "Johnston"     "Haywood"     
- [56] "Dare"         "Beaufort"     "Swain"        "Greene"       "Lee"         
- [61] "Rutherford"   "Wayne"        "Harnett"      "Cleveland"    "Lincoln"     
- [66] "Jackson"      "Moore"        "Mecklenburg"  "Cabarrus"     "Montgomery"  
- [71] "Stanly"       "Henderson"    "Graham"       "Lenoir"       "Transylvania"
- [76] "Gaston"       "Polk"         "Macon"        "Sampson"      "Pamlico"     
- [81] "Cherokee"     "Cumberland"   "Jones"        "Union"        "Anson"       
- [86] "Hoke"         "Hyde"         "Duplin"       "Richmond"     "Clay"        
- [91] "Craven"       "Scotland"     "Onslow"       "Robeson"      "Carteret"    
- [96] "Bladen"       "Pender"       "Columbus"     "New Hanover"  "Brunswick"   </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>reverse_mismatches <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(pop_names, world_names)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Countries in 'pop_recent' not in 'world':</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Countries in 'pop_recent' not in 'world':</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(reverse_mismatches)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  [1] "Aruba"                                               
-  [2] "Africa Eastern and Southern"                         
-  [3] "Afghanistan"                                         
-  [4] "Africa Western and Central"                          
-  [5] "Angola"                                              
-  [6] "Albania"                                             
-  [7] "Andorra"                                             
-  [8] "Arab World"                                          
-  [9] "United Arab Emirates"                                
- [10] "Argentina"                                           
- [11] "Armenia"                                             
- [12] "American Samoa"                                      
- [13] "Antigua and Barbuda"                                 
- [14] "Australia"                                           
- [15] "Austria"                                             
- [16] "Azerbaijan"                                          
- [17] "Burundi"                                             
- [18] "Belgium"                                             
- [19] "Benin"                                               
- [20] "Burkina Faso"                                        
- [21] "Bangladesh"                                          
- [22] "Bulgaria"                                            
- [23] "Bahrain"                                             
- [24] "Bahamas, The"                                        
- [25] "Bosnia and Herzegovina"                              
- [26] "Belarus"                                             
- [27] "Belize"                                              
- [28] "Bermuda"                                             
- [29] "Bolivia"                                             
- [30] "Brazil"                                              
- [31] "Barbados"                                            
- [32] "Brunei Darussalam"                                   
- [33] "Bhutan"                                              
- [34] "Botswana"                                            
- [35] "Central African Republic"                            
- [36] "Canada"                                              
- [37] "Central Europe and the Baltics"                      
- [38] "Switzerland"                                         
- [39] "Channel Islands"                                     
- [40] "Chile"                                               
- [41] "China"                                               
- [42] "Cote d'Ivoire"                                       
- [43] "Cameroon"                                            
- [44] "Congo, Dem. Rep."                                    
- [45] "Congo, Rep."                                         
- [46] "Colombia"                                            
- [47] "Comoros"                                             
- [48] "Cabo Verde"                                          
- [49] "Costa Rica"                                          
- [50] "Caribbean small states"                              
- [51] "Cuba"                                                
- [52] "Curacao"                                             
- [53] "Cayman Islands"                                      
- [54] "Cyprus"                                              
- [55] "Czechia"                                             
- [56] "Germany"                                             
- [57] "Djibouti"                                            
- [58] "Dominica"                                            
- [59] "Denmark"                                             
- [60] "Dominican Republic"                                  
- [61] "Algeria"                                             
- [62] "East Asia &amp; Pacific (excluding high income)"         
- [63] "Early-demographic dividend"                          
- [64] "East Asia &amp; Pacific"                                 
- [65] "Europe &amp; Central Asia (excluding high income)"       
- [66] "Europe &amp; Central Asia"                               
- [67] "Ecuador"                                             
- [68] "Egypt, Arab Rep."                                    
- [69] "Euro area"                                           
- [70] "Eritrea"                                             
- [71] "Spain"                                               
- [72] "Estonia"                                             
- [73] "Ethiopia"                                            
- [74] "European Union"                                      
- [75] "Fragile and conflict affected situations"            
- [76] "Finland"                                             
- [77] "Fiji"                                                
- [78] "France"                                              
- [79] "Faroe Islands"                                       
- [80] "Micronesia, Fed. Sts."                               
- [81] "Gabon"                                               
- [82] "United Kingdom"                                      
- [83] "Georgia"                                             
- [84] "Ghana"                                               
- [85] "Gibraltar"                                           
- [86] "Guinea"                                              
- [87] "Gambia, The"                                         
- [88] "Guinea-Bissau"                                       
- [89] "Equatorial Guinea"                                   
- [90] "Greece"                                              
- [91] "Grenada"                                             
- [92] "Greenland"                                           
- [93] "Guatemala"                                           
- [94] "Guam"                                                
- [95] "Guyana"                                              
- [96] "High income"                                         
- [97] "Hong Kong SAR, China"                                
- [98] "Honduras"                                            
- [99] "Heavily indebted poor countries (HIPC)"              
-[100] "Croatia"                                             
-[101] "Haiti"                                               
-[102] "Hungary"                                             
-[103] "IBRD only"                                           
-[104] "IDA &amp; IBRD total"                                    
-[105] "IDA total"                                           
-[106] "IDA blend"                                           
-[107] "Indonesia"                                           
-[108] "IDA only"                                            
-[109] "Isle of Man"                                         
-[110] "India"                                               
-[111] "Ireland"                                             
-[112] "Iran, Islamic Rep."                                  
-[113] "Iraq"                                                
-[114] "Iceland"                                             
-[115] "Israel"                                              
-[116] "Italy"                                               
-[117] "Jamaica"                                             
-[118] "Jordan"                                              
-[119] "Japan"                                               
-[120] "Kazakhstan"                                          
-[121] "Kenya"                                               
-[122] "Kyrgyz Republic"                                     
-[123] "Cambodia"                                            
-[124] "Kiribati"                                            
-[125] "St. Kitts and Nevis"                                 
-[126] "Korea, Rep."                                         
-[127] "Kuwait"                                              
-[128] "Latin America &amp; Caribbean (excluding high income)"   
-[129] "Lao PDR"                                             
-[130] "Lebanon"                                             
-[131] "Liberia"                                             
-[132] "Libya"                                               
-[133] "St. Lucia"                                           
-[134] "Latin America &amp; Caribbean"                           
-[135] "Least developed countries: UN classification"        
-[136] "Low income"                                          
-[137] "Liechtenstein"                                       
-[138] "Sri Lanka"                                           
-[139] "Lower middle income"                                 
-[140] "Low &amp; middle income"                                 
-[141] "Lesotho"                                             
-[142] "Late-demographic dividend"                           
-[143] "Lithuania"                                           
-[144] "Luxembourg"                                          
-[145] "Latvia"                                              
-[146] "Macao SAR, China"                                    
-[147] "St. Martin (French part)"                            
-[148] "Morocco"                                             
-[149] "Monaco"                                              
-[150] "Moldova"                                             
-[151] "Madagascar"                                          
-[152] "Maldives"                                            
-[153] "Middle East &amp; North Africa"                          
-[154] "Mexico"                                              
-[155] "Marshall Islands"                                    
-[156] "Middle income"                                       
-[157] "North Macedonia"                                     
-[158] "Mali"                                                
-[159] "Malta"                                               
-[160] "Myanmar"                                             
-[161] "Middle East &amp; North Africa (excluding high income)"  
-[162] "Montenegro"                                          
-[163] "Mongolia"                                            
-[164] "Northern Mariana Islands"                            
-[165] "Mozambique"                                          
-[166] "Mauritania"                                          
-[167] "Mauritius"                                           
-[168] "Malawi"                                              
-[169] "Malaysia"                                            
-[170] "North America"                                       
-[171] "Namibia"                                             
-[172] "New Caledonia"                                       
-[173] "Niger"                                               
-[174] "Nigeria"                                             
-[175] "Nicaragua"                                           
-[176] "Netherlands"                                         
-[177] "Norway"                                              
-[178] "Nepal"                                               
-[179] "Nauru"                                               
-[180] "New Zealand"                                         
-[181] "OECD members"                                        
-[182] "Oman"                                                
-[183] "Other small states"                                  
-[184] "Pakistan"                                            
-[185] "Panama"                                              
-[186] "Peru"                                                
-[187] "Philippines"                                         
-[188] "Palau"                                               
-[189] "Papua New Guinea"                                    
-[190] "Poland"                                              
-[191] "Pre-demographic dividend"                            
-[192] "Puerto Rico"                                         
-[193] "Korea, Dem. People's Rep."                           
-[194] "Portugal"                                            
-[195] "Paraguay"                                            
-[196] "West Bank and Gaza"                                  
-[197] "Pacific island small states"                         
-[198] "Post-demographic dividend"                           
-[199] "French Polynesia"                                    
-[200] "Qatar"                                               
-[201] "Romania"                                             
-[202] "Russian Federation"                                  
-[203] "Rwanda"                                              
-[204] "South Asia"                                          
-[205] "Saudi Arabia"                                        
-[206] "Sudan"                                               
-[207] "Senegal"                                             
-[208] "Singapore"                                           
-[209] "Solomon Islands"                                     
-[210] "Sierra Leone"                                        
-[211] "El Salvador"                                         
-[212] "San Marino"                                          
-[213] "Somalia"                                             
-[214] "Serbia"                                              
-[215] "Sub-Saharan Africa (excluding high income)"          
-[216] "South Sudan"                                         
-[217] "Sub-Saharan Africa"                                  
-[218] "Small states"                                        
-[219] "Sao Tome and Principe"                               
-[220] "Suriname"                                            
-[221] "Slovak Republic"                                     
-[222] "Slovenia"                                            
-[223] "Sweden"                                              
-[224] "Eswatini"                                            
-[225] "Sint Maarten (Dutch part)"                           
-[226] "Seychelles"                                          
-[227] "Syrian Arab Republic"                                
-[228] "Turks and Caicos Islands"                            
-[229] "Chad"                                                
-[230] "East Asia &amp; Pacific (IDA &amp; IBRD countries)"          
-[231] "Europe &amp; Central Asia (IDA &amp; IBRD countries)"        
-[232] "Togo"                                                
-[233] "Thailand"                                            
-[234] "Tajikistan"                                          
-[235] "Turkmenistan"                                        
-[236] "Latin America &amp; the Caribbean (IDA &amp; IBRD countries)"
-[237] "Timor-Leste"                                         
-[238] "Middle East &amp; North Africa (IDA &amp; IBRD countries)"   
-[239] "Tonga"                                               
-[240] "South Asia (IDA &amp; IBRD)"                             
-[241] "Sub-Saharan Africa (IDA &amp; IBRD countries)"           
-[242] "Trinidad and Tobago"                                 
-[243] "Tunisia"                                             
-[244] "Turkiye"                                             
-[245] "Tuvalu"                                              
-[246] "Tanzania"                                            
-[247] "Uganda"                                              
-[248] "Ukraine"                                             
-[249] "Upper middle income"                                 
-[250] "Uruguay"                                             
-[251] "United States"                                       
-[252] "Uzbekistan"                                          
-[253] "St. Vincent and the Grenadines"                      
-[254] "Venezuela, RB"                                       
-[255] "British Virgin Islands"                              
-[256] "Virgin Islands (U.S.)"                               
-[257] "Vietnam"                                             
-[258] "Vanuatu"                                             
-[259] "World"                                               
-[260] "Samoa"                                               
-[261] "Kosovo"                                              
-[262] "Yemen, Rep."                                         
-[263] "South Africa"                                        
-[264] "Zambia"                                              
-[265] "Zimbabwe"                                            </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust names in the population data to match those in the world dataset (if needed)</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pop_recent <span class="ot">&lt;-</span> pop_recent <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"United States"</span> <span class="sc">~</span> <span class="st">"USA"</span>,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Bahamas, The"</span> <span class="sc">~</span> <span class="st">"Bahamas"</span>,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Cote d'Ivoire"</span> <span class="sc">~</span> <span class="st">"Ivory Coast"</span>,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Korea, Rep."</span> <span class="sc">~</span> <span class="st">"South Korea"</span>,</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Korea, Dem. People's Rep."</span> <span class="sc">~</span> <span class="st">"North Korea"</span>,</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Russian Federation"</span> <span class="sc">~</span> <span class="st">"Russia"</span>,</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Venezuela, RB"</span> <span class="sc">~</span> <span class="st">"Venezuela"</span>,</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Egypt, Arab Rep."</span> <span class="sc">~</span> <span class="st">"Egypt"</span>,</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Iran, Islamic Rep."</span> <span class="sc">~</span> <span class="st">"Iran"</span>,</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Syrian Arab Republic"</span> <span class="sc">~</span> <span class="st">"Syria"</span>,</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Yemen, Rep."</span> <span class="sc">~</span> <span class="st">"Yemen"</span>,</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Gambia, The"</span> <span class="sc">~</span> <span class="st">"Gambia"</span>,</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Brunei Darussalam"</span> <span class="sc">~</span> <span class="st">"Brunei"</span>,</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Hong Kong SAR, China"</span> <span class="sc">~</span> <span class="st">"Hong Kong"</span>,</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Macao SAR, China"</span> <span class="sc">~</span> <span class="st">"Macau"</span>,</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Sint Maarten (Dutch part)"</span> <span class="sc">~</span> <span class="st">"Sint Maarten"</span>,</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"St. Kitts and Nevis"</span> <span class="sc">~</span> <span class="st">"Saint Kitts and Nevis"</span>,</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"St. Lucia"</span> <span class="sc">~</span> <span class="st">"Saint Lucia"</span>,</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"St. Vincent and the Grenadines"</span> <span class="sc">~</span> <span class="st">"Saint Vincent and the Grenadines"</span>,</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">`</span><span class="at">Country Name</span><span class="st">`</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Join the population data with the world boundaries</span></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>world_pop <span class="ot">&lt;-</span> world <span class="sc">%&gt;%</span></span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pop_recent, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"NAME"</span> <span class="ot">=</span> <span class="st">"Country Name"</span>))</span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore the joined dataset</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(world_pop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 100
-Columns: 18
-$ AREA           &lt;dbl&gt; 0.114, 0.061, 0.143, 0.070, 0.153, 0.097, 0.062, 0.091,…
-$ PERIMETER      &lt;dbl&gt; 1.442, 1.231, 1.630, 2.968, 2.206, 1.670, 1.547, 1.284,…
-$ CNTY_          &lt;dbl&gt; 1825, 1827, 1828, 1831, 1832, 1833, 1834, 1835, 1836, 1…
-$ CNTY_ID        &lt;dbl&gt; 1825, 1827, 1828, 1831, 1832, 1833, 1834, 1835, 1836, 1…
-$ NAME           &lt;chr&gt; "Ashe", "Alleghany", "Surry", "Currituck", "Northampton…
-$ FIPS           &lt;chr&gt; "37009", "37005", "37171", "37053", "37131", "37091", "…
-$ FIPSNO         &lt;dbl&gt; 37009, 37005, 37171, 37053, 37131, 37091, 37029, 37073,…
-$ CRESS_ID       &lt;int&gt; 5, 3, 86, 27, 66, 46, 15, 37, 93, 85, 17, 79, 39, 73, 9…
-$ BIR74          &lt;dbl&gt; 1091, 487, 3188, 508, 1421, 1452, 286, 420, 968, 1612, …
-$ SID74          &lt;dbl&gt; 1, 0, 5, 1, 9, 7, 0, 0, 4, 1, 2, 16, 4, 4, 4, 18, 3, 4,…
-$ NWBIR74        &lt;dbl&gt; 10, 10, 208, 123, 1066, 954, 115, 254, 748, 160, 550, 1…
-$ BIR79          &lt;dbl&gt; 1364, 542, 3616, 830, 1606, 1838, 350, 594, 1190, 2038,…
-$ SID79          &lt;dbl&gt; 0, 3, 6, 2, 3, 5, 2, 2, 2, 5, 2, 5, 4, 4, 6, 17, 4, 7, …
-$ NWBIR79        &lt;dbl&gt; 19, 12, 260, 145, 1197, 1237, 139, 371, 844, 176, 597, …
-$ `Country Code` &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ Year           &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ Value          &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-$ geometry       &lt;MULTIPOLYGON [°]&gt; MULTIPOLYGON (((-81.47276 3..., MULTIPOLYG…</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="step-2-basic-map-plotting" class="level3">
-<h3 class="anchored" data-anchor-id="step-2-basic-map-plotting">Step 2: Basic Map Plotting</h3>
-<p>Let’s create a static map showing the population distribution across the world.</p>
+<section id="step-1-load-and-explore-spatial-data" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-load-and-explore-spatial-data">Step 1 | Load and Explore Spatial Data</h3>
+<p>We’ll start by loading the World Development Indicators dataset, focusing on population data, and then join it with a spatial dataset containing country boundaries.</p>
 <div id="qwebr-insertion-location-1"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1305,6 +913,126 @@ const currentDocumentLocation = document.getElementById("qwebr-insertion-locatio
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
     1
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Load world boundaries shapefile (global country boundaries)
+world <- ne_countries(scale = "medium", returnclass = "sf")
+head(world, 5)
+
+# Specify the data URL using HTTPS
+url <- "https://raw.githubusercontent.com/datasets/population/master/data/population.csv"
+
+cat("Downloading the data ...\\n")
+download.file(url, "population.csv")
+cat("Dataset saved as 'population.csv'.\\n")
+
+# Read the population data into R
+pop_data <- read_csv("population.csv", show_col_types = FALSE)
+head(pop_data, 5)`, 
+  1);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="step-2-combine-population.csv-and-world" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-combine-population.csv-and-world">Step 2 | Combine <code>population.csv</code> and <code>world</code></h3>
+<div id="qwebr-insertion-location-2"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-2");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    2
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Filter for the most recent year available
+pop_recent <- pop_data %>%
+  filter(Year == max(Year))
+
+# Check the structure of both datasets
+glimpse(pop_recent)
+
+# Join the population data with the world boundaries using country codes
+world_pop <- world %>%
+  left_join(pop_recent, by = c("iso_a3" = "Country Code"))
+
+# Save the cleaned and joined dataset
+# saveRDS(world_pop, "world_population_data.rds")
+# cat("Dataset saved as 'world_population_data.rds'.\\n")
+
+# Load the saved RDS file
+# world_pop <- readRDS("world_population_data.rds")
+
+# Display the structure of the dataset
+str(world_pop)
+head(world_pop,5)`, 
+  2);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="instructor-only" class="level3">
+<h3 class="anchored" data-anchor-id="instructor-only">INSTRUCTOR ONLY</h3>
+<p>(THIS VERISON ALREADY HAS THE CLEANED UP RDS FILE, DOWNLOAD FROM REPO TO CONTINUE LAB)</p>
+<div id="qwebr-insertion-location-3"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-3");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    3
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Specify the data URL using HTTPS
+url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/world_population_data.rds"
+
+cat("Downloading the data...'.\\n")
+download.file(url, "world_pop.rds")
+cat("Dataset saved as 'world_population_data.rds'.\\n")
+
+# Load the cleaned and joined dataset
+world_pop <- readRDS("world_pop.rds")
+
+# Create a static map
+ggplot(data = world_pop) +
+  geom_sf(aes(fill = Population), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "lightgray") +
+  labs(
+    title = "Global Population Distribution",
+    fill = "Population",
+    caption = "Data Source: World Bank and Natural Earth"
+  ) +
+  theme_minimal()`, 
+  3);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="step-3-basic-map-plotting" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-basic-map-plotting">Step 3 | Basic Map Plotting</h3>
+<p>Let’s create a static map showing the population distribution across the world.</p>
+<div id="qwebr-insertion-location-4"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-4");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    4
   );
 
 // Add the interactive element into the document scope
@@ -1321,21 +1049,21 @@ ggplot(data = world_pop) +
     caption = "Data Source: World Bank and Natural Earth"
   ) +
   theme_minimal()`, 
-  1);
+  4);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="step-3-adding-layers-and-customization" class="level3">
-<h3 class="anchored" data-anchor-id="step-3-adding-layers-and-customization">Step 3: Adding Layers and Customization</h3>
+<section id="step-4-adding-layers-and-customization" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-adding-layers-and-customization">Step 4 | Adding Layers and Customization</h3>
 <p>We can further enhance the map by customizing the color scale, adding labels, and modifying the theme.</p>
-<div id="qwebr-insertion-location-2"></div>
+<div id="qwebr-insertion-location-5"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-2");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-5");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    2
+    5
   );
 
 // Add the interactive element into the document scope
@@ -1358,7 +1086,7 @@ ggplot(data = world_pop) +
     text = element_text(family = "Georgia"),
     plot.title = element_text(size = 14, face = "bold")
   )`, 
-  2);
+  5);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
@@ -1373,20 +1101,20 @@ ggplot(data = world_pop) +
 <h3 class="anchored" data-anchor-id="step-1-basic-interactive-map">Step 1: Basic Interactive Map</h3>
 <p>We’ll create an interactive map with markers for specific locations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the leaflet library</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a basic interactive map</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span>  <span class="co"># Add default OpenStreetMap tiles</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">122.4194</span>, <span class="sc">-</span><span class="fl">74.0060</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">37.7749</span>, <span class="fl">40.7128</span>),</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">popup =</span> <span class="fu">c</span>(<span class="st">"San Francisco"</span>, <span class="st">"New York"</span>))</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the map</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the leaflet library</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a basic interactive map</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span>  <span class="co"># Add default OpenStreetMap tiles</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">122.4194</span>, <span class="sc">-</span><span class="fl">74.0060</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">37.7749</span>, <span class="fl">40.7128</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">popup =</span> <span class="fu">c</span>(<span class="st">"San Francisco"</span>, <span class="st">"New York"</span>))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the map</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="leaflet html-widget html-fill-item" id="htmlwidget-3591ea3e796739743357" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-3591ea3e796739743357">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addMarkers","args":[[37.7749,40.7128],[-122.4194,-74.006],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["San Francisco","New York"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[37.7749,40.7128],"lng":[-122.4194,-74.006]}},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-1600ce47c01281ea6c57" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-1600ce47c01281ea6c57">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addMarkers","args":[[37.7749,40.7128],[-122.4194,-74.006],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["San Francisco","New York"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[37.7749,40.7128],"lng":[-122.4194,-74.006]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -1394,21 +1122,21 @@ ggplot(data = world_pop) +
 <h3 class="anchored" data-anchor-id="step-2-adding-multiple-layers-and-features">Step 2: Adding Multiple Layers and Features</h3>
 <p>Let’s add more layers and customize the map further.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enhanced interactive map with additional layers</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span>  <span class="co"># Base layer</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addProviderTiles</span>(providers<span class="sc">$</span>Stamen.Toner) <span class="sc">%&gt;%</span>  <span class="co"># Additional layer</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">122.4194</span>, <span class="sc">-</span><span class="fl">74.0060</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">37.7749</span>, <span class="fl">40.7128</span>),</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">popup =</span> <span class="fu">c</span>(<span class="st">"San Francisco"</span>, <span class="st">"New York"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addCircles</span>(<span class="at">lng =</span> <span class="sc">-</span><span class="fl">122.4194</span>, <span class="at">lat =</span> <span class="fl">37.7749</span>, <span class="at">radius =</span> <span class="dv">50000</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">fillOpacity =</span> <span class="fl">0.4</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addPolygons</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.1</span>, <span class="sc">-</span><span class="fl">74.0</span>, <span class="sc">-</span><span class="fl">73.9</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">40.7</span>, <span class="fl">40.8</span>, <span class="fl">40.7</span>),</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">fillOpacity =</span> <span class="fl">0.3</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the enhanced map</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enhanced interactive map with additional layers</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span>  <span class="co"># Base layer</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addProviderTiles</span>(providers<span class="sc">$</span>Stamen.Toner) <span class="sc">%&gt;%</span>  <span class="co"># Additional layer</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">122.4194</span>, <span class="sc">-</span><span class="fl">74.0060</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">37.7749</span>, <span class="fl">40.7128</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">popup =</span> <span class="fu">c</span>(<span class="st">"San Francisco"</span>, <span class="st">"New York"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addCircles</span>(<span class="at">lng =</span> <span class="sc">-</span><span class="fl">122.4194</span>, <span class="at">lat =</span> <span class="fl">37.7749</span>, <span class="at">radius =</span> <span class="dv">50000</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">fillOpacity =</span> <span class="fl">0.4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addPolygons</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.1</span>, <span class="sc">-</span><span class="fl">74.0</span>, <span class="sc">-</span><span class="fl">73.9</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">40.7</span>, <span class="fl">40.8</span>, <span class="fl">40.7</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">fillOpacity =</span> <span class="fl">0.3</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the enhanced map</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="leaflet html-widget html-fill-item" id="htmlwidget-b8cd7a7216c369b0d0ef" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-b8cd7a7216c369b0d0ef">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addProviderTiles","args":[null,null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addMarkers","args":[[37.7749,40.7128],[-122.4194,-74.006],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["San Francisco","New York"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircles","args":[37.7749,-122.4194,50000,null,null,{"interactive":true,"className":"","stroke":true,"color":"blue","weight":5,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.4},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null,null]},{"method":"addPolygons","args":[[[[{"lng":[-74.09999999999999,-74,-73.90000000000001],"lat":[40.7,40.8,40.7]}]]],null,null,{"interactive":true,"className":"","stroke":true,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.3,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[37.7749,40.8],"lng":[-122.4194,-73.90000000000001]}},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-a3e20bf74fde53e65e14" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-a3e20bf74fde53e65e14">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addProviderTiles","args":[null,null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addMarkers","args":[[37.7749,40.7128],[-122.4194,-74.006],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["San Francisco","New York"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircles","args":[37.7749,-122.4194,50000,null,null,{"interactive":true,"className":"","stroke":true,"color":"blue","weight":5,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.4},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null,null]},{"method":"addPolygons","args":[[[[{"lng":[-74.09999999999999,-74,-73.90000000000001],"lat":[40.7,40.8,40.7]}]]],null,null,{"interactive":true,"className":"","stroke":true,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.3,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[37.7749,40.8],"lng":[-122.4194,-73.90000000000001]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>

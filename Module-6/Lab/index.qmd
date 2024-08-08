@@ -15,7 +15,7 @@ execute:
   echo: true
   warning: false
 webr:
-  packages: ['ggplot2', 'dplyr', 'sf', 'leaflet', 'readr'] # Install R packages on document open
+  packages: ['ggplot2', 'dplyr', 'sf', 'leaflet', 'readr', 'rnaturalearth', 'rnaturalearthdata'] # Install R packages on document open
   show-startup-message: false    # Disable displaying status of webR initialization
 filters:
 - webr
@@ -35,39 +35,79 @@ Spatial visualization is crucial for analyzing geographic data, allowing for the
 
 Static maps are powerful tools for presenting spatial data in a clear and concise manner. In this example, we’ll visualize global population data using the World Bank’s World Development Indicators dataset.
 
-### Step 1 | Load and Explore Spatial Data
 
-We’ll start by loading the World Development Indicators dataset, focusing on population data, and then join it with a spatial dataset containing country boundaries.
-
+### Step 0 | Load correct libraries
 ```{r}
-# Load necessary libraries
 library(sf)
 library(ggplot2)
 library(dplyr)
 library(readr)
+library(leaflet)
+library(rnaturalearth)
 ```
+
+### Step 1 | Load and Explore Spatial Data
+
+We’ll start by loading the World Development Indicators dataset, focusing on population data, and then join it with a spatial dataset containing country boundaries.
+
+```{webr-r}
+#| eval: false
+# Load world boundaries shapefile (global country boundaries)
+world <- ne_countries(scale = "medium", returnclass = "sf")
+head(world, 5)
+
+# Specify the data URL using HTTPS
+url <- "https://raw.githubusercontent.com/datasets/population/master/data/population.csv"
+
+cat("Downloading the data ...\n")
+download.file(url, "population.csv")
+cat("Dataset saved as 'population.csv'.\n")
+
+# Read the population data into R
+pop_data <- read_csv("population.csv", show_col_types = FALSE)
+head(pop_data, 5)
+
+```
+
+### Step 2 | Combine `population.csv` and `world`
+
+```{webr-r}
+# Filter for the most recent year available
+pop_recent <- pop_data %>%
+  filter(Year == max(Year))
+
+# Check the structure of both datasets
+glimpse(pop_recent)
+
+# Join the population data with the world boundaries using country codes
+world_pop <- world %>%
+  left_join(pop_recent, by = c("iso_a3" = "Country Code"))
+
+# Save the cleaned and joined dataset
+# saveRDS(world_pop, "world_population_data.rds")
+# cat("Dataset saved as 'world_population_data.rds'.\n")
+
+# Load the saved RDS file
+# world_pop <- readRDS("world_population_data.rds")
+
+# Display the structure of the dataset
+str(world_pop)
+head(world_pop,5)
+```
+
+### INSTRUCTOR ONLY 
+(THIS VERISON ALREADY HAS THE CLEANED UP RDS FILE, DOWNLOAD FROM REPO TO CONTINUE LAB)
 
 ```{webr-r}
 # Specify the data URL using HTTPS
 url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/world_population_data.rds"
 
-# Download the data file from the HTTPS URL
-cat("Downloading the data ...\n")
+cat("Downloading the data...'.\n")
 download.file(url, "world_pop.rds")
-
-# Check for the downloaded file
-cat("After downloading the data, we now have:\n")
-print(list.files())
-
-# Load necessary libraries
-library(sf)
-library(ggplot2)
+cat("Dataset saved as 'world_population_data.rds'.\n")
 
 # Load the cleaned and joined dataset
 world_pop <- readRDS("world_pop.rds")
-
-# Explore the loaded dataset
-glimpse(world_pop)
 
 # Create a static map
 ggplot(data = world_pop) +
@@ -82,7 +122,7 @@ ggplot(data = world_pop) +
 
 ```
 
-### Step 2 | Basic Map Plotting
+### Step 3 | Basic Map Plotting
 
 Let’s create a static map showing the population distribution across the world.
 
@@ -98,7 +138,7 @@ ggplot(data = world_pop) +
   theme_minimal()
 ```
 
-### Step 3 | Adding Layers and Customization
+### Step 4 | Adding Layers and Customization
 
 We can further enhance the map by customizing the color scale, adding labels, and modifying the theme.
 
