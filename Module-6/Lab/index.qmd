@@ -208,16 +208,16 @@ saveRDS(usaMap, "usa_map_sf.rds")
 cat("Final merged shapefile saved as 'final_merged_shapefile.rds'.\n")
 ```
 
-### INSTRUCTOR VERISON
+### Step 3 
 ```{r}
 # Load the saved RDS file
 url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/usa_map_sf.rds"
 cat("Downloading the data...'.\n")
-download.file(url, "usa_map_sf.rds.rds")
-cat("Dataset saved as 'usa_map_sf.rds.rds'.\n")
+download.file(url, "usa_map_sf.rds")
+cat("Dataset saved as 'usa_map_sf.rds'.\n")
 
 # Load the cleaned and joined dataset
-usaMap <- readRDS("world_pop.rds")
+usaMap <- readRDS("usa_map_sf.rds")
 
 # Define color palette based on RATE
 pal <- colorBin("Reds", domain = usaMap$RATE, bins = 3)

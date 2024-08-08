@@ -24,72 +24,66 @@ Spatial visualization is crucial for analyzing geographic data, allowing for the
 
 Static maps are powerful tools for presenting spatial data in a clear and concise manner. In this example, we’ll visualize global population data using the World Bank’s World Development Indicators dataset.
 
-### Step 1 | Load and Explore Spatial Data
 
-We’ll start by loading the World Development Indicators dataset, focusing on population data, and then join it with a spatial dataset containing country boundaries.
-
+### Step 0 | Load correct libraries
 ```{r}
 library(sf)
 library(ggplot2)
 library(dplyr)
 library(readr)
+library(leaflet)
+library(rnaturalearth)
 ```
-```{r}
-#| eval: false
-# Load necessary libraries
-library(sf)
-library(dplyr)
-library(readr)
-library(rnaturalearth)  # Package for global country boundaries
 
+### Step 1 | Load and Explore Spatial Data
+
+We’ll start by loading the World Development Indicators dataset, focusing on population data, and then join it with a spatial dataset containing country boundaries.
+
+```{r}
 # Load world boundaries shapefile (global country boundaries)
 world <- ne_countries(scale = "medium", returnclass = "sf")
+head(world, 5)
 
 # Specify the data URL using HTTPS
 url <- "https://raw.githubusercontent.com/datasets/population/master/data/population.csv"
 
 cat("Downloading the data ...\n")
 download.file(url, "population.csv")
+cat("Dataset saved as 'population.csv'.\n")
 
 # Read the population data into R
 pop_data <- read_csv("population.csv", show_col_types = FALSE)
+head(pop_data, 5)
 
+```
+
+### Step 2 | Combine `population.csv` and `world`
+
+```{r}
 # Filter for the most recent year available
 pop_recent <- pop_data %>%
   filter(Year == max(Year))
 
 # Check the structure of both datasets
 glimpse(pop_recent)
-glimpse(world)
 
 # Join the population data with the world boundaries using country codes
 world_pop <- world %>%
   left_join(pop_recent, by = c("iso_a3" = "Country Code"))
 
-# Save the cleaned and joined dataset
-#saveRDS(world_pop, "world_population_data.rds")
-
-cat("Dataset saved as 'world_population_data.rds'.\n")
-
-# Load the saved RDS file
-world_pop <- readRDS("world_population_data.rds")
-
 # Display the structure of the dataset
 str(world_pop)
-
-# Preview the first few rows of the dataset
-head(world_pop)
-
-# Show a summary of the dataset
-summary(world_pop)
-
-glimpse(world_pop)
+head(world_pop,5)
 ```
 
-```{webr-r}
-# Create a static map
+### Step 3 | Basic Map Plotting
+
+Let’s create a static map showing the population distribution across the world.
+
+```{r}
+# Create a basic population map
 ggplot(data = world_pop) +
-  geom_sf(aes(fill = Population), color = "black") +
+  geom_sf(aes(fill = Value), color = "black") +
   scale_fill_viridis_c(option = "plasma", na.value = "lightgray") +
   labs(
     title = "Global Population Distribution",
@@ -97,33 +91,16 @@ ggplot(data = world_pop) +
     caption = "Data Source: World Bank and Natural Earth"
   ) +
   theme_minimal()
-
 ```
 
-### Step 2 | Basic Map Plotting
-
-Let’s create a static map showing the population distribution across the world.
-
-```{r}
-# Create a basic population map
-ggplot(data = world_pop) +
-  geom_sf(aes(fill = Population), color = "black") +
-  labs(
-    title = "Global Population Distribution",
-    fill = "Population",
-    caption = "Data Source: World Bank and Natural Earth"
-  ) +
-  theme_minimal()
-```
-
-### Step 3 | Adding Layers and Customization
+### Step 4 | Adding Layers and Customization
 
 We can further enhance the map by customizing the color scale, adding labels, and modifying the theme.
 
 ```{r}
 # Enhance the population map with customizations
 ggplot(data = world_pop) +
-  geom_sf(aes(fill = Population), color = "black") +
+  geom_sf(aes(fill = Value), color = "black") +
   scale_fill_viridis_c(option = "plasma", na.value = "lightgray") +
   labs(
     title = "Enhanced Global Population Distribution",
@@ -167,22 +144,53 @@ m
 Let’s add more layers and customize the map further.
 
 ```{r}
-# Enhanced interactive map with additional layers
-m <- leaflet() %>%
-  addTiles() %>%  # Base layer
-  addProviderTiles(providers$Stamen.Toner) %>%  # Additional layer
-  addMarkers(lng = c(-122.4194, -74.0060), lat = c(37.7749, 40.7128),
-             popup = c("San Francisco", "New York")) %>%
-  addCircles(lng = -122.4194, lat = 37.7749, radius = 50000, color = "blue", fillOpacity = 0.4) %>%
-  addPolygons(lng = c(-74.1, -74.0, -73.9), lat = c(40.7, 40.8, 40.7),
-              color = "red", fillOpacity = 0.3)
+# Download the shapefile (if not already done)
+url <- "https://www.weather.gov/source/gis/Shapefiles/County/s_10se24.zip"
+download.file(url, "state_boundaries.zip")
+unzip("state_boundaries.zip", exdir = "state_boundaries")
+```
 
-# Print the enhanced map
-m
+```{r}
+# Load the shapefile
+shapes <- st_read("state_boundaries/s_10se24.shp")
+
+# Transform the projection to WGS84
+shapes <- shapes %>%
+  sf::st_transform('+proj=longlat +datum=WGS84')
+
+# Create example data (replace with your actual data if available)
+usa <- data.frame(
+  NAME = shapes$NAME,  # Use the NAME column for merging
+  RATE = runif(n = nrow(shapes), min = 1, max = 10)  # Example random data
+)
+
+# Merge the shapefile with your data using the NAME column
+usaMap <- merge(shapes, usa, by = "NAME")
+```
+
+### Step 3 
+```{r}
+# Define color palette based on RATE
+pal <- colorBin("Reds", domain = usaMap$RATE, bins = 3)
+
+# Create the Leaflet map
+map <- leaflet() %>%
+  setView(lng = -98.5795, lat = 39.8282, zoom = 4) %>%  # Center of US
+  addPolygons(
+    data = usaMap,
+    label = ~paste0(NAME, ", Rate: ", round(RATE, 2)),
+    fillColor = ~pal(RATE),
+    fillOpacity = 0.7,
+    color = "black",
+    weight = 1
+  )
+
+# Display the map
+map
 ```
 
 ### Summary
 
-Interactive maps with `leaflet` are ideal for web-based presentations, providing users with dynamic and engaging ways to explore spatial data.
+Interactive maps with `leaflet` are ideal for web-based presentations, 
 
 
