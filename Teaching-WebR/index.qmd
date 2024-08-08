@@ -4,7 +4,7 @@ author: "Brian Cervantes Alvarez"
 date: today
 date-format: long
 format:
-  LUstyle-revealjs:
+  OSUstyle-revealjs:
     footer: "[https://howarder.github.io/ST_437_Data_Viz/Teaching-WebR](https://howardr.github.io/ST_437_Data_Viz/Teaching-WebR)"
     logo: "images/OSULogo.png"
     auto-stretch: false

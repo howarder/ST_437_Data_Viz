@@ -1,0 +1,170 @@
+---
+title: "Lab 6 | Advanced Visualization Tools & Customization"
+subtitle: "ST 437 Data Visualization"
+author: 
+  - Erin Howard
+  - Brian Cervantes Alvarez
+date: today
+date-format: long
+format: 
+    OSUstyle-html:
+        toc: true
+        toc-location: right
+        toc-depth: 5
+execute: 
+  echo: true
+  warning: false
+webr:
+  packages: ['ggplot2', 'dplyr', 'sf', 'leaflet', 'readr'] # Install R packages on document open
+  show-startup-message: false    # Disable displaying status of webR initialization
+filters:
+- webr
+---
+
+## Learning Objectives
+
+Pending
+
+### Overview
+
+Spatial visualization is crucial for analyzing geographic data, allowing for the representation of information on maps. This lab will guide you through creating static, interactive, and publication-ready maps using R.
+
+## Example 1 | Static Map with `ggplot2` and `sf`
+
+### Introduction
+
+Static maps are powerful tools for presenting spatial data in a clear and concise manner. In this example, we’ll visualize global population data using the World Bank’s World Development Indicators dataset.
+
+### Step 1 | Load and Explore Spatial Data
+
+We’ll start by loading the World Development Indicators dataset, focusing on population data, and then join it with a spatial dataset containing country boundaries.
+
+```{r}
+# Load necessary libraries
+library(sf)
+library(ggplot2)
+library(dplyr)
+library(readr)
+```
+
+```{webr-r}
+# Specify the data URL using HTTPS
+url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/world_population_data.rds"
+
+# Download the data file from the HTTPS URL
+cat("Downloading the data ...\n")
+download.file(url, "world_pop.rds")
+
+# Check for the downloaded file
+cat("After downloading the data, we now have:\n")
+print(list.files())
+
+# Load necessary libraries
+library(sf)
+library(ggplot2)
+
+# Load the cleaned and joined dataset
+world_pop <- readRDS("world_pop.rds")
+
+# Explore the loaded dataset
+glimpse(world_pop)
+
+# Create a static map
+ggplot(data = world_pop) +
+  geom_sf(aes(fill = Population), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "lightgray") +
+  labs(
+    title = "Global Population Distribution",
+    fill = "Population",
+    caption = "Data Source: World Bank and Natural Earth"
+  ) +
+  theme_minimal()
+
+```
+
+### Step 2 | Basic Map Plotting
+
+Let’s create a static map showing the population distribution across the world.
+
+```{webr-r}
+# Create a basic population map
+ggplot(data = world_pop) +
+  geom_sf(aes(fill = Population), color = "black") +
+  labs(
+    title = "Global Population Distribution",
+    fill = "Population",
+    caption = "Data Source: World Bank and Natural Earth"
+  ) +
+  theme_minimal()
+```
+
+### Step 3 | Adding Layers and Customization
+
+We can further enhance the map by customizing the color scale, adding labels, and modifying the theme.
+
+```{webr-r}
+# Enhance the population map with customizations
+ggplot(data = world_pop) +
+  geom_sf(aes(fill = Population), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "lightgray") +
+  labs(
+    title = "Enhanced Global Population Distribution",
+    fill = "Population",
+    caption = "Data Source: World Bank and Natural Earth"
+  ) +
+  theme(
+    panel.background = element_rect(fill = "lightblue"),
+    panel.grid.major = element_line(color = "white"),
+    text = element_text(family = "Georgia"),
+    plot.title = element_text(size = 14, face = "bold")
+  )
+```
+
+## Example 2: Interactive Map with `leaflet`
+
+### Introduction
+
+Interactive maps allow users to explore spatial data dynamically, making them valuable for presentations and web applications. We’ll use the `leaflet` package to create an interactive map.
+
+### Step 1: Basic Interactive Map
+
+We’ll create an interactive map with markers for specific locations.
+
+```{r}
+# Load the leaflet library
+library(leaflet)
+
+# Create a basic interactive map
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap tiles
+  addMarkers(lng = c(-122.4194, -74.0060), lat = c(37.7749, 40.7128),
+             popup = c("San Francisco", "New York"))
+
+# Print the map
+m
+```
+
+### Step 2: Adding Multiple Layers and Features
+
+Let’s add more layers and customize the map further.
+
+```{r}
+# Enhanced interactive map with additional layers
+m <- leaflet() %>%
+  addTiles() %>%  # Base layer
+  addProviderTiles(providers$Stamen.Toner) %>%  # Additional layer
+  addMarkers(lng = c(-122.4194, -74.0060), lat = c(37.7749, 40.7128),
+             popup = c("San Francisco", "New York")) %>%
+  addCircles(lng = -122.4194, lat = 37.7749, radius = 50000, color = "blue", fillOpacity = 0.4) %>%
+  addPolygons(lng = c(-74.1, -74.0, -73.9), lat = c(40.7, 40.8, 40.7),
+              color = "red", fillOpacity = 0.3)
+
+# Print the enhanced map
+m
+```
+
+### Summary
+
+Interactive maps with `leaflet` are ideal for web-based presentations, providing users with dynamic and engaging ways to explore spatial data.
+
+
