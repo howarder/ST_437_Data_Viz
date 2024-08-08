@@ -905,6 +905,52 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 <section id="step-1-load-and-explore-spatial-data" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-load-and-explore-spatial-data">Step 1 | Load and Explore Spatial Data</h3>
 <p>We’ll start by loading the World Development Indicators dataset, focusing on population data, and then join it with a spatial dataset containing country boundaries.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load world boundaries shapefile (global country boundaries)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">"medium"</span>, <span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(world, <span class="dv">5</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the data URL using HTTPS</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/datasets/population/master/data/population.csv"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Downloading the data ...</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url, <span class="st">"population.csv"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Dataset saved as 'population.csv'.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the population data into R</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>pop_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"population.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pop_data, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-2-combine-population.csv-and-world" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-combine-population.csv-and-world">Step 2 | Combine <code>population.csv</code> and <code>world</code></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter for the most recent year available</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pop_recent <span class="ot">&lt;-</span> pop_data <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">==</span> <span class="fu">max</span>(Year))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the structure of both datasets</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(pop_recent)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Join the population data with the world boundaries using country codes</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>world_pop <span class="ot">&lt;-</span> world <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pop_recent, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"iso_a3"</span> <span class="ot">=</span> <span class="st">"Country Code"</span>))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the cleaned and joined dataset</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(world_pop, <span class="st">"world_population_data.rds"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Dataset saved as 'world_population_data.rds'.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the saved RDS file</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>world_pop <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"world_population_data.rds"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the structure of the dataset</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(world_pop)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(world_pop,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="instructor-only" class="level3">
+<h3 class="anchored" data-anchor-id="instructor-only">INSTRUCTOR ONLY</h3>
+<p>(THIS VERISON ALREADY HAS THE CLEANED UP RDS FILE, DOWNLOAD FROM REPO TO CONTINUE LAB)</p>
 <div id="qwebr-insertion-location-1"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -920,26 +966,22 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `# Load world boundaries shapefile (global country boundaries)
-world <- ne_countries(scale = "medium", returnclass = "sf")
-head(world, 5)
+  `# Specify the data URL using HTTPS
+url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/world_population_data.rds"
 
-# Specify the data URL using HTTPS
-url <- "https://raw.githubusercontent.com/datasets/population/master/data/population.csv"
+cat("Downloading the data...'.\\n")
+download.file(url, "world_pop.rds")
+cat("Dataset saved as 'world_population_data.rds'.\\n")
 
-cat("Downloading the data ...\\n")
-download.file(url, "population.csv")
-cat("Dataset saved as 'population.csv'.\\n")
-
-# Read the population data into R
-pop_data <- read_csv("population.csv", show_col_types = FALSE)
-head(pop_data, 5)`, 
+# Load the cleaned and joined dataset
+world_pop <- readRDS("world_pop.rds")`, 
   1);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="step-2-combine-population.csv-and-world" class="level3">
-<h3 class="anchored" data-anchor-id="step-2-combine-population.csv-and-world">Step 2 | Combine <code>population.csv</code> and <code>world</code></h3>
+<section id="step-3-basic-map-plotting" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-basic-map-plotting">Step 3 | Basic Map Plotting</h3>
+<p>Let’s create a static map showing the population distribution across the world.</p>
 <div id="qwebr-insertion-location-2"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -955,34 +997,23 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `# Filter for the most recent year available
-pop_recent <- pop_data %>%
-  filter(Year == max(Year))
-
-# Check the structure of both datasets
-glimpse(pop_recent)
-
-# Join the population data with the world boundaries using country codes
-world_pop <- world %>%
-  left_join(pop_recent, by = c("iso_a3" = "Country Code"))
-
-# Save the cleaned and joined dataset
-# saveRDS(world_pop, "world_population_data.rds")
-# cat("Dataset saved as 'world_population_data.rds'.\\n")
-
-# Load the saved RDS file
-# world_pop <- readRDS("world_population_data.rds")
-
-# Display the structure of the dataset
-str(world_pop)
-head(world_pop,5)`, 
+  `# Create a basic population map
+ggplot(data = world_pop) +
+  geom_sf(aes(fill = Value), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "lightgray") +
+  labs(
+    title = "Global Population Distribution",
+    fill = "Population",
+    caption = "Data Source: World Bank and Natural Earth"
+  ) +
+  theme_minimal()`, 
   2);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="instructor-only" class="level3">
-<h3 class="anchored" data-anchor-id="instructor-only">INSTRUCTOR ONLY</h3>
-<p>(THIS VERISON ALREADY HAS THE CLEANED UP RDS FILE, DOWNLOAD FROM REPO TO CONTINUE LAB)</p>
+<section id="step-4-adding-layers-and-customization" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-adding-layers-and-customization">Step 4 | Adding Layers and Customization</h3>
+<p>We can further enhance the map by customizing the color scale, adding labels, and modifying the theme.</p>
 <div id="qwebr-insertion-location-3"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -998,82 +1029,9 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `# Specify the data URL using HTTPS
-url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/world_population_data.rds"
-
-cat("Downloading the data...'.\\n")
-download.file(url, "world_pop.rds")
-cat("Dataset saved as 'world_population_data.rds'.\\n")
-
-# Load the cleaned and joined dataset
-world_pop <- readRDS("world_pop.rds")
-
-# Create a static map
-ggplot(data = world_pop) +
-  geom_sf(aes(fill = Population), color = "black") +
-  scale_fill_viridis_c(option = "plasma", na.value = "lightgray") +
-  labs(
-    title = "Global Population Distribution",
-    fill = "Population",
-    caption = "Data Source: World Bank and Natural Earth"
-  ) +
-  theme_minimal()`, 
-  3);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-<section id="step-3-basic-map-plotting" class="level3">
-<h3 class="anchored" data-anchor-id="step-3-basic-map-plotting">Step 3 | Basic Map Plotting</h3>
-<p>Let’s create a static map showing the population distribution across the world.</p>
-<div id="qwebr-insertion-location-4"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-4");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    4
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `# Create a basic population map
-ggplot(data = world_pop) +
-  geom_sf(aes(fill = Population), color = "black") +
-  labs(
-    title = "Global Population Distribution",
-    fill = "Population",
-    caption = "Data Source: World Bank and Natural Earth"
-  ) +
-  theme_minimal()`, 
-  4);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-<section id="step-4-adding-layers-and-customization" class="level3">
-<h3 class="anchored" data-anchor-id="step-4-adding-layers-and-customization">Step 4 | Adding Layers and Customization</h3>
-<p>We can further enhance the map by customizing the color scale, adding labels, and modifying the theme.</p>
-<div id="qwebr-insertion-location-5"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-5");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    5
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
   `# Enhance the population map with customizations
 ggplot(data = world_pop) +
-  geom_sf(aes(fill = Population), color = "black") +
+  geom_sf(aes(fill = Value), color = "black") +
   scale_fill_viridis_c(option = "plasma", na.value = "lightgray") +
   labs(
     title = "Enhanced Global Population Distribution",
@@ -1086,7 +1044,7 @@ ggplot(data = world_pop) +
     text = element_text(family = "Georgia"),
     plot.title = element_text(size = 14, face = "bold")
   )`, 
-  5);
+  3);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
@@ -1101,20 +1059,20 @@ ggplot(data = world_pop) +
 <h3 class="anchored" data-anchor-id="step-1-basic-interactive-map">Step 1: Basic Interactive Map</h3>
 <p>We’ll create an interactive map with markers for specific locations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the leaflet library</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a basic interactive map</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span>  <span class="co"># Add default OpenStreetMap tiles</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">122.4194</span>, <span class="sc">-</span><span class="fl">74.0060</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">37.7749</span>, <span class="fl">40.7128</span>),</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">popup =</span> <span class="fu">c</span>(<span class="st">"San Francisco"</span>, <span class="st">"New York"</span>))</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the map</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the leaflet library</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a basic interactive map</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span>  <span class="co"># Add default OpenStreetMap tiles</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">122.4194</span>, <span class="sc">-</span><span class="fl">74.0060</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">37.7749</span>, <span class="fl">40.7128</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">popup =</span> <span class="fu">c</span>(<span class="st">"San Francisco"</span>, <span class="st">"New York"</span>))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the map</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="leaflet html-widget html-fill-item" id="htmlwidget-1600ce47c01281ea6c57" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-1600ce47c01281ea6c57">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addMarkers","args":[[37.7749,40.7128],[-122.4194,-74.006],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["San Francisco","New York"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[37.7749,40.7128],"lng":[-122.4194,-74.006]}},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-b98f9a48fba64d4eac1c" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-b98f9a48fba64d4eac1c">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addMarkers","args":[[37.7749,40.7128],[-122.4194,-74.006],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["San Francisco","New York"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[37.7749,40.7128],"lng":[-122.4194,-74.006]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -1122,27 +1080,27 @@ ggplot(data = world_pop) +
 <h3 class="anchored" data-anchor-id="step-2-adding-multiple-layers-and-features">Step 2: Adding Multiple Layers and Features</h3>
 <p>Let’s add more layers and customize the map further.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enhanced interactive map with additional layers</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span>  <span class="co"># Base layer</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addProviderTiles</span>(providers<span class="sc">$</span>Stamen.Toner) <span class="sc">%&gt;%</span>  <span class="co"># Additional layer</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">122.4194</span>, <span class="sc">-</span><span class="fl">74.0060</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">37.7749</span>, <span class="fl">40.7128</span>),</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">popup =</span> <span class="fu">c</span>(<span class="st">"San Francisco"</span>, <span class="st">"New York"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addCircles</span>(<span class="at">lng =</span> <span class="sc">-</span><span class="fl">122.4194</span>, <span class="at">lat =</span> <span class="fl">37.7749</span>, <span class="at">radius =</span> <span class="dv">50000</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">fillOpacity =</span> <span class="fl">0.4</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addPolygons</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.1</span>, <span class="sc">-</span><span class="fl">74.0</span>, <span class="sc">-</span><span class="fl">73.9</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">40.7</span>, <span class="fl">40.8</span>, <span class="fl">40.7</span>),</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">fillOpacity =</span> <span class="fl">0.3</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the enhanced map</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enhanced interactive map with additional layers</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">leaflet</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">%&gt;%</span>  <span class="co"># Base layer</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addProviderTiles</span>(providers<span class="sc">$</span>Stamen.Toner) <span class="sc">%&gt;%</span>  <span class="co"># Additional layer</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">122.4194</span>, <span class="sc">-</span><span class="fl">74.0060</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">37.7749</span>, <span class="fl">40.7128</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">popup =</span> <span class="fu">c</span>(<span class="st">"San Francisco"</span>, <span class="st">"New York"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addCircles</span>(<span class="at">lng =</span> <span class="sc">-</span><span class="fl">122.4194</span>, <span class="at">lat =</span> <span class="fl">37.7749</span>, <span class="at">radius =</span> <span class="dv">50000</span>, <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">fillOpacity =</span> <span class="fl">0.4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addPolygons</span>(<span class="at">lng =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.1</span>, <span class="sc">-</span><span class="fl">74.0</span>, <span class="sc">-</span><span class="fl">73.9</span>), <span class="at">lat =</span> <span class="fu">c</span>(<span class="fl">40.7</span>, <span class="fl">40.8</span>, <span class="fl">40.7</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">fillOpacity =</span> <span class="fl">0.3</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the enhanced map</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="leaflet html-widget html-fill-item" id="htmlwidget-a3e20bf74fde53e65e14" style="width:100%;height:464px;"></div>
-<script type="application/json" data-for="htmlwidget-a3e20bf74fde53e65e14">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addProviderTiles","args":[null,null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addMarkers","args":[[37.7749,40.7128],[-122.4194,-74.006],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["San Francisco","New York"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircles","args":[37.7749,-122.4194,50000,null,null,{"interactive":true,"className":"","stroke":true,"color":"blue","weight":5,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.4},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null,null]},{"method":"addPolygons","args":[[[[{"lng":[-74.09999999999999,-74,-73.90000000000001],"lat":[40.7,40.8,40.7]}]]],null,null,{"interactive":true,"className":"","stroke":true,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.3,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[37.7749,40.8],"lng":[-122.4194,-73.90000000000001]}},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-0a5be33d9776eb5e7ff5" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-0a5be33d9776eb5e7ff5">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addProviderTiles","args":[null,null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addMarkers","args":[[37.7749,40.7128],[-122.4194,-74.006],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["San Francisco","New York"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addCircles","args":[37.7749,-122.4194,50000,null,null,{"interactive":true,"className":"","stroke":true,"color":"blue","weight":5,"opacity":0.5,"fill":true,"fillColor":"blue","fillOpacity":0.4},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null,null]},{"method":"addPolygons","args":[[[[{"lng":[-74.09999999999999,-74,-73.90000000000001],"lat":[40.7,40.8,40.7]}]]],null,null,{"interactive":true,"className":"","stroke":true,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.3,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[37.7749,40.8],"lng":[-122.4194,-73.90000000000001]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
 <section id="summary" class="level3">
 <h3 class="anchored" data-anchor-id="summary">Summary</h3>
-<p>Interactive maps with <code>leaflet</code> are ideal for web-based presentations, providing users with dynamic and engaging ways to explore spatial data.</p>
+<p>Interactive maps with <code>leaflet</code> are ideal for web-based presentations,</p>
 </section>
 </section>
 
