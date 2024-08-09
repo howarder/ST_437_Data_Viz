@@ -216,7 +216,7 @@ Finally, we’ll create the interactive map using the prepared data.
 ```{r}
 #| eval: false
 # Download the cleaned and joined dataset
-url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/usa_map_sf.rds"
+url <- "https://howarder.github.io/ST_437_Data_Viz/Assets/Datasets/usa_map_sf.rds"
 download.file(url, "usa_map_sf.rds")
 
 # Load the dataset
