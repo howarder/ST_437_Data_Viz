@@ -1,42 +1,46 @@
 ---
-title: "Lab 6 | Advanced Visualization Tools & Customization"
-subtitle: "ST 437 Data Visualization"
-author: 
-  - Erin Howard
-  - Brian Cervantes Alvarez
-date: today
-date-format: long
-format: 
-    OSUstyle-html:
-        toc: true
-        toc-location: right
-        toc-depth: 5
-execute: 
-  echo: true
-  warning: false
-webr:
-  packages: ['ggplot2', 'dplyr', 'sf', 'leaflet', 'readr', 'rnaturalearth', 'rnaturalearthdata'] # Install R packages on document open
-  show-startup-message: false    # Disable displaying status of webR initialization
-filters:
-- webr
+title: "Lab 6 | Advanced Visualization Tools & Customization"  
+subtitle: "ST 437 Data Visualization"  
+author:  
+  - Erin Howard  
+  - Brian Cervantes Alvarez  
+date: today  
+date-format: long  
+format:  
+    OSUstyle-html:  
+        toc: true  
+        toc-location: right  
+        toc-depth: 5  
+execute:  
+  echo: true  
+  warning: false  
+webr:  
+  packages: ['ggplot2', 'dplyr', 'sf', 'leaflet', 'readr', 'rnaturalearth', 'rnaturalearthdata', 'magrittr']  
+  show-startup-message: false  
+filters:  
+- webr  
 ---
 
 ## Learning Objectives
 
-Pending
+- Understand the basics of spatial data and how to work with it in R.
+- Learn how to create static and interactive maps.
+- Customize maps for better visualization.
 
 ### Overview
 
-Spatial visualization is crucial for analyzing geographic data, allowing for the representation of information on maps. This lab will guide you through creating static, interactive, and publication-ready maps using R.
+Mapping geographic data helps us see patterns and trends in a way that's easy to understand. This lab will show you how to create different types of maps using R.
 
 ## Example 1 | Static Map with `ggplot2` and `sf`
 
 ### Introduction
 
-Static maps are powerful tools for presenting spatial data in a clear and concise manner. In this example, we’ll visualize global population data using the World Bank’s World Development Indicators dataset.
+Static maps are great for presenting information clearly in reports or presentations. In this example, we’ll create a map that shows the global population using data from the World Bank.
 
+### Step 0 | Load the Necessary Libraries
 
-### Step 0 | Load correct libraries
+First, let's load the libraries we need.
+
 ```{r}
 library(sf)
 library(ggplot2)
@@ -44,76 +48,66 @@ library(dplyr)
 library(readr)
 library(leaflet)
 library(rnaturalearth)
+library(rnaturalearthdata)
 ```
 
 ### Step 1 | Load and Explore Spatial Data
 
-We’ll start by loading the World Development Indicators dataset, focusing on population data, and then join it with a spatial dataset containing country boundaries.
+We start by loading the global country boundaries and population data.
 
-```{r}
-#| eval: false
-# Load world boundaries shapefile (global country boundaries)
+```{webr-r}
+# Load the world map with country boundaries
 world <- ne_countries(scale = "medium", returnclass = "sf")
+
+# Check the first few rows to understand the structure
 head(world, 5)
 
-# Specify the data URL using HTTPS
+# Download the population data
 url <- "https://raw.githubusercontent.com/datasets/population/master/data/population.csv"
-
-cat("Downloading the data ...\n")
 download.file(url, "population.csv")
-cat("Dataset saved as 'population.csv'.\n")
 
-# Read the population data into R
+# Load the population data into R
 pop_data <- read_csv("population.csv", show_col_types = FALSE)
-head(pop_data, 5)
 
+# Check the first few rows of population data
+head(pop_data, 5)
 ```
+
+- **`ne_countries()`**: Loads a map of the world with country borders.
+- **`download.file()` and `read_csv()`**: Downloads and reads the population data.
 
 ### Step 2 | Combine `population.csv` and `world`
 
-```{r}
-#| eval: false
+Now, we'll merge the population data with the world map based on the country codes.
+
+```{webr-r}
 # Filter for the most recent year available
 pop_recent <- pop_data %>%
   filter(Year == max(Year))
 
-# Check the structure of both datasets
-glimpse(pop_recent)
-
-# Join the population data with the world boundaries using country codes
+# Merge population data with the world map using country codes
 world_pop <- world %>%
   left_join(pop_recent, by = c("iso_a3" = "Country Code"))
 
-# Save the cleaned and joined dataset
+# Save the merged dataset for future use
 saveRDS(world_pop, "world_population_data.rds")
-cat("Dataset saved as 'world_population_data.rds'.\n")
 
-# Load the saved RDS file
+# Load the merged dataset (if not already loaded)
 world_pop <- readRDS("world_population_data.rds")
 
-# Display the structure of the dataset
+# Check the structure of the merged data
 str(world_pop)
-head(world_pop,5)
+
+# Preview the first few rows
+head(world_pop, 5)
 ```
 
-### INSTRUCTOR ONLY 
-(THIS VERISON ALREADY HAS THE CLEANED UP RDS FILE, DOWNLOAD FROM REPO TO CONTINUE LAB)
-
-```{webr-r}
-# Specify the data URL using HTTPS
-url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/world_population_data.rds"
-
-cat("Downloading the data...'.\n")
-download.file(url, "world_pop.rds")
-cat("Dataset saved as 'world_population_data.rds'.\n")
-
-# Load the cleaned and joined dataset
-world_pop <- readRDS("world_pop.rds")
-```
+- **`left_join()`**: Combines the world map with population data so that each country has its population data attached.
+- **`saveRDS()`**: Saves the merged dataset so we don't have to redo this step in the future.
 
 ### Step 3 | Basic Map Plotting
 
-Let’s create a static map showing the population distribution across the world.
+Let's create a simple map to visualize the population distribution across countries.
 
 ```{webr-r}
 # Create a basic population map
@@ -128,12 +122,15 @@ ggplot(data = world_pop) +
   theme_minimal()
 ```
 
+- **`geom_sf()`**: Plots the map, coloring each country based on its population.
+- **`scale_fill_viridis_c()`**: Adds a color scale to represent population values.
+
 ### Step 4 | Adding Layers and Customization
 
-We can further enhance the map by customizing the color scale, adding labels, and modifying the theme.
+We can enhance the map by customizing its appearance.
 
 ```{webr-r}
-# Enhance the population map with customizations
+# Customize the population map
 ggplot(data = world_pop) +
   geom_sf(aes(fill = Value), color = "black") +
   scale_fill_viridis_c(option = "plasma", na.value = "lightgray") +
@@ -150,37 +147,40 @@ ggplot(data = world_pop) +
   )
 ```
 
-## Example 2: Interactive Map with `leaflet`
+- **`theme()`**: Customizes the look of the map by changing the background, grid lines, and text.
+
+## Example 2 | Interactive Map with `leaflet`
 
 ### Introduction
 
-Interactive maps allow users to explore spatial data dynamically, making them valuable for presentations and web applications. We’ll use the `leaflet` package to create an interactive map.
+Interactive maps let users explore data by zooming, panning, and clicking on different areas. We’ll use the `leaflet` package to make a map that you can interact with.
 
 ### Step 1: Basic Interactive Map
 
-We’ll create an interactive map with markers for specific locations.
+We'll start with a simple interactive map.
 
 ```{r}
-# Load the leaflet library
-library(leaflet)
-
 # Create a basic interactive map
 m <- leaflet() %>%
-  addTiles() %>%  # Add default OpenStreetMap tiles
+  addTiles() %>%  # Add default map tiles
   addMarkers(lng = c(-122.4194, -74.0060), lat = c(37.7749, 40.7128),
              popup = c("San Francisco", "New York"))
 
-# Print the map
+# Display the map
 m
 ```
 
+- **`leaflet()`**: Initializes a new interactive map.
+- **`addTiles()`**: Adds a base map layer.
+- **`addMarkers()`**: Places markers on the map for specific locations.
+
 ### Step 2: Adding Multiple Layers and Features
 
-Let’s add more layers and customize the map further.
+Next, we’ll add state boundaries to the map.
 
 ```{r}
 #| eval: false
-# Download the shapefile (if not already done)
+# Download the shapefile with state boundaries
 url <- "https://www.weather.gov/source/gis/Shapefiles/County/s_10se24.zip"
 download.file(url, "state_boundaries.zip")
 unzip("state_boundaries.zip", exdir = "state_boundaries")
@@ -188,35 +188,37 @@ unzip("state_boundaries.zip", exdir = "state_boundaries")
 # Load the shapefile
 shapes <- st_read("state_boundaries/s_10se24.shp")
 
-# Transform the projection to WGS84
+# Transform the map projection to WGS84
 shapes <- shapes %>%
   sf::st_transform('+proj=longlat +datum=WGS84')
 
-# Create example data (replace with your actual data if available)
+# Create example data to merge with the shapes
 usa <- data.frame(
-  NAME = shapes$NAME,  # Use the NAME column for merging
-  RATE = runif(n = nrow(shapes), min = 1, max = 10)  # Example random data
+  NAME = shapes$NAME,  # State names
+  RATE = runif(n = nrow(shapes), min = 1, max = 10)  # Example data
 )
 
-# Merge the shapefile with your data using the NAME column
+# Merge the shapefile with your data
 usaMap <- merge(shapes, usa, by = "NAME")
-```
-```{r}
-#| eval: false
+
 # Save the final merged data as an RDS file
 saveRDS(usaMap, "usa_map_sf.rds")
-cat("Final merged shapefile saved as 'final_merged_shapefile.rds'.\n")
 ```
 
-### Step 3 
-```{r}
-# Load the saved RDS file
-url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/usa_map_sf.rds"
-cat("Downloading the data...'.\n")
-download.file(url, "usa_map_sf.rds")
-cat("Dataset saved as 'usa_map_sf.rds'.\n")
+- **`unzip()`**: Extracts the shapefile contents.
+- **`st_transform()`**: Changes the map's projection to match the Leaflet format.
+- **`merge()`**: Combines the shapefile with our example data.
 
-# Load the cleaned and joined dataset
+### Step 3: Creating the Leaflet USA Map
+
+Finally, we’ll create the interactive map using the prepared data.
+
+```{r}
+# Download the cleaned and joined dataset
+url <- "https://howarder.github.io/ST_437_Data_Viz/Datasets/usa_map_sf.rds"
+download.file(url, "usa_map_sf.rds")
+
+# Load the dataset
 usaMap <- readRDS("usa_map_sf.rds")
 
 # Define color palette based on RATE
@@ -238,8 +240,9 @@ map <- leaflet() %>%
 map
 ```
 
+- **`setView()`**: Centers the map on the US.
+- **`addPolygons()`**: Adds state boundaries to the map, color-coded by the `RATE` values.
+
 ### Summary
 
-Interactive maps with `leaflet` are ideal for web-based presentations, 
-
-
+Interactive maps with `leaflet` are powerful tools for exploring spatial data. They allow users to engage with data dynamically, making presentations and web applications more interactive and informative.
