@@ -211,10 +211,10 @@ saveRDS(usaMap, "usa_map_sf.rds")
 
 ### Step 3: Creating the Leaflet USA Map
 
-Finally, we’ll create the interactive map using the prepared data.
+Finally, we’ll create the interactive map using the prepared da5ta.
 
 ```{r}
-#| eval: false
+#| eval: true
 # Download the cleaned and joined dataset
 url <- "https://howarder.github.io/ST_437_Data_Viz/Assets/Datasets/usa_map_sf.rds"
 download.file(url, "usa_map_sf.rds")
