@@ -1,0 +1,41 @@
+---
+title: "Introduction to Data Visualization"
+format: 
+  revealjs:
+    scrollable: true
+    incremental: true
+editor: visual
+webr:
+  show-startup-message: false
+  packages: ['ggplot2', 'dplyr'] # Install R packages on document open
+execute: 
+  echo: true
+  warning: false
+filters: 
+  - webr
+---
+
+```{r echo=FALSE}
+library(countdown)
+```
+
+## Share a Data Visualization {.smaller}
+
+-   Form groups of 2-3
+-   Start by introducing yourself to your group (name, major, why you're taking this class, etc.)
+-   As a group, explore one member's data visualization. Answer the following questions:
+    -   q1
+    -   q2
+    -   q3
+-   When the timer runs out switch to new group member's visualization and answer the same questions above.
+
+```{r echo=FALSE}
+countdown(minutes=5)
+```
+
+## webr
+
+```{webr-r}
+ggplot(data = mtcars, aes(x = disp, y = mpg)) + 
+  geom_point()
+```
