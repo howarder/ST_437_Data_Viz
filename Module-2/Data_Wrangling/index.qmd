@@ -1,0 +1,20 @@
+---
+title: "Data Wrangling in R"
+author: "Brian Cervantes Alvarez"
+date: today
+date-format: long
+format: 
+    OSUstyle-html:
+        toc: true
+        toc-location: right
+execute: 
+  echo: true
+  warning: false
+webr:
+  packages: ['readr', 'dplyr', 'lubridate', 'stringr', 'tidyr'] # Install R packages on document open
+  show-startup-message: false    # Disable displaying status of webR initialization
+filters:
+- webr
+---
+
+![](DataWranglingDALLE.webp)
