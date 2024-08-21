@@ -1,2 +1,20 @@
 project:
-  title: "index"
+  type: website
+
+website:
+  title: "Advanced Data Visualization"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Dashboards
+      - href: ShinyViz.qmd
+        text: Shiny
+      - href: SpatialViz.qmd
+        text: Spatial
+
+format:
+  html:
+    toc: true  
+    toc-location: right  
+    toc-depth: 5  
+    theme: ../Assets/_extensions/Theme/OSUstyle/OSUstyle.scss
