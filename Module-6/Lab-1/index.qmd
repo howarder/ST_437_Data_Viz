@@ -92,9 +92,6 @@ server <- function(input, output) {
 shinyApp(ui, server)
 ```
 
-
-
-
 :::{.column-page}
 
 ```{shinylive-r}
