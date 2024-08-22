@@ -1,3 +1,95 @@
 ---
 title: "Using Quarto Dashboards"
+subtitle: "ST 437 Data Visualization"  
+author:  
+  - Erin Howard  
+  - Brian Cervantes Alvarez  
+date: today  
+date-format: long  
+format: dashboard
+execute:  
+  echo: true  
+  warning: false  
 ---
+
+
+```{r}
+#| label: load-packages
+#| message: false
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(gt)
+library(scales)
+library(plotly)
+library(forcats)
+```
+
+```{r}
+#| label: load-data
+#| message: false
+olympics_full <- read_csv("https://raw.githubusercontent.com/bcervantesalvarez/Portfolio/main/Assets/Datasets/olympics.csv")
+```
+
+
+
+## Column {width=60%}
+
+```{r}
+library(gt)
+library(dplyr)
+library(readr)
+
+# Load the dataset
+
+
+# Create the summary table
+summary_table <- tibble(
+  `Variable Name` = names(ds),
+  `Data Type` = sapply(ds, function(x) if(is.numeric(x)) "Continuous" else "Categorical"),
+  `Example 1` = sapply(ds, function(x) as.character(x[1])),
+  `Example 2` = sapply(ds, function(x) as.character(x[2])),
+  `Example 3` = sapply(ds, function(x) as.character(x[3]))
+)
+
+# Generate the table with gt
+summary_table_gt <- summary_table %>%
+  gt() %>%
+  tab_header(
+    title = "Financial Risk Assessment Dataset Summary",
+    subtitle = "Overview of Variables, Types, and Sample Values"
+  ) %>%
+  cols_label(
+    `Variable Name` = "Variable Name",
+    `Data Type` = "Data Type",
+    `Example 1` = "Example 1",
+    `Example 2` = "Example 2",
+    `Example 3` = "Example 3"
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(weight = "bold")
+    ),
+    locations = cells_column_labels(
+      columns = everything()
+    )
+  ) %>%
+  tab_options(
+    table.font.size = 14,
+    heading.title.font.size = 16,
+    heading.subtitle.font.size = 14
+  )
+
+# Print the table
+summary_table_gt
+```
+
+## Column {width=40%}
+
+```{r}
+```
+
+```{r}
+```
+
+
