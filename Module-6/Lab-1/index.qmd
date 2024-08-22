@@ -1,0 +1,867 @@
+---
+title: "Using ShinyLive"  
+subtitle: "ST 437 Data Visualization"  
+author:  
+  - Erin Howard  
+  - Brian Cervantes Alvarez  
+date: today  
+date-format: long  
+format:  
+    OSUstyle-html:  
+        toc: true  
+        toc-location: right  
+        toc-depth: 5  
+execute:  
+  echo: true  
+  warning: false  
+  show-startup-message: false  
+filters:  
+  - shinylive 
+---
+
+# Introduction to Shiny & ShinyLive
+
+Shiny allows you to make your plots interactive, adding widgets like sliders, dropdowns, and checkboxes that let users manipulate the plot in real-time.
+
+A Shiny app is built around two main components:
+
+1. **UI (User Interface)**: Defines how the app looks and what input controls are available to the user.
+2. **Server**: Contains the instructions on how to generate and update outputs based on user inputs.
+
+Follow the guide below to get started with `shinylive`.
+
+# Quick Guide to Installing `shinylive` for Quarto
+
+### 1. Install `shinylive` R Package
+
+In RStudio, install the `shinylive` package:
+
+```r
+install.packages("shinylive")
+```
+
+### 2. Create a Quarto Project
+
+In the Terminal tab, create a new Quarto project:
+
+```sh
+quarto create project default
+```
+
+This sets up a Quarto project with a necessary `_quarto.yml` file.
+
+### 3. Add `shinylive` Quarto Extension
+
+Install the `shinylive` extension by running:
+
+```sh
+quarto add quarto-ext/shinylive
+```
+
+### 4. Embed a Shiny App in Your Quarto Document
+
+Open your `.qmd` file and add the `shinylive` filter at the top:
+
+```yaml
+---
+filters:
+  - shinylive
+---
+```
+
+Then, insert your Shiny app code in a code block like this:
+
+```{{shinylive-r}}
+#| standalone: true
+#| viewerHeight: 700
+#| components: [editor, viewer]
+
+library(shiny)
+
+ui <- fluidPage(
+  sliderInput("obs", "Number of observations:", 1, 1000, 500),
+  plotOutput("distPlot")
+)
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+    hist(rnorm(input$obs))
+  })
+}
+
+shinyApp(ui, server)
+```
+
+
+
+
+:::{.column-page}
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 700
+#| components: [editor, viewer]
+
+library(shiny)
+
+ui <- fluidPage(
+  sliderInput("obs", "Number of observations:", 1, 1000, 500),
+  plotOutput("distPlot")
+)
+
+server <- function(input, output) {
+  output$distPlot <- renderPlot({
+    hist(rnorm(input$obs))
+  })
+}
+
+shinyApp(ui, server)
+```
+
+:::
+
+### 5. Render Your Quarto Document
+
+Render your document by clicking the Render button in RStudio or use:
+
+```sh
+quarto preview your-document.qmd --no-browser --no-watch-inputs
+```
+
+### 6. Publish Your Document (Optional)
+
+To publish, use one of the following commands:
+
+- **GitHub Pages**: `quarto publish gh-pages`
+- **Quarto Pub**: `quarto publish quarto-pub`
+
+## Important Considerations When Using ShinyLive
+
+While ShinyLive allows you to run Shiny apps directly in a Quarto document, there are a few key quirks to be aware of:
+
+1. **Library Inclusion**:
+   - **Ensure all necessary libraries are included within the `{shinylive-r}` block**: If any required library is not loaded within the code block, the app will not run correctly when deployed on the web. This is because the web environment running the app does not have access to the R session in your local machine.
+
+2. **Standalone Applications**:
+   - **Use `#| standalone: true`**: This option should be included to indicate that the code represents a complete Shiny application. It ensures that all necessary components are included and isolated from other parts of the document.
+
+3. **Component Configuration**:
+   - **Configure components like `editor` and `viewer` properly**: These options allow users to interact with the code, making it easier to test and explore different configurations directly within the document.
+
+4. **Resource Management**:
+   - **Be mindful of resource-intensive operations**: Since the app runs in a web-based environment, heavy computations might slow down the app or cause it to become unresponsive. Use reactive programming efficiently to minimize unnecessary computations.
+
+
+
+# Building our first shiny app
+
+
+### The Cost of Living Dataset
+
+We’ll be using a dataset from **Numbeo**, a trusted source for comparing the cost of living across cities worldwide. The dataset compares various cost indices relative to New York City (NYC), which serves as the baseline with an index of 100%.
+
+Here's an overview of the dataset:
+
+| Column Name                         | Example Values                                     |
+|-------------------------------------|----------------------------------------------------|
+| **Rank**                            | 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ...                 |
+| **Country**                         | Switzerland, Bahamas, Iceland, Singapore, ...      |
+| **Cost of Living Index**            | 101.1, 85.0, 83.0, 76.7, ...                       |
+| **Rent Index**                      | 46.5, 36.7, 39.2, 67.2, ...                        |
+| **Cost of Living Plus Rent Index**  | 74.9, 61.8, 62.0, 72.1, ...                        |
+| **Groceries Index**                 | 109.1, 81.6, 88.4, 74.6, ...                       |
+| **Restaurant Price Index**          | 97.0, 83.3, 86.8, 50.4, ...                        |
+| **Local Purchasing Power Index**    | 158.7, 54.6, 120.3, 111.1, ...                     |
+
+#### Variables Explained
+
+- **Cost of Living Index**: Compares the price of consumer goods (excluding rent) to NYC. An index of 120 means a city is 20% more expensive than NYC.
+
+- **Rent Index**: Measures the cost of renting apartments compared to NYC. An index of 80 indicates rents are 20% cheaper than NYC.
+
+- **Cost of Living Plus Rent Index**: Combines the Cost of Living Index and Rent Index for an overall comparison.
+
+- **Groceries Index**: Reflects grocery prices relative to NYC.
+
+- **Restaurant Price Index**: Compares the cost of dining out to NYC.
+
+- **Local Purchasing Power Index**: Indicates the purchasing power of residents based on average net salary, relative to NYC.
+
+For more details on the methodology, visit [Numbeo's methodology page](https://www.numbeo.com/common/motivation_and_methodology.jsp).
+
+
+## Cost of Living Shiny Demo
+
+This Shiny app allows you to explore and visualize cost-of-living data from around the world, dynamically comparing various indices such as the Cost of Living Index, Rent Index, and more, relative to New York City's baseline (100%). By uploading your own dataset, selecting specific countries, and choosing different indices to plot, you can instantly generate interactive, percentage-based lollipop plots that provide a clear visual comparison.
+
+Now, let's break down each part of the app to understand how it works and why Shiny is a powerful tool for creating dynamic, real-time visualizations.
+
+:::{.column-screen-inset-shaded}
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 1000
+#| components: [editor, viewer]
+library(shiny)
+library(ggplot2)
+library(dplyr)
+library(shinythemes)
+library(RColorBrewer)
+
+# Define UI with a theme and custom CSS
+ui <- fluidPage(
+  theme = shinytheme("flatly"),  # Apply the "flatly" theme
+  tags$style(HTML("
+    .selectize-input, .selectize-dropdown {
+      background-color: white !important;
+      color: black !important;
+    }
+  ")),  # Custom CSS to fix the transparency issue
+  titlePanel("Dynamic Cost of Living Data Visualization"),
+  sidebarLayout(
+    sidebarPanel(
+      h3("Step 1: Upload Your Dataset"),
+      fileInput("file", "Choose CSV File", accept = ".csv"),
+      h3("Step 2: Select Countries and Variable"),
+      uiOutput("countries_ui"),
+      uiOutput("ycol_ui"),
+      h3("Step 3: Create the Lollipop Plot")
+    ),
+    mainPanel(
+      plotOutput("lollipopPlot")
+    )
+  )
+)
+
+# Define server logic
+server <- function(input, output, session) {
+  
+  # Reactive expression to read the uploaded file
+  uploaded_data <- reactive({
+    req(input$file)  # Ensure a file is uploaded
+    read.csv(input$file$datapath)
+  })
+  
+  # Dynamically generate the UI for country selection based on uploaded data
+  output$countries_ui <- renderUI({
+    req(uploaded_data())  # Ensure data is available
+    selectInput("countries", "Select Countries:", 
+                choices = unique(uploaded_data()$Country), 
+                selected = head(unique(uploaded_data()$Country), 6),  # Default to top 6 countries
+                multiple = TRUE)
+  })
+  
+  # Dynamically generate the Y-axis options based on the uploaded data
+  output$ycol_ui <- renderUI({
+    req(uploaded_data())  # Ensure data is available
+    selectInput("ycol", "Y-axis:", 
+                choices = setdiff(names(uploaded_data())[-1], c("Country", "Rank")),  # Exclude Country and Rank
+                selected = setdiff(names(uploaded_data())[-1], c("Country", "Rank"))[1])
+  })
+  
+  filtered_data <- reactive({
+    req(uploaded_data())  # Ensure data is available
+    uploaded_data() %>%
+      filter(Country %in% input$countries)
+  })
+  
+  output$lollipopPlot <- renderPlot({
+    req(input$ycol)  # Ensure ycol is selected
+    
+    data <- filtered_data()
+    
+    # Convert the selected Y variable to a percentage relative to 100% (NYC)
+    data <- data %>%
+      mutate(Percentage = !!sym(input$ycol))
+    
+    # Generate the lollipop plot
+    ggplot(data, aes(x = reorder(Country, Percentage), y = Percentage, color = Percentage)) +
+      geom_segment(aes(xend = Country, y = 0, yend = Percentage), color = "grey") +
+      geom_point(size = 4, alpha = 0.7) +
+      scale_color_gradient2(low = "darkgreen", mid = "yellow", high = "darkred", midpoint = 100, 
+                            name = "Index\n(%)") +  # Gradient color based on the percentage
+      labs(
+        title = paste(input$ycol, "Lollipop Plot by Country"),
+        subtitle = "Comparison to NYC (Index = 100%) - Lower is Better",
+        x = "Country",
+        y = paste(input$ycol, "as a Percentage of NYC (100%)")
+      ) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(size = 12),  # Increase x-axis label size
+        plot.margin = unit(c(1, 1, 1, 1), "cm")  # Add margin to ensure labels aren't cut off
+      ) +
+      coord_flip()
+  })
+}
+
+# Run the app
+shinyApp(ui = ui, server = server)
+```
+
+:::
+
+## Step-by-Step Breakdown on Creating Shiny Visualizations
+
+In this section, we’ll guide you through the process of building a Shiny app that allows users to create dynamic visualizations. This app enables users to explore and compare cost-of-living data across different countries, relative to New York City's cost of living, which is set as the baseline (100%). The app provides several advantages over traditional static `ggplot2` visualizations, including interactivity, real-time data exploration, and a more engaging user experience.
+
+### Dataset Recap
+
+Before diving into the app's construction, let's quickly revisit the dataset. The dataset compares various cost-of-living indices, such as Rent Index, Groceries Index, and others, relative to New York City (NYC). NYC serves as the baseline, with an index of 100%. 
+
+For instance:
+- **Cost of Living Index**: Values above 100% indicate a higher cost of living compared to NYC, while values below 100% indicate a lower cost of living.
+- **Rent Index**: Similarly, values above 100% suggest higher rents compared to NYC, and lower values suggest cheaper rents.
+
+### Step 1: Setting Up the User Interface (UI)
+
+**UI Overview:**
+The User Interface (UI) is the front end of the Shiny app. It's where users interact with the app by selecting inputs like files, variables, and other controls. The UI is defined using the `fluidPage()` function, which structures the layout and appearance of the app.
+
+**Key Elements in the UI:**
+
+- **Theme Selection:** 
+  - **Shiny Syntax**: `theme = shinytheme("flatly")` 
+  - **Explanation**: This line applies the "flatly" theme to the app. In standard `ggplot2`, themes are usually applied directly within the plot using `theme()`, but in Shiny, the overall app theme is set within the UI to ensure consistency across all elements.
+  
+- **File Upload Input:** 
+  - **Shiny Syntax**: `fileInput("file", "Choose CSV File", accept = ".csv")`
+  - **Explanation**: This input allows users to upload their CSV file. In traditional `ggplot2`, data is usually hard-coded or read in with functions like `read_csv()`. In Shiny, the `fileInput()` function dynamically generates the file upload interface, allowing the app to process different datasets on the fly.
+
+- **Country and Variable Selectors:** 
+  - **Shiny Syntax**:
+    ```r
+    selectInput("countries", "Select Countries:", choices = unique(uploaded_data()$Country), multiple = TRUE)
+    selectInput("ycol", "Y-axis:", choices = setdiff(names(uploaded_data())[-1], c("Country", "Rank")))
+    ```
+
+  - **Explanation**: 
+    - `selectInput()` generates dropdown menus where users can select the countries they want to display and the variable they want to plot. In static `ggplot2`, you would manually specify these variables in the code, but in Shiny, this is made dynamic, allowing users to control the inputs directly.
+
+These elements work together to create an interactive interface where users can easily adjust inputs and see the results instantly.
+
+### Step 2: Creating the Server Logic
+
+**Server Overview:**
+The Server function is the backend of the Shiny app, where the logic for processing inputs and generating outputs is defined. The server reacts to user inputs and updates the app’s outputs accordingly.
+
+**Key Components in the Server:**
+
+- **Reactive Expressions:** 
+  - **Shiny Syntax**:
+    ```r
+    uploaded_data <- reactive({
+      req(input$file)  # Ensure a file is uploaded
+      read.csv(input$file$datapath)
+    })
+    
+    filtered_data <- reactive({
+      req(uploaded_data())  # Ensure data is available
+      uploaded_data() %>%
+        filter(Country %in% input$countries)
+    })
+    ```
+
+  - **Explanation**:
+    - **`reactive()`**: Reactive expressions in Shiny are used to handle data that changes in response to user input. For example, `uploaded_data()` reads the file uploaded by the user. In standard `ggplot2`, the data is typically loaded once at the beginning and remains static. However, in Shiny, reactive expressions ensure that the app updates automatically whenever the user changes the input data.
+    - **`req()`**: This function ensures that certain conditions are met before executing the code. For example, `req(input$file)` ensures that the user has uploaded a file before proceeding. This is different from static plots where all data and conditions are usually predefined.
+
+- **Dynamic UI Generation:**
+  - **Shiny Syntax**:
+    ```r
+    output$countries_ui <- renderUI({
+      req(uploaded_data())  # Ensure data is available
+      selectInput("countries", "Select Countries:", 
+                  choices = unique(uploaded_data()$Country), 
+                  selected = head(unique(uploaded_data()$Country), 6),  # Default to top 6 countries
+                  multiple = TRUE)
+    })
+    ```
+
+  - **Explanation**:
+    - **`renderUI()`**: This function dynamically generates UI elements based on the current state of the app. For instance, it creates the country selector after the dataset has been uploaded. In contrast, in standard `ggplot2`, all UI elements would need to be hardcoded.
+
+These components ensure the app is responsive, automatically updating the visualization whenever the user changes an input.
+
+### Step 3: Generating the Lollipop Plot
+
+**Plot Overview:**
+The core of this Shiny app is the lollipop plot, which visualizes how the selected index compares across different countries relative to NYC.
+
+**Plot Details:**
+
+- **Percentage Conversion:** The selected Y-axis variable is converted into a percentage relative to NYC's index of 100%. This allows users to easily see how each country's cost compares to NYC.
+  - **Shiny Syntax**:
+    ```r
+    data <- data %>%
+      mutate(Percentage = !!sym(input$ycol))
+    ```
+
+  - **Explanation**: 
+    - The `mutate()` function is used to calculate the percentage difference relative to NYC. In traditional `ggplot2`, you would calculate these values once and plot them statically. In Shiny, these calculations are dynamic and update automatically based on user input.
+
+- **Gradient Color Scale:** 
+  - **Shiny Syntax**:
+    ```r
+    scale_color_gradient2(low = "darkgreen", mid = "yellow", high = "darkred", midpoint = 100, name = "Index\n(%)")
+    ```
+
+  - **Explanation**: This color scale is applied to visually represent how each country compares to NYC (100%). In static `ggplot2`, this would be set once during plot creation. However, in Shiny, the color scale can adjust dynamically based on the uploaded dataset and user selections.
+
+- **Plot Structure:** 
+  - **Shiny Syntax**:
+    ```r
+    ggplot(data, aes(x = reorder(Country, Percentage), y = Percentage, color = Percentage)) +
+      geom_segment(aes(xend = Country, y = 0, yend = Percentage), color = "grey") +
+      geom_point(size = 4, alpha = 0.7) +
+      coord_flip()
+    ```
+
+  - **Explanation**: 
+    - **`aes()`**: Maps the selected variables to the plot aesthetics, just like in standard `ggplot2`.
+    - **`geom_segment()` and `geom_point()`**: These functions draw the lollipop plot elements. While they are standard `ggplot2` functions, in Shiny, they are connected to reactive expressions, meaning they update based on user input.
+    - **`coord_flip()`**: Flips the axes, making the country names easier to read. This is a static function but is dynamically controlled within Shiny.
+
+This lollipop plot provides an intuitive and visually appealing way to compare indices across countries.
+
+### Step 4: Reactive Programming in Action
+
+**Reactive Programming:**
+One of the main advantages of Shiny over traditional static plots is its use of reactive programming. Whenever a user interacts with the UI (e.g., uploads a new file, selects different countries, or changes the index), the reactive expressions automatically update the plot.
+
+**Benefits:**
+
+- **Real-Time Updates:** Users can instantly see how changes in their inputs affect the output, making data exploration faster and more interactive.
+- **Dynamic Data Handling:** The app can handle different datasets and input combinations without needing to reload or re-run the code manually.
+
+**Shiny Syntax vs. Static Programming:**
+- In a standard `ggplot2` workflow, data and plots are usually static—meaning that once you create a plot, you need to run the entire script again if you want to make changes. In Shiny, however, reactive expressions and the `renderPlot()` function ensure that the plot updates in real-time, allowing users to explore data dynamically.
+
+### Step 5: Enhancing User Experience with Themes and CSS
+
+**Polishing the App:**
+To ensure the app not only functions well but also looks good, we've applied a theme and custom CSS.
+
+**Details:**
+
+- **Themes:** 
+  - **Shiny Syntax**: `theme = shinytheme("flatly")`
+  - **Explanation**: In Shiny, themes are applied to the entire app through the UI, whereas in static `ggplot2
+
+`, themes are applied to individual plots.
+
+- **Custom CSS:** 
+  - **Shiny Syntax**:
+    ```r
+    tags$style(HTML("
+      .selectize-input, .selectize-dropdown {
+        background-color: white !important;
+        color: black !important;
+      }
+    "))
+    ```
+  - **Explanation**: Custom CSS is used to ensure that the dropdowns and selectors are displayed correctly. This level of customization isn't typically necessary in static plots, but in a Shiny app, it helps ensure a smooth user experience.
+
+**User Experience:**
+These enhancements improve the overall user experience, making the app more professional and easier to navigate.
+
+
+# Shiny Demo #2 | Distribution Sampling
+
+Below is an example of a more advanced Shiny app embedded within a Quarto document, demonstrating the use of various inputs and dynamic UI elements.
+
+:::{.column-screen-inset-shaded}
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 700
+#| components: [editor, viewer]
+
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(shiny)
+library(bslib)
+library(colourpicker)
+
+# Define UI for app that draws a histogram ----
+ui <- page_sidebar(
+  sidebar = sidebar(open = "open",
+    numericInput("n", "Sample count", 100),
+    selectInput("dist", "Distribution type",
+      choices = c("Normal" = "norm", 
+                  "Exponential" = "exp",
+                  "Gamma" = "gamma",
+                  "Uniform" = "unif",
+                  "Beta" = "beta",
+                  "Chi-squared" = "chisq",
+                  "Log-normal" = "lnorm",
+                  "F-distribution" = "f")),
+    uiOutput("param_ui"),
+    checkboxInput("animate", "Animate", FALSE),
+    colourInput("hist_color", "Histogram Color", value = "lightcoral"),
+    sliderInput("bins", "Number of Bins", min = 10, max = 100, value = 40, step = 1)
+  ),
+  plotOutput("plot", width = "100%", height = "600px")
+)
+
+server <- function(input, output, session) {
+  output$param_ui <- renderUI({
+    switch(input$dist,
+      norm = tagList(
+        sliderInput("mean", "Mean", min = -10, max = 10, value = 0, step = 0.1),
+        sliderInput("sd", "Standard Deviation", min = 0.1, max = 10, value = 1, step = 0.1)
+      ),
+      exp = tagList(
+        sliderInput("rate", "Rate (1/Mean)", min = 0.1, max = 10, value = 1, step = 0.1)
+      ),
+      gamma = tagList(
+        sliderInput("shape", "Shape", min = 0.1, max = 10, value = 2, step = 0.1),
+        sliderInput("scale", "Scale", min = 0.1, max = 10, value = 2, step = 0.1)
+      ),
+      unif = tagList(
+        sliderInput("min", "Minimum", min = -10, max = 10, value = 0, step = 0.1),
+        sliderInput("max", "Maximum", min = -10, max = 10, value = 1, step = 0.1)
+      ),
+      beta = tagList(
+        sliderInput("alpha", "Alpha", min = 0.1, max = 10, value = 2, step = 0.1),
+        sliderInput("beta", "Beta", min = 0.1, max = 10, value = 5, step = 0.1)
+      ),
+      chisq = tagList(
+        sliderInput("df", "Degrees of Freedom", min = 1, max = 20, value = 2, step = 1)
+      ),
+      lnorm = tagList(
+        sliderInput("meanlog", "Mean (log)", min = -5, max = 5, value = 0, step = 0.1),
+        sliderInput("sdlog", "Standard Deviation (log)", min = 0.1, max = 2, value = 1, step = 0.1)
+      ),
+      f = tagList(
+        sliderInput("df1", "Degrees of Freedom 1", min = 1, max = 20, value = 2, step = 1),
+        sliderInput("df2", "Degrees of Freedom 2", min = 1, max = 20, value = 5, step = 1)
+      )
+    )
+  })
+  
+  data <- reactive({
+    if (isTRUE(input$animate)) {
+      invalidateLater(1000)  # Default 1-second delay for fluid animation
+    }
+    
+    n <- input$n
+    dist <- input$dist
+    
+    switch(dist,
+      norm = rnorm(n, mean = input$mean, sd = input$sd),
+      exp = rexp(n, rate = input$rate),
+      gamma = rgamma(n, shape = input$shape, scale = input$scale),
+      unif = runif(n, min = input$min, max = input$max),
+      beta = rbeta(n, shape1 = input$alpha, shape2 = input$beta),
+      chisq = rchisq(n, df = input$df),
+      lnorm = rlnorm(n, meanlog = input$meanlog, sdlog = input$sdlog),
+      f = rf(n, df1 = input$df1, df2 = input$df2)
+    )
+  })
+  
+  output$plot <- renderPlot({
+    hist_data <- data()
+    dist_names <- c(
+      norm = "Normal", exp = "Exponential", gamma = "Gamma", unif = "Uniform",
+      beta = "Beta", chisq = "Chi-squared", lnorm = "Log-normal", f = "F-distribution"
+    )
+    dist_name <- dist_names[input$dist]
+    
+    ggplot(data.frame(x = hist_data), aes(x = x)) +
+      geom_histogram(aes(y = ..density.., fill = "Histogram"), bins = input$bins, color = "black", alpha = 0.7) +
+      stat_function(fun = switch(input$dist,
+        norm = dnorm,
+        exp = dexp,
+        gamma = dgamma,
+        unif = dunif,
+        beta = dbeta,
+        chisq = dchisq,
+        lnorm = dlnorm,
+        f = df
+      ), args = switch(input$dist,
+        norm = list(mean = input$mean, sd = input$sd),
+        exp = list(rate = input$rate),
+        gamma = list(shape = input$shape, scale = input$scale),
+        unif = list(min = input$min, max = input$max),
+        beta = list(shape1 = input$alpha, shape2 = input$beta),
+        chisq = list(df = input$df),
+        lnorm = list(meanlog = input$meanlog, sdlog = input$sdlog),
+        f = list(df1 = input$df1, df2 = input$df2)
+      ), aes(color = "Density Curve"), size = 1) +
+      geom_vline(aes(xintercept = mean(hist_data), color = "Sample Mean"), linetype = "dotted", size = 1.2) +
+      geom_vline(aes(xintercept = input$mean, color = "True Mean"), linetype = "dashed", size = 1.2) +
+      scale_fill_manual(values = input$hist_color, name = "") +  # Use selected histogram color
+      scale_color_manual(values = c("Density Curve" = "red", "Sample Mean" = "blue4", "True Mean" = "green4"), name = "") +
+      labs(title = paste(dist_name, "Distribution | Random Sample"),
+           x = "Value", y = "Density") +
+      theme_minimal(base_size = 15) +
+      theme(
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "top",
+        legend.title = element_blank()
+      )
+  }, res = 144)
+
+  outputOptions(output, "plot", suspendWhenHidden = FALSE)
+}
+
+# Create Shiny app ----
+shinyApp(ui = ui, server = server)
+```
+
+:::
+
+## Additional Tips for Using ShinyLive
+
+- **Testing Locally**: Before publishing or sharing your document, always test the Shiny app locally to ensure that it works as expected. This can help catch any issues related to missing libraries or improper configurations.
+  
+- **Resource Optimization**: If your Shiny app is performing slowly or struggling with large datasets, consider optimizing your code by reducing the number of reactive elements or pre-processing data where possible.
+
+- **Error Handling**: Make sure to implement error handling within your Shiny app, especially when dealing with user inputs that could cause unexpected behavior.
+
+By following these steps and keeping these considerations in mind, you'll be able to effectively embed and run Shiny applications within your Quarto documents using ShinyLive. This approach allows for a seamless integration of interactive elements into your reports and presentations, providing an engaging and dynamic experience for your audience.
+
+
+## Limitations of using `shinylive`
+
+While `shinylive` provides powerful, interactive visualizations, there are some limitations to keep in mind:
+
+1. **Data Import Restrictions:**
+   - The package allows for the upload of a CSV file, but it cannot connect to external databases, Google Sheets, or other web-based data sources. This means that you are limited to using datasets that you have locally stored and manually upload.
+
+2. **Single File Application:**
+   - The framework is designed as a single file, which simplifies the setup but limits the complexity that can be developed. Larger, more complex applications may require splitting the code across multiple files or using more advanced Shiny features.
+
+3. **Performance Considerations:**
+   - While `shinylive` is designed to be efficient, larger datasets or more complex visualizations may slow down performance. This is especially relevant when running the app within the Quarto environment, as the embedded app has some restrictions on resources.
+
+4. **Debugging Challenges:**
+   - Debugging within a Shiny app can be more challenging compared to traditional R scripts, especially within the `Shinylive` framework. Error messages and debugging tools are not as straightforward, making it harder to pinpoint issues if something goes wrong.
+
+5. **Package Availability:**
+   - Not all R packages are available when using `Shinylive`, so you may encounter limitations depending on the specific functionality you need. Most standard packages for visualization and data manipulation are supported, but more specialized packages may not be.
+
+6. **UI Customization:**
+   - Although the app uses themes and custom CSS to improve the user interface, there are limitations in terms of how much you can customize the appearance within the constraints of the Quarto environment.
+
+These limitations are important to consider when planning to use this Shiny app, especially if your project requires more advanced data handling or complex UI elements. Despite these constraints, the app is still a powerful tool for interactive data visualization and exploration.
+
+
+
+# Appendix
+
+
+### Building a Shiny User Interface
+
+#### 1. Basic Structure of a Shiny App
+
+- **UI Definition**:
+  - The user interface (UI) defines the layout and appearance of the Shiny app.
+  - **Example**:
+    ```r
+    ui <- page_sidebar(
+      titlePanel("App Title"),
+      sidebarLayout(
+        sidebarPanel("Sidebar contents"),
+        mainPanel("Main content here")
+      )
+    )
+    ```
+  - **Key Concept**: The `page_sidebar` function creates a sidebar layout that includes a title, sidebar, and main content area.
+
+- **Server Definition**:
+  - The server function contains the logic of the app, processing inputs and generating outputs.
+  - **Example**:
+    ```r
+    server <- function(input, output) {
+      # Server logic goes here
+    }
+    ```
+
+- **Running the App**:
+  - Use the `shinyApp()` function to combine the UI and server components and launch the app.
+  - **Example**:
+    ```r
+    shinyApp(ui = ui, server = server)
+    ```
+
+#### 2. Layouts
+
+- **Sidebar Layout**:
+  - The `page_sidebar` function creates a standard page with a sidebar, useful for apps with a clear separation of controls and output.
+  - **Example**:
+    ```r
+    ui <- page_sidebar(
+      title = "App Title",
+      sidebar = sidebar("Sidebar Contents"),
+      mainPanel("Main Content")
+    )
+    ```
+  - **Alternative Layouts**: You can also use `page_fluid` with `layout_sidebar` for more flexibility, or `page_navbar` for a multi-page app with a navigation bar.
+
+#### 3. Cards
+
+- **Cards**:
+  - `card()` creates a container with borders and padding to group related information.
+  - **Example**:
+    ```r
+    ui <- page_sidebar(
+      title = "App Title",
+      sidebar = sidebar("Sidebar Contents"),
+      card(
+        card_header("Card Header"),
+        "Card Body"
+      )
+    )
+    ```
+  - **Functionality**: Cards help organize content visually, adding headers, footers, and even images for better presentation.
+
+#### 4. Value Boxes
+
+- **Value Boxes**:
+  - `value_box()` is used to highlight key values or metrics in the app.
+  - **Example**:
+    ```r
+    value_box(
+      title = "Important Metric",
+      value = 100,
+      showcase = bsicons::bs_icon("bar-chart"),
+      theme = "teal"
+    )
+    ```
+  - **Use Case**: Value boxes are ideal for dashboards where key metrics need to be displayed prominently.
+
+#### 5. Creating User Interfaces with Shiny
+
+- **Composing the UI**:
+  - Shiny provides a variety of functions to build a user interface that includes inputs, outputs, and dynamic elements.
+  - **Key Elements**:
+    - `page_*` functions for overall layout.
+    - `card()` and `value_box()` for organizing and emphasizing content.
+    - Control widgets like `sliderInput()`, `selectInput()`, and `checkboxInput()` to allow user interaction.
+
+
+
+### Displaying Reactive Output in Shiny
+
+**Building Reactive Output**
+
+Shiny enables your app to respond dynamically to user inputs, making it feel "alive." To achieve this, you need to create reactive outputs that automatically update when users interact with control widgets.
+
+#### Steps to Create Reactive Output
+
+1. **Add an Output Element to the UI**:
+   - Shiny provides several functions to turn R objects into output elements, such as `textOutput()`, `plotOutput()`, and `tableOutput()`.
+   - Example: 
+     ```r
+     ui <- page_sidebar(
+       textOutput("selected_var")
+     )
+     ```
+   - Each output element in the UI must be paired with a corresponding render function in the server logic.
+
+2. **Define the Server Logic**:
+   - The server function creates reactive outputs by using render functions like `renderText()`, `renderPlot()`, or `renderTable()`.
+   - These functions take an R expression that generates the output, which will update every time the relevant input changes.
+   - Example:
+     ```r
+     server <- function(input, output) {
+       output$selected_var <- renderText({
+         paste("You have selected", input$var)
+       })
+     }
+     ```
+
+3. **Connecting Inputs and Outputs**:
+   - The `input` object stores all the values from widgets in your app, accessed via `input$widget_name`.
+   - Reactive output is created by using these input values within your render functions, allowing Shiny to automatically update the output whenever the input changes.
+
+#### Shiny Output Functions
+
+- **Output Functions**: Placeholders in the UI for the output.
+  - `plotOutput()`: Displays a plot.
+  - `textOutput()`: Displays text.
+  - `tableOutput()`: Displays a table.
+
+- **Render Functions**: Instructions in the server for creating the output.
+  - `renderPlot()`: Generates a plot.
+  - `renderText()`: Generates text.
+  - `renderTable()`: Generates a table.
+
+**Creating Reactive Text**
+
+- Use `textOutput()` in the UI to place a text output.
+- Use `renderText()` in the server to define how that text should be generated based on user inputs.
+
+**Example**: Display a selected variable's name.
+```r
+output$selected_var <- renderText({
+  paste("You have selected", input$var)
+})
+```
+
+**Recap**
+
+By following these steps, you can make your Shiny app responsive and interactive:
+
+1. Use *Output functions in the UI to define where the output will be displayed.
+2. Use render* functions in the server to specify how the output is generated.
+3. Include input values in your render expressions to make the outputs reactive.
+
+These techniques allow you to build dynamic Shiny apps that automatically update whenever the user interacts with the interface.
+
+### List of Shiny Control Widgets
+
+1. **`actionButton(inputId, label)`**  
+   - **Description**: Creates a button that triggers an action when clicked.
+   - **Example**: `actionButton("submit", "Submit")`
+
+2. **`checkboxInput(inputId, label, value = FALSE)`**  
+   - **Description**: Creates a single checkbox that can be checked or unchecked.
+   - **Example**: `checkboxInput("agree", "I agree to the terms", value = FALSE)`
+
+3. **`checkboxGroupInput(inputId, label, choices, selected = NULL)`**  
+   - **Description**: Creates a group of checkboxes where multiple options can be selected.
+   - **Example**: `checkboxGroupInput("fruits", "Choose fruits:", choices = c("Apple", "Banana", "Cherry"))`
+
+4. **`dateInput(inputId, label, value = NULL)`**  
+   - **Description**: Provides a calendar widget to select a single date.
+   - **Example**: `dateInput("dob", "Date of Birth", value = "2000-01-01")`
+
+5. **`dateRangeInput(inputId, label, start = NULL, end = NULL)`**  
+   - **Description**: Provides a pair of calendars to select a date range.
+   - **Example**: `dateRangeInput("travel_dates", "Travel Dates", start = "2024-01-01", end = "2024-01-15")`
+
+6. **`fileInput(inputId, label, accept = NULL)`**  
+   - **Description**: Allows users to upload a file from their local machine.
+   - **Example**: `fileInput("upload", "Upload CSV File", accept = ".csv")`
+
+7. **`helpText(text)`**  
+   - **Description**: Displays static text as help or instructions in the UI.
+   - **Example**: `helpText("Select options below to filter data.")`
+
+8. **`numericInput(inputId, label, value, min = NULL, max = NULL, step = NULL)`**  
+   - **Description**: Creates a numeric input field where users can enter numbers.
+   - **Example**: `numericInput("age", "Enter your age", value = 25, min = 1, max = 100, step = 1)`
+
+9. **`radioButtons(inputId, label, choices, selected = NULL)`**  
+   - **Description**: Creates a group of radio buttons where only one option can be selected at a time.
+   - **Example**: `radioButtons("gender", "Gender", choices = list("Male" = "M", "Female" = "F"))`
+
+10. **`selectInput(inputId, label, choices, selected = NULL)`**  
+    - **Description**: Provides a dropdown menu for selecting one option from a list.
+    - **Example**: `selectInput("state", "Select State", choices = c("California", "Texas", "New York"))`
+
+11. **`sliderInput(inputId, label, min, max, value, step = NULL)`**  
+    - **Description**: Creates a slider bar for selecting a numeric value or range.
+    - **Example**: `sliderInput("range", "Select Range", min = 0, max = 100, value = c(25, 75), step = 5)`
+
+12. **`submitButton(text = "Submit")`**  
+    - **Description**: Creates a button that submits the form when clicked. Unlike `actionButton`, this one waits for a manual trigger to update all inputs.
+    - **Example**: `submitButton("Apply Changes")`
+
+13. **`textInput(inputId, label, value = "")`**  
+    - **Description**: Provides a text input field where users can enter text.
+    - **Example**: `textInput("name", "Enter your name", value = "John Doe")`

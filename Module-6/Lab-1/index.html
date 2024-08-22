@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.55">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Erin Howard">
+<meta name="author" content="Brian Cervantes Alvarez">
+<meta name="dcterms.date" content="2024-08-22">
+
+<title>Using ShinyLive</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="index_files/libs/quarto-contrib/shinylive-0.5.0/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="index_files/libs/quarto-contrib/shinylive-0.5.0/shinylive/run-python-blocks.js" type="module"></script>
+<link href="index_files/libs/quarto-contrib/shinylive-0.5.0/shinylive/shinylive.css" rel="stylesheet">
+<link href="index_files/libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-shiny-shinylive" id="toc-introduction-to-shiny-shinylive" class="nav-link active" data-scroll-target="#introduction-to-shiny-shinylive">Introduction to Shiny &amp; ShinyLive</a></li>
+  <li><a href="#quick-guide-to-installing-shinylive-for-quarto" id="toc-quick-guide-to-installing-shinylive-for-quarto" class="nav-link" data-scroll-target="#quick-guide-to-installing-shinylive-for-quarto">Quick Guide to Installing <code>shinylive</code> for Quarto</a>
+  <ul>
+  <li><a href="#install-shinylive-r-package" id="toc-install-shinylive-r-package" class="nav-link" data-scroll-target="#install-shinylive-r-package">1. Install <code>shinylive</code> R Package</a></li>
+  <li><a href="#create-a-quarto-project" id="toc-create-a-quarto-project" class="nav-link" data-scroll-target="#create-a-quarto-project">2. Create a Quarto Project</a></li>
+  <li><a href="#add-shinylive-quarto-extension" id="toc-add-shinylive-quarto-extension" class="nav-link" data-scroll-target="#add-shinylive-quarto-extension">3. Add <code>shinylive</code> Quarto Extension</a></li>
+  <li><a href="#embed-a-shiny-app-in-your-quarto-document" id="toc-embed-a-shiny-app-in-your-quarto-document" class="nav-link" data-scroll-target="#embed-a-shiny-app-in-your-quarto-document">4. Embed a Shiny App in Your Quarto Document</a></li>
+  <li><a href="#render-your-quarto-document" id="toc-render-your-quarto-document" class="nav-link" data-scroll-target="#render-your-quarto-document">5. Render Your Quarto Document</a></li>
+  <li><a href="#publish-your-document-optional" id="toc-publish-your-document-optional" class="nav-link" data-scroll-target="#publish-your-document-optional">6. Publish Your Document (Optional)</a></li>
+  <li><a href="#important-considerations-when-using-shinylive" id="toc-important-considerations-when-using-shinylive" class="nav-link" data-scroll-target="#important-considerations-when-using-shinylive">Important Considerations When Using ShinyLive</a></li>
+  </ul></li>
+  <li><a href="#building-our-first-shiny-app" id="toc-building-our-first-shiny-app" class="nav-link" data-scroll-target="#building-our-first-shiny-app">Building our first shiny app</a>
+  <ul>
+  <li><a href="#the-cost-of-living-dataset" id="toc-the-cost-of-living-dataset" class="nav-link" data-scroll-target="#the-cost-of-living-dataset">The Cost of Living Dataset</a>
+  <ul>
+  <li><a href="#variables-explained" id="toc-variables-explained" class="nav-link" data-scroll-target="#variables-explained">Variables Explained</a></li>
+  </ul></li>
+  <li><a href="#cost-of-living-shiny-demo" id="toc-cost-of-living-shiny-demo" class="nav-link" data-scroll-target="#cost-of-living-shiny-demo">Cost of Living Shiny Demo</a></li>
+  <li><a href="#step-by-step-breakdown-on-creating-shiny-visualizations" id="toc-step-by-step-breakdown-on-creating-shiny-visualizations" class="nav-link" data-scroll-target="#step-by-step-breakdown-on-creating-shiny-visualizations">Step-by-Step Breakdown on Creating Shiny Visualizations</a>
+  <ul>
+  <li><a href="#dataset-recap" id="toc-dataset-recap" class="nav-link" data-scroll-target="#dataset-recap">Dataset Recap</a></li>
+  <li><a href="#step-1-setting-up-the-user-interface-ui" id="toc-step-1-setting-up-the-user-interface-ui" class="nav-link" data-scroll-target="#step-1-setting-up-the-user-interface-ui">Step 1: Setting Up the User Interface (UI)</a></li>
+  <li><a href="#step-2-creating-the-server-logic" id="toc-step-2-creating-the-server-logic" class="nav-link" data-scroll-target="#step-2-creating-the-server-logic">Step 2: Creating the Server Logic</a></li>
+  <li><a href="#step-3-generating-the-lollipop-plot" id="toc-step-3-generating-the-lollipop-plot" class="nav-link" data-scroll-target="#step-3-generating-the-lollipop-plot">Step 3: Generating the Lollipop Plot</a></li>
+  <li><a href="#step-4-reactive-programming-in-action" id="toc-step-4-reactive-programming-in-action" class="nav-link" data-scroll-target="#step-4-reactive-programming-in-action">Step 4: Reactive Programming in Action</a></li>
+  <li><a href="#step-5-enhancing-user-experience-with-themes-and-css" id="toc-step-5-enhancing-user-experience-with-themes-and-css" class="nav-link" data-scroll-target="#step-5-enhancing-user-experience-with-themes-and-css">Step 5: Enhancing User Experience with Themes and CSS</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#shiny-demo-2-distribution-sampling" id="toc-shiny-demo-2-distribution-sampling" class="nav-link" data-scroll-target="#shiny-demo-2-distribution-sampling">Shiny Demo #2 | Distribution Sampling</a>
+  <ul>
+  <li><a href="#additional-tips-for-using-shinylive" id="toc-additional-tips-for-using-shinylive" class="nav-link" data-scroll-target="#additional-tips-for-using-shinylive">Additional Tips for Using ShinyLive</a></li>
+  <li><a href="#limitations-of-using-shinylive" id="toc-limitations-of-using-shinylive" class="nav-link" data-scroll-target="#limitations-of-using-shinylive">Limitations of using <code>shinylive</code></a></li>
+  </ul></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
+  <ul>
+  <li><a href="#building-a-shiny-user-interface" id="toc-building-a-shiny-user-interface" class="nav-link" data-scroll-target="#building-a-shiny-user-interface">Building a Shiny User Interface</a>
+  <ul>
+  <li><a href="#basic-structure-of-a-shiny-app" id="toc-basic-structure-of-a-shiny-app" class="nav-link" data-scroll-target="#basic-structure-of-a-shiny-app">1. Basic Structure of a Shiny App</a></li>
+  <li><a href="#layouts" id="toc-layouts" class="nav-link" data-scroll-target="#layouts">2. Layouts</a></li>
+  <li><a href="#cards" id="toc-cards" class="nav-link" data-scroll-target="#cards">3. Cards</a></li>
+  <li><a href="#value-boxes" id="toc-value-boxes" class="nav-link" data-scroll-target="#value-boxes">4. Value Boxes</a></li>
+  <li><a href="#creating-user-interfaces-with-shiny" id="toc-creating-user-interfaces-with-shiny" class="nav-link" data-scroll-target="#creating-user-interfaces-with-shiny">5. Creating User Interfaces with Shiny</a></li>
+  </ul></li>
+  <li><a href="#displaying-reactive-output-in-shiny" id="toc-displaying-reactive-output-in-shiny" class="nav-link" data-scroll-target="#displaying-reactive-output-in-shiny">Displaying Reactive Output in Shiny</a>
+  <ul>
+  <li><a href="#steps-to-create-reactive-output" id="toc-steps-to-create-reactive-output" class="nav-link" data-scroll-target="#steps-to-create-reactive-output">Steps to Create Reactive Output</a></li>
+  <li><a href="#shiny-output-functions" id="toc-shiny-output-functions" class="nav-link" data-scroll-target="#shiny-output-functions">Shiny Output Functions</a></li>
+  </ul></li>
+  <li><a href="#list-of-shiny-control-widgets" id="toc-list-of-shiny-control-widgets" class="nav-link" data-scroll-target="#list-of-shiny-control-widgets">List of Shiny Control Widgets</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Using ShinyLive</h1>
+<p class="subtitle lead">ST 437 Data Visualization</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Authors</div>
+    <div class="quarto-title-meta-contents">
+             <p>Erin Howard </p>
+             <p>Brian Cervantes Alvarez </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 22, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction-to-shiny-shinylive" class="level1">
+<h1>Introduction to Shiny &amp; ShinyLive</h1>
+<p>Shiny allows you to make your plots interactive, adding widgets like sliders, dropdowns, and checkboxes that let users manipulate the plot in real-time.</p>
+<p>A Shiny app is built around two main components:</p>
+<ol type="1">
+<li><strong>UI (User Interface)</strong>: Defines how the app looks and what input controls are available to the user.</li>
+<li><strong>Server</strong>: Contains the instructions on how to generate and update outputs based on user inputs.</li>
+</ol>
+<p>Follow the guide below to get started with <code>shinylive</code>.</p>
+</section>
+<section id="quick-guide-to-installing-shinylive-for-quarto" class="level1 page-columns page-full">
+<h1>Quick Guide to Installing <code>shinylive</code> for Quarto</h1>
+<section id="install-shinylive-r-package" class="level3">
+<h3 class="anchored" data-anchor-id="install-shinylive-r-package">1. Install <code>shinylive</code> R Package</h3>
+<p>In RStudio, install the <code>shinylive</code> package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"shinylive"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="create-a-quarto-project" class="level3">
+<h3 class="anchored" data-anchor-id="create-a-quarto-project">2. Create a Quarto Project</h3>
+<p>In the Terminal tab, create a new Quarto project:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> create project default</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This sets up a Quarto project with a necessary <code>_quarto.yml</code> file.</p>
+</section>
+<section id="add-shinylive-quarto-extension" class="level3">
+<h3 class="anchored" data-anchor-id="add-shinylive-quarto-extension">3. Add <code>shinylive</code> Quarto Extension</h3>
+<p>Install the <code>shinylive</code> extension by running:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> add quarto-ext/shinylive</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="embed-a-shiny-app-in-your-quarto-document" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="embed-a-shiny-app-in-your-quarto-document">4. Embed a Shiny App in Your Quarto Document</h3>
+<p>Open your <code>.qmd</code> file and add the <code>shinylive</code> filter at the top:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filters</span><span class="kw">:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> shinylive</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, insert your Shiny app code in a code block like this:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{shinylive-r}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="in">#| standalone: true</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="in">#| viewerHeight: 700</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="in">#| components: [editor, viewer]</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="in">library(shiny)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="in">ui &lt;- fluidPage(</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="in">  sliderInput("obs", "Number of observations:", 1, 1000, 500),</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="in">  plotOutput("distPlot")</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="in">)</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="in">server &lt;- function(input, output) {</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="in">  output$distPlot &lt;- renderPlot({</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="in">    hist(rnorm(input$obs))</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="in">  })</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="in">}</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="in">shinyApp(ui, server)</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="column-page">
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 700
+#| components: [editor, viewer]
+
+library(shiny)
+
+ui &lt;- fluidPage(
+  sliderInput("obs", "Number of observations:", 1, 1000, 500),
+  plotOutput("distPlot")
+)
+
+server &lt;- function(input, output) {
+  output$distPlot &lt;- renderPlot({
+    hist(rnorm(input$obs))
+  })
+}
+
+shinyApp(ui, server)</code></pre>
+</div>
+</section>
+<section id="render-your-quarto-document" class="level3">
+<h3 class="anchored" data-anchor-id="render-your-quarto-document">5. Render Your Quarto Document</h3>
+<p>Render your document by clicking the Render button in RStudio or use:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview your-document.qmd <span class="at">--no-browser</span> <span class="at">--no-watch-inputs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="publish-your-document-optional" class="level3">
+<h3 class="anchored" data-anchor-id="publish-your-document-optional">6. Publish Your Document (Optional)</h3>
+<p>To publish, use one of the following commands:</p>
+<ul>
+<li><strong>GitHub Pages</strong>: <code>quarto publish gh-pages</code></li>
+<li><strong>Quarto Pub</strong>: <code>quarto publish quarto-pub</code></li>
+</ul>
+</section>
+<section id="important-considerations-when-using-shinylive" class="level2">
+<h2 class="anchored" data-anchor-id="important-considerations-when-using-shinylive">Important Considerations When Using ShinyLive</h2>
+<p>While ShinyLive allows you to run Shiny apps directly in a Quarto document, there are a few key quirks to be aware of:</p>
+<ol type="1">
+<li><strong>Library Inclusion</strong>:
+<ul>
+<li><strong>Ensure all necessary libraries are included within the <code>{shinylive-r}</code> block</strong>: If any required library is not loaded within the code block, the app will not run correctly when deployed on the web. This is because the web environment running the app does not have access to the R session in your local machine.</li>
+</ul></li>
+<li><strong>Standalone Applications</strong>:
+<ul>
+<li><strong>Use <code>#| standalone: true</code></strong>: This option should be included to indicate that the code represents a complete Shiny application. It ensures that all necessary components are included and isolated from other parts of the document.</li>
+</ul></li>
+<li><strong>Component Configuration</strong>:
+<ul>
+<li><strong>Configure components like <code>editor</code> and <code>viewer</code> properly</strong>: These options allow users to interact with the code, making it easier to test and explore different configurations directly within the document.</li>
+</ul></li>
+<li><strong>Resource Management</strong>:
+<ul>
+<li><strong>Be mindful of resource-intensive operations</strong>: Since the app runs in a web-based environment, heavy computations might slow down the app or cause it to become unresponsive. Use reactive programming efficiently to minimize unnecessary computations.</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="building-our-first-shiny-app" class="level1 page-columns page-full">
+<h1>Building our first shiny app</h1>
+<section id="the-cost-of-living-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="the-cost-of-living-dataset">The Cost of Living Dataset</h3>
+<p>We’ll be using a dataset from <strong>Numbeo</strong>, a trusted source for comparing the cost of living across cities worldwide. The dataset compares various cost indices relative to New York City (NYC), which serves as the baseline with an index of 100%.</p>
+<p>Here’s an overview of the dataset:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 58%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column Name</th>
+<th>Example Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Rank</strong></td>
+<td>1, 2, 3, 4, 5, 6, 7, 8, 9, 10, …</td>
+</tr>
+<tr class="even">
+<td><strong>Country</strong></td>
+<td>Switzerland, Bahamas, Iceland, Singapore, …</td>
+</tr>
+<tr class="odd">
+<td><strong>Cost of Living Index</strong></td>
+<td>101.1, 85.0, 83.0, 76.7, …</td>
+</tr>
+<tr class="even">
+<td><strong>Rent Index</strong></td>
+<td>46.5, 36.7, 39.2, 67.2, …</td>
+</tr>
+<tr class="odd">
+<td><strong>Cost of Living Plus Rent Index</strong></td>
+<td>74.9, 61.8, 62.0, 72.1, …</td>
+</tr>
+<tr class="even">
+<td><strong>Groceries Index</strong></td>
+<td>109.1, 81.6, 88.4, 74.6, …</td>
+</tr>
+<tr class="odd">
+<td><strong>Restaurant Price Index</strong></td>
+<td>97.0, 83.3, 86.8, 50.4, …</td>
+</tr>
+<tr class="even">
+<td><strong>Local Purchasing Power Index</strong></td>
+<td>158.7, 54.6, 120.3, 111.1, …</td>
+</tr>
+</tbody>
+</table>
+<section id="variables-explained" class="level4">
+<h4 class="anchored" data-anchor-id="variables-explained">Variables Explained</h4>
+<ul>
+<li><p><strong>Cost of Living Index</strong>: Compares the price of consumer goods (excluding rent) to NYC. An index of 120 means a city is 20% more expensive than NYC.</p></li>
+<li><p><strong>Rent Index</strong>: Measures the cost of renting apartments compared to NYC. An index of 80 indicates rents are 20% cheaper than NYC.</p></li>
+<li><p><strong>Cost of Living Plus Rent Index</strong>: Combines the Cost of Living Index and Rent Index for an overall comparison.</p></li>
+<li><p><strong>Groceries Index</strong>: Reflects grocery prices relative to NYC.</p></li>
+<li><p><strong>Restaurant Price Index</strong>: Compares the cost of dining out to NYC.</p></li>
+<li><p><strong>Local Purchasing Power Index</strong>: Indicates the purchasing power of residents based on average net salary, relative to NYC.</p></li>
+</ul>
+<p>For more details on the methodology, visit <a href="https://www.numbeo.com/common/motivation_and_methodology.jsp">Numbeo’s methodology page</a>.</p>
+</section>
+</section>
+<section id="cost-of-living-shiny-demo" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="cost-of-living-shiny-demo">Cost of Living Shiny Demo</h2>
+<p>This Shiny app allows you to explore and visualize cost-of-living data from around the world, dynamically comparing various indices such as the Cost of Living Index, Rent Index, and more, relative to New York City’s baseline (100%). By uploading your own dataset, selecting specific countries, and choosing different indices to plot, you can instantly generate interactive, percentage-based lollipop plots that provide a clear visual comparison.</p>
+<p>Now, let’s break down each part of the app to understand how it works and why Shiny is a powerful tool for creating dynamic, real-time visualizations.</p>
+<div class="column-screen-inset-shaded">
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 1000
+#| components: [editor, viewer]
+library(shiny)
+library(ggplot2)
+library(dplyr)
+library(shinythemes)
+library(RColorBrewer)
+
+# Define UI with a theme and custom CSS
+ui &lt;- fluidPage(
+  theme = shinytheme("flatly"),  # Apply the "flatly" theme
+  tags$style(HTML("
+    .selectize-input, .selectize-dropdown {
+      background-color: white !important;
+      color: black !important;
+    }
+  ")),  # Custom CSS to fix the transparency issue
+  titlePanel("Dynamic Cost of Living Data Visualization"),
+  sidebarLayout(
+    sidebarPanel(
+      h3("Step 1: Upload Your Dataset"),
+      fileInput("file", "Choose CSV File", accept = ".csv"),
+      h3("Step 2: Select Countries and Variable"),
+      uiOutput("countries_ui"),
+      uiOutput("ycol_ui"),
+      h3("Step 3: Create the Lollipop Plot")
+    ),
+    mainPanel(
+      plotOutput("lollipopPlot")
+    )
+  )
+)
+
+# Define server logic
+server &lt;- function(input, output, session) {
+  
+  # Reactive expression to read the uploaded file
+  uploaded_data &lt;- reactive({
+    req(input$file)  # Ensure a file is uploaded
+    read.csv(input$file$datapath)
+  })
+  
+  # Dynamically generate the UI for country selection based on uploaded data
+  output$countries_ui &lt;- renderUI({
+    req(uploaded_data())  # Ensure data is available
+    selectInput("countries", "Select Countries:", 
+                choices = unique(uploaded_data()$Country), 
+                selected = head(unique(uploaded_data()$Country), 6),  # Default to top 6 countries
+                multiple = TRUE)
+  })
+  
+  # Dynamically generate the Y-axis options based on the uploaded data
+  output$ycol_ui &lt;- renderUI({
+    req(uploaded_data())  # Ensure data is available
+    selectInput("ycol", "Y-axis:", 
+                choices = setdiff(names(uploaded_data())[-1], c("Country", "Rank")),  # Exclude Country and Rank
+                selected = setdiff(names(uploaded_data())[-1], c("Country", "Rank"))[1])
+  })
+  
+  filtered_data &lt;- reactive({
+    req(uploaded_data())  # Ensure data is available
+    uploaded_data() %&gt;%
+      filter(Country %in% input$countries)
+  })
+  
+  output$lollipopPlot &lt;- renderPlot({
+    req(input$ycol)  # Ensure ycol is selected
+    
+    data &lt;- filtered_data()
+    
+    # Convert the selected Y variable to a percentage relative to 100% (NYC)
+    data &lt;- data %&gt;%
+      mutate(Percentage = !!sym(input$ycol))
+    
+    # Generate the lollipop plot
+    ggplot(data, aes(x = reorder(Country, Percentage), y = Percentage, color = Percentage)) +
+      geom_segment(aes(xend = Country, y = 0, yend = Percentage), color = "grey") +
+      geom_point(size = 4, alpha = 0.7) +
+      scale_color_gradient2(low = "darkgreen", mid = "yellow", high = "darkred", midpoint = 100, 
+                            name = "Index\n(%)") +  # Gradient color based on the percentage
+      labs(
+        title = paste(input$ycol, "Lollipop Plot by Country"),
+        subtitle = "Comparison to NYC (Index = 100%) - Lower is Better",
+        x = "Country",
+        y = paste(input$ycol, "as a Percentage of NYC (100%)")
+      ) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(size = 12),  # Increase x-axis label size
+        plot.margin = unit(c(1, 1, 1, 1), "cm")  # Add margin to ensure labels aren't cut off
+      ) +
+      coord_flip()
+  })
+}
+
+# Run the app
+shinyApp(ui = ui, server = server)</code></pre>
+</div>
+</section>
+<section id="step-by-step-breakdown-on-creating-shiny-visualizations" class="level2">
+<h2 class="anchored" data-anchor-id="step-by-step-breakdown-on-creating-shiny-visualizations">Step-by-Step Breakdown on Creating Shiny Visualizations</h2>
+<p>In this section, we’ll guide you through the process of building a Shiny app that allows users to create dynamic visualizations. This app enables users to explore and compare cost-of-living data across different countries, relative to New York City’s cost of living, which is set as the baseline (100%). The app provides several advantages over traditional static <code>ggplot2</code> visualizations, including interactivity, real-time data exploration, and a more engaging user experience.</p>
+<section id="dataset-recap" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-recap">Dataset Recap</h3>
+<p>Before diving into the app’s construction, let’s quickly revisit the dataset. The dataset compares various cost-of-living indices, such as Rent Index, Groceries Index, and others, relative to New York City (NYC). NYC serves as the baseline, with an index of 100%.</p>
+<p>For instance: - <strong>Cost of Living Index</strong>: Values above 100% indicate a higher cost of living compared to NYC, while values below 100% indicate a lower cost of living. - <strong>Rent Index</strong>: Similarly, values above 100% suggest higher rents compared to NYC, and lower values suggest cheaper rents.</p>
+</section>
+<section id="step-1-setting-up-the-user-interface-ui" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-setting-up-the-user-interface-ui">Step 1: Setting Up the User Interface (UI)</h3>
+<p><strong>UI Overview:</strong> The User Interface (UI) is the front end of the Shiny app. It’s where users interact with the app by selecting inputs like files, variables, and other controls. The UI is defined using the <code>fluidPage()</code> function, which structures the layout and appearance of the app.</p>
+<p><strong>Key Elements in the UI:</strong></p>
+<ul>
+<li><strong>Theme Selection:</strong>
+<ul>
+<li><strong>Shiny Syntax</strong>: <code>theme = shinytheme("flatly")</code></li>
+<li><strong>Explanation</strong>: This line applies the “flatly” theme to the app. In standard <code>ggplot2</code>, themes are usually applied directly within the plot using <code>theme()</code>, but in Shiny, the overall app theme is set within the UI to ensure consistency across all elements.</li>
+</ul></li>
+<li><strong>File Upload Input:</strong>
+<ul>
+<li><strong>Shiny Syntax</strong>: <code>fileInput("file", "Choose CSV File", accept = ".csv")</code></li>
+<li><strong>Explanation</strong>: This input allows users to upload their CSV file. In traditional <code>ggplot2</code>, data is usually hard-coded or read in with functions like <code>read_csv()</code>. In Shiny, the <code>fileInput()</code> function dynamically generates the file upload interface, allowing the app to process different datasets on the fly.</li>
+</ul></li>
+<li><strong>Country and Variable Selectors:</strong>
+<ul>
+<li><p><strong>Shiny Syntax</strong>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">selectInput</span>(<span class="st">"countries"</span>, <span class="st">"Select Countries:"</span>, <span class="at">choices =</span> <span class="fu">unique</span>(<span class="fu">uploaded_data</span>()<span class="sc">$</span>Country), <span class="at">multiple =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">selectInput</span>(<span class="st">"ycol"</span>, <span class="st">"Y-axis:"</span>, <span class="at">choices =</span> <span class="fu">setdiff</span>(<span class="fu">names</span>(<span class="fu">uploaded_data</span>())[<span class="sc">-</span><span class="dv">1</span>], <span class="fu">c</span>(<span class="st">"Country"</span>, <span class="st">"Rank"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Explanation</strong>:</p>
+<ul>
+<li><code>selectInput()</code> generates dropdown menus where users can select the countries they want to display and the variable they want to plot. In static <code>ggplot2</code>, you would manually specify these variables in the code, but in Shiny, this is made dynamic, allowing users to control the inputs directly.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>These elements work together to create an interactive interface where users can easily adjust inputs and see the results instantly.</p>
+</section>
+<section id="step-2-creating-the-server-logic" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-creating-the-server-logic">Step 2: Creating the Server Logic</h3>
+<p><strong>Server Overview:</strong> The Server function is the backend of the Shiny app, where the logic for processing inputs and generating outputs is defined. The server reacts to user inputs and updates the app’s outputs accordingly.</p>
+<p><strong>Key Components in the Server:</strong></p>
+<ul>
+<li><strong>Reactive Expressions:</strong>
+<ul>
+<li><p><strong>Shiny Syntax</strong>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>uploaded_data <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req</span>(input<span class="sc">$</span>file)  <span class="co"># Ensure a file is uploaded</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read.csv</span>(input<span class="sc">$</span>file<span class="sc">$</span>datapath)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req</span>(<span class="fu">uploaded_data</span>())  <span class="co"># Ensure data is available</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uploaded_data</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Country <span class="sc">%in%</span> input<span class="sc">$</span>countries)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Explanation</strong>:</p>
+<ul>
+<li><strong><code>reactive()</code></strong>: Reactive expressions in Shiny are used to handle data that changes in response to user input. For example, <code>uploaded_data()</code> reads the file uploaded by the user. In standard <code>ggplot2</code>, the data is typically loaded once at the beginning and remains static. However, in Shiny, reactive expressions ensure that the app updates automatically whenever the user changes the input data.</li>
+<li><strong><code>req()</code></strong>: This function ensures that certain conditions are met before executing the code. For example, <code>req(input$file)</code> ensures that the user has uploaded a file before proceeding. This is different from static plots where all data and conditions are usually predefined.</li>
+</ul></li>
+</ul></li>
+<li><strong>Dynamic UI Generation:</strong>
+<ul>
+<li><p><strong>Shiny Syntax</strong>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>countries_ui <span class="ot">&lt;-</span> <span class="fu">renderUI</span>({</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req</span>(<span class="fu">uploaded_data</span>())  <span class="co"># Ensure data is available</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">selectInput</span>(<span class="st">"countries"</span>, <span class="st">"Select Countries:"</span>, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">choices =</span> <span class="fu">unique</span>(<span class="fu">uploaded_data</span>()<span class="sc">$</span>Country), </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">selected =</span> <span class="fu">head</span>(<span class="fu">unique</span>(<span class="fu">uploaded_data</span>()<span class="sc">$</span>Country), <span class="dv">6</span>),  <span class="co"># Default to top 6 countries</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">multiple =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Explanation</strong>:</p>
+<ul>
+<li><strong><code>renderUI()</code></strong>: This function dynamically generates UI elements based on the current state of the app. For instance, it creates the country selector after the dataset has been uploaded. In contrast, in standard <code>ggplot2</code>, all UI elements would need to be hardcoded.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>These components ensure the app is responsive, automatically updating the visualization whenever the user changes an input.</p>
+</section>
+<section id="step-3-generating-the-lollipop-plot" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-generating-the-lollipop-plot">Step 3: Generating the Lollipop Plot</h3>
+<p><strong>Plot Overview:</strong> The core of this Shiny app is the lollipop plot, which visualizes how the selected index compares across different countries relative to NYC.</p>
+<p><strong>Plot Details:</strong></p>
+<ul>
+<li><strong>Percentage Conversion:</strong> The selected Y-axis variable is converted into a percentage relative to NYC’s index of 100%. This allows users to easily see how each country’s cost compares to NYC.
+<ul>
+<li><p><strong>Shiny Syntax</strong>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Percentage =</span> <span class="sc">!!</span><span class="fu">sym</span>(input<span class="sc">$</span>ycol))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Explanation</strong>:</p>
+<ul>
+<li>The <code>mutate()</code> function is used to calculate the percentage difference relative to NYC. In traditional <code>ggplot2</code>, you would calculate these values once and plot them statically. In Shiny, these calculations are dynamic and update automatically based on user input.</li>
+</ul></li>
+</ul></li>
+<li><strong>Gradient Color Scale:</strong>
+<ul>
+<li><p><strong>Shiny Syntax</strong>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_color_gradient2</span>(<span class="at">low =</span> <span class="st">"darkgreen"</span>, <span class="at">mid =</span> <span class="st">"yellow"</span>, <span class="at">high =</span> <span class="st">"darkred"</span>, <span class="at">midpoint =</span> <span class="dv">100</span>, <span class="at">name =</span> <span class="st">"Index</span><span class="sc">\n</span><span class="st">(%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Explanation</strong>: This color scale is applied to visually represent how each country compares to NYC (100%). In static <code>ggplot2</code>, this would be set once during plot creation. However, in Shiny, the color scale can adjust dynamically based on the uploaded dataset and user selections.</p></li>
+</ul></li>
+<li><strong>Plot Structure:</strong>
+<ul>
+<li><p><strong>Shiny Syntax</strong>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Country, Percentage), <span class="at">y =</span> Percentage, <span class="at">color =</span> Percentage)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">xend =</span> Country, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">yend =</span> Percentage), <span class="at">color =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Explanation</strong>:</p>
+<ul>
+<li><strong><code>aes()</code></strong>: Maps the selected variables to the plot aesthetics, just like in standard <code>ggplot2</code>.</li>
+<li><strong><code>geom_segment()</code> and <code>geom_point()</code></strong>: These functions draw the lollipop plot elements. While they are standard <code>ggplot2</code> functions, in Shiny, they are connected to reactive expressions, meaning they update based on user input.</li>
+<li><strong><code>coord_flip()</code></strong>: Flips the axes, making the country names easier to read. This is a static function but is dynamically controlled within Shiny.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>This lollipop plot provides an intuitive and visually appealing way to compare indices across countries.</p>
+</section>
+<section id="step-4-reactive-programming-in-action" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-reactive-programming-in-action">Step 4: Reactive Programming in Action</h3>
+<p><strong>Reactive Programming:</strong> One of the main advantages of Shiny over traditional static plots is its use of reactive programming. Whenever a user interacts with the UI (e.g., uploads a new file, selects different countries, or changes the index), the reactive expressions automatically update the plot.</p>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li><strong>Real-Time Updates:</strong> Users can instantly see how changes in their inputs affect the output, making data exploration faster and more interactive.</li>
+<li><strong>Dynamic Data Handling:</strong> The app can handle different datasets and input combinations without needing to reload or re-run the code manually.</li>
+</ul>
+<p><strong>Shiny Syntax vs.&nbsp;Static Programming:</strong> - In a standard <code>ggplot2</code> workflow, data and plots are usually static—meaning that once you create a plot, you need to run the entire script again if you want to make changes. In Shiny, however, reactive expressions and the <code>renderPlot()</code> function ensure that the plot updates in real-time, allowing users to explore data dynamically.</p>
+</section>
+<section id="step-5-enhancing-user-experience-with-themes-and-css" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-enhancing-user-experience-with-themes-and-css">Step 5: Enhancing User Experience with Themes and CSS</h3>
+<p><strong>Polishing the App:</strong> To ensure the app not only functions well but also looks good, we’ve applied a theme and custom CSS.</p>
+<p><strong>Details:</strong></p>
+<ul>
+<li><strong>Themes:</strong>
+<ul>
+<li><strong>Shiny Syntax</strong>: <code>theme = shinytheme("flatly")</code></li>
+<li><strong>Explanation</strong>: In Shiny, themes are applied to the entire app through the UI, whereas in static `ggplot2</li>
+</ul></li>
+</ul>
+<p>`, themes are applied to individual plots.</p>
+<ul>
+<li><strong>Custom CSS:</strong>
+<ul>
+<li><p><strong>Shiny Syntax</strong>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tags<span class="sc">$</span><span class="fu">style</span>(<span class="fu">HTML</span>(<span class="st">"</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="st">  .selectize-input, .selectize-dropdown {</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="st">    background-color: white !important;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="st">    color: black !important;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Explanation</strong>: Custom CSS is used to ensure that the dropdowns and selectors are displayed correctly. This level of customization isn’t typically necessary in static plots, but in a Shiny app, it helps ensure a smooth user experience.</p></li>
+</ul></li>
+</ul>
+<p><strong>User Experience:</strong> These enhancements improve the overall user experience, making the app more professional and easier to navigate.</p>
+</section>
+</section>
+</section>
+<section id="shiny-demo-2-distribution-sampling" class="level1 page-columns page-full">
+<h1>Shiny Demo #2 | Distribution Sampling</h1>
+<p>Below is an example of a more advanced Shiny app embedded within a Quarto document, demonstrating the use of various inputs and dynamic UI elements.</p>
+<div class="column-screen-inset-shaded">
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 700
+#| components: [editor, viewer]
+
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(shiny)
+library(bslib)
+library(colourpicker)
+
+# Define UI for app that draws a histogram ----
+ui &lt;- page_sidebar(
+  sidebar = sidebar(open = "open",
+    numericInput("n", "Sample count", 100),
+    selectInput("dist", "Distribution type",
+      choices = c("Normal" = "norm", 
+                  "Exponential" = "exp",
+                  "Gamma" = "gamma",
+                  "Uniform" = "unif",
+                  "Beta" = "beta",
+                  "Chi-squared" = "chisq",
+                  "Log-normal" = "lnorm",
+                  "F-distribution" = "f")),
+    uiOutput("param_ui"),
+    checkboxInput("animate", "Animate", FALSE),
+    colourInput("hist_color", "Histogram Color", value = "lightcoral"),
+    sliderInput("bins", "Number of Bins", min = 10, max = 100, value = 40, step = 1)
+  ),
+  plotOutput("plot", width = "100%", height = "600px")
+)
+
+server &lt;- function(input, output, session) {
+  output$param_ui &lt;- renderUI({
+    switch(input$dist,
+      norm = tagList(
+        sliderInput("mean", "Mean", min = -10, max = 10, value = 0, step = 0.1),
+        sliderInput("sd", "Standard Deviation", min = 0.1, max = 10, value = 1, step = 0.1)
+      ),
+      exp = tagList(
+        sliderInput("rate", "Rate (1/Mean)", min = 0.1, max = 10, value = 1, step = 0.1)
+      ),
+      gamma = tagList(
+        sliderInput("shape", "Shape", min = 0.1, max = 10, value = 2, step = 0.1),
+        sliderInput("scale", "Scale", min = 0.1, max = 10, value = 2, step = 0.1)
+      ),
+      unif = tagList(
+        sliderInput("min", "Minimum", min = -10, max = 10, value = 0, step = 0.1),
+        sliderInput("max", "Maximum", min = -10, max = 10, value = 1, step = 0.1)
+      ),
+      beta = tagList(
+        sliderInput("alpha", "Alpha", min = 0.1, max = 10, value = 2, step = 0.1),
+        sliderInput("beta", "Beta", min = 0.1, max = 10, value = 5, step = 0.1)
+      ),
+      chisq = tagList(
+        sliderInput("df", "Degrees of Freedom", min = 1, max = 20, value = 2, step = 1)
+      ),
+      lnorm = tagList(
+        sliderInput("meanlog", "Mean (log)", min = -5, max = 5, value = 0, step = 0.1),
+        sliderInput("sdlog", "Standard Deviation (log)", min = 0.1, max = 2, value = 1, step = 0.1)
+      ),
+      f = tagList(
+        sliderInput("df1", "Degrees of Freedom 1", min = 1, max = 20, value = 2, step = 1),
+        sliderInput("df2", "Degrees of Freedom 2", min = 1, max = 20, value = 5, step = 1)
+      )
+    )
+  })
+  
+  data &lt;- reactive({
+    if (isTRUE(input$animate)) {
+      invalidateLater(1000)  # Default 1-second delay for fluid animation
+    }
+    
+    n &lt;- input$n
+    dist &lt;- input$dist
+    
+    switch(dist,
+      norm = rnorm(n, mean = input$mean, sd = input$sd),
+      exp = rexp(n, rate = input$rate),
+      gamma = rgamma(n, shape = input$shape, scale = input$scale),
+      unif = runif(n, min = input$min, max = input$max),
+      beta = rbeta(n, shape1 = input$alpha, shape2 = input$beta),
+      chisq = rchisq(n, df = input$df),
+      lnorm = rlnorm(n, meanlog = input$meanlog, sdlog = input$sdlog),
+      f = rf(n, df1 = input$df1, df2 = input$df2)
+    )
+  })
+  
+  output$plot &lt;- renderPlot({
+    hist_data &lt;- data()
+    dist_names &lt;- c(
+      norm = "Normal", exp = "Exponential", gamma = "Gamma", unif = "Uniform",
+      beta = "Beta", chisq = "Chi-squared", lnorm = "Log-normal", f = "F-distribution"
+    )
+    dist_name &lt;- dist_names[input$dist]
+    
+    ggplot(data.frame(x = hist_data), aes(x = x)) +
+      geom_histogram(aes(y = ..density.., fill = "Histogram"), bins = input$bins, color = "black", alpha = 0.7) +
+      stat_function(fun = switch(input$dist,
+        norm = dnorm,
+        exp = dexp,
+        gamma = dgamma,
+        unif = dunif,
+        beta = dbeta,
+        chisq = dchisq,
+        lnorm = dlnorm,
+        f = df
+      ), args = switch(input$dist,
+        norm = list(mean = input$mean, sd = input$sd),
+        exp = list(rate = input$rate),
+        gamma = list(shape = input$shape, scale = input$scale),
+        unif = list(min = input$min, max = input$max),
+        beta = list(shape1 = input$alpha, shape2 = input$beta),
+        chisq = list(df = input$df),
+        lnorm = list(meanlog = input$meanlog, sdlog = input$sdlog),
+        f = list(df1 = input$df1, df2 = input$df2)
+      ), aes(color = "Density Curve"), size = 1) +
+      geom_vline(aes(xintercept = mean(hist_data), color = "Sample Mean"), linetype = "dotted", size = 1.2) +
+      geom_vline(aes(xintercept = input$mean, color = "True Mean"), linetype = "dashed", size = 1.2) +
+      scale_fill_manual(values = input$hist_color, name = "") +  # Use selected histogram color
+      scale_color_manual(values = c("Density Curve" = "red", "Sample Mean" = "blue4", "True Mean" = "green4"), name = "") +
+      labs(title = paste(dist_name, "Distribution | Random Sample"),
+           x = "Value", y = "Density") +
+      theme_minimal(base_size = 15) +
+      theme(
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "top",
+        legend.title = element_blank()
+      )
+  }, res = 144)
+
+  outputOptions(output, "plot", suspendWhenHidden = FALSE)
+}
+
+# Create Shiny app ----
+shinyApp(ui = ui, server = server)</code></pre>
+</div>
+<section id="additional-tips-for-using-shinylive" class="level2">
+<h2 class="anchored" data-anchor-id="additional-tips-for-using-shinylive">Additional Tips for Using ShinyLive</h2>
+<ul>
+<li><p><strong>Testing Locally</strong>: Before publishing or sharing your document, always test the Shiny app locally to ensure that it works as expected. This can help catch any issues related to missing libraries or improper configurations.</p></li>
+<li><p><strong>Resource Optimization</strong>: If your Shiny app is performing slowly or struggling with large datasets, consider optimizing your code by reducing the number of reactive elements or pre-processing data where possible.</p></li>
+<li><p><strong>Error Handling</strong>: Make sure to implement error handling within your Shiny app, especially when dealing with user inputs that could cause unexpected behavior.</p></li>
+</ul>
+<p>By following these steps and keeping these considerations in mind, you’ll be able to effectively embed and run Shiny applications within your Quarto documents using ShinyLive. This approach allows for a seamless integration of interactive elements into your reports and presentations, providing an engaging and dynamic experience for your audience.</p>
+</section>
+<section id="limitations-of-using-shinylive" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-of-using-shinylive">Limitations of using <code>shinylive</code></h2>
+<p>While <code>shinylive</code> provides powerful, interactive visualizations, there are some limitations to keep in mind:</p>
+<ol type="1">
+<li><strong>Data Import Restrictions:</strong>
+<ul>
+<li>The package allows for the upload of a CSV file, but it cannot connect to external databases, Google Sheets, or other web-based data sources. This means that you are limited to using datasets that you have locally stored and manually upload.</li>
+</ul></li>
+<li><strong>Single File Application:</strong>
+<ul>
+<li>The framework is designed as a single file, which simplifies the setup but limits the complexity that can be developed. Larger, more complex applications may require splitting the code across multiple files or using more advanced Shiny features.</li>
+</ul></li>
+<li><strong>Performance Considerations:</strong>
+<ul>
+<li>While <code>shinylive</code> is designed to be efficient, larger datasets or more complex visualizations may slow down performance. This is especially relevant when running the app within the Quarto environment, as the embedded app has some restrictions on resources.</li>
+</ul></li>
+<li><strong>Debugging Challenges:</strong>
+<ul>
+<li>Debugging within a Shiny app can be more challenging compared to traditional R scripts, especially within the <code>Shinylive</code> framework. Error messages and debugging tools are not as straightforward, making it harder to pinpoint issues if something goes wrong.</li>
+</ul></li>
+<li><strong>Package Availability:</strong>
+<ul>
+<li>Not all R packages are available when using <code>Shinylive</code>, so you may encounter limitations depending on the specific functionality you need. Most standard packages for visualization and data manipulation are supported, but more specialized packages may not be.</li>
+</ul></li>
+<li><strong>UI Customization:</strong>
+<ul>
+<li>Although the app uses themes and custom CSS to improve the user interface, there are limitations in terms of how much you can customize the appearance within the constraints of the Quarto environment.</li>
+</ul></li>
+</ol>
+<p>These limitations are important to consider when planning to use this Shiny app, especially if your project requires more advanced data handling or complex UI elements. Despite these constraints, the app is still a powerful tool for interactive data visualization and exploration.</p>
+</section>
+</section>
+<section id="appendix" class="level1">
+<h1>Appendix</h1>
+<section id="building-a-shiny-user-interface" class="level3">
+<h3 class="anchored" data-anchor-id="building-a-shiny-user-interface">Building a Shiny User Interface</h3>
+<section id="basic-structure-of-a-shiny-app" class="level4">
+<h4 class="anchored" data-anchor-id="basic-structure-of-a-shiny-app">1. Basic Structure of a Shiny App</h4>
+<ul>
+<li><strong>UI Definition</strong>:
+<ul>
+<li><p>The user interface (UI) defines the layout and appearance of the Shiny app.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">page_sidebar</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">titlePanel</span>(<span class="st">"App Title"</span>),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sidebarLayout</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sidebarPanel</span>(<span class="st">"Sidebar contents"</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mainPanel</span>(<span class="st">"Main content here"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Key Concept</strong>: The <code>page_sidebar</code> function creates a sidebar layout that includes a title, sidebar, and main content area.</p></li>
+</ul></li>
+<li><strong>Server Definition</strong>:
+<ul>
+<li><p>The server function contains the logic of the app, processing inputs and generating outputs.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Server logic goes here</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul></li>
+<li><strong>Running the App</strong>:
+<ul>
+<li><p>Use the <code>shinyApp()</code> function to combine the UI and server components and launch the app.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul></li>
+</ul>
+</section>
+<section id="layouts" class="level4">
+<h4 class="anchored" data-anchor-id="layouts">2. Layouts</h4>
+<ul>
+<li><strong>Sidebar Layout</strong>:
+<ul>
+<li><p>The <code>page_sidebar</code> function creates a standard page with a sidebar, useful for apps with a clear separation of controls and output.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">page_sidebar</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">"App Title"</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sidebar =</span> <span class="fu">sidebar</span>(<span class="st">"Sidebar Contents"</span>),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mainPanel</span>(<span class="st">"Main Content"</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Alternative Layouts</strong>: You can also use <code>page_fluid</code> with <code>layout_sidebar</code> for more flexibility, or <code>page_navbar</code> for a multi-page app with a navigation bar.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="cards" class="level4">
+<h4 class="anchored" data-anchor-id="cards">3. Cards</h4>
+<ul>
+<li><strong>Cards</strong>:
+<ul>
+<li><p><code>card()</code> creates a container with borders and padding to group related information.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">page_sidebar</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">"App Title"</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">sidebar =</span> <span class="fu">sidebar</span>(<span class="st">"Sidebar Contents"</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">card</span>(</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">card_header</span>(<span class="st">"Card Header"</span>),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Card Body"</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Functionality</strong>: Cards help organize content visually, adding headers, footers, and even images for better presentation.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="value-boxes" class="level4">
+<h4 class="anchored" data-anchor-id="value-boxes">4. Value Boxes</h4>
+<ul>
+<li><strong>Value Boxes</strong>:
+<ul>
+<li><p><code>value_box()</code> is used to highlight key values or metrics in the app.</p></li>
+<li><p><strong>Example</strong>:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">value_box</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">"Important Metric"</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="dv">100</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">showcase =</span> bsicons<span class="sc">::</span><span class="fu">bs_icon</span>(<span class="st">"bar-chart"</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">theme =</span> <span class="st">"teal"</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Use Case</strong>: Value boxes are ideal for dashboards where key metrics need to be displayed prominently.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="creating-user-interfaces-with-shiny" class="level4">
+<h4 class="anchored" data-anchor-id="creating-user-interfaces-with-shiny">5. Creating User Interfaces with Shiny</h4>
+<ul>
+<li><strong>Composing the UI</strong>:
+<ul>
+<li>Shiny provides a variety of functions to build a user interface that includes inputs, outputs, and dynamic elements.</li>
+<li><strong>Key Elements</strong>:
+<ul>
+<li><code>page_*</code> functions for overall layout.</li>
+<li><code>card()</code> and <code>value_box()</code> for organizing and emphasizing content.</li>
+<li>Control widgets like <code>sliderInput()</code>, <code>selectInput()</code>, and <code>checkboxInput()</code> to allow user interaction.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="displaying-reactive-output-in-shiny" class="level3">
+<h3 class="anchored" data-anchor-id="displaying-reactive-output-in-shiny">Displaying Reactive Output in Shiny</h3>
+<p><strong>Building Reactive Output</strong></p>
+<p>Shiny enables your app to respond dynamically to user inputs, making it feel “alive.” To achieve this, you need to create reactive outputs that automatically update when users interact with control widgets.</p>
+<section id="steps-to-create-reactive-output" class="level4">
+<h4 class="anchored" data-anchor-id="steps-to-create-reactive-output">Steps to Create Reactive Output</h4>
+<ol type="1">
+<li><strong>Add an Output Element to the UI</strong>:
+<ul>
+<li><p>Shiny provides several functions to turn R objects into output elements, such as <code>textOutput()</code>, <code>plotOutput()</code>, and <code>tableOutput()</code>.</p></li>
+<li><p>Example:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">page_sidebar</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textOutput</span>(<span class="st">"selected_var"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Each output element in the UI must be paired with a corresponding render function in the server logic.</p></li>
+</ul></li>
+<li><strong>Define the Server Logic</strong>:
+<ul>
+<li><p>The server function creates reactive outputs by using render functions like <code>renderText()</code>, <code>renderPlot()</code>, or <code>renderTable()</code>.</p></li>
+<li><p>These functions take an R expression that generates the output, which will update every time the relevant input changes.</p></li>
+<li><p>Example:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>selected_var <span class="ot">&lt;-</span> <span class="fu">renderText</span>({</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(<span class="st">"You have selected"</span>, input<span class="sc">$</span>var)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul></li>
+<li><strong>Connecting Inputs and Outputs</strong>:
+<ul>
+<li>The <code>input</code> object stores all the values from widgets in your app, accessed via <code>input$widget_name</code>.</li>
+<li>Reactive output is created by using these input values within your render functions, allowing Shiny to automatically update the output whenever the input changes.</li>
+</ul></li>
+</ol>
+</section>
+<section id="shiny-output-functions" class="level4">
+<h4 class="anchored" data-anchor-id="shiny-output-functions">Shiny Output Functions</h4>
+<ul>
+<li><strong>Output Functions</strong>: Placeholders in the UI for the output.
+<ul>
+<li><code>plotOutput()</code>: Displays a plot.</li>
+<li><code>textOutput()</code>: Displays text.</li>
+<li><code>tableOutput()</code>: Displays a table.</li>
+</ul></li>
+<li><strong>Render Functions</strong>: Instructions in the server for creating the output.
+<ul>
+<li><code>renderPlot()</code>: Generates a plot.</li>
+<li><code>renderText()</code>: Generates text.</li>
+<li><code>renderTable()</code>: Generates a table.</li>
+</ul></li>
+</ul>
+<p><strong>Creating Reactive Text</strong></p>
+<ul>
+<li>Use <code>textOutput()</code> in the UI to place a text output.</li>
+<li>Use <code>renderText()</code> in the server to define how that text should be generated based on user inputs.</li>
+</ul>
+<p><strong>Example</strong>: Display a selected variable’s name.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>output<span class="sc">$</span>selected_var <span class="ot">&lt;-</span> <span class="fu">renderText</span>({</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">"You have selected"</span>, input<span class="sc">$</span>var)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Recap</strong></p>
+<p>By following these steps, you can make your Shiny app responsive and interactive:</p>
+<ol type="1">
+<li>Use *Output functions in the UI to define where the output will be displayed.</li>
+<li>Use render* functions in the server to specify how the output is generated.</li>
+<li>Include input values in your render expressions to make the outputs reactive.</li>
+</ol>
+<p>These techniques allow you to build dynamic Shiny apps that automatically update whenever the user interacts with the interface.</p>
+</section>
+</section>
+<section id="list-of-shiny-control-widgets" class="level3">
+<h3 class="anchored" data-anchor-id="list-of-shiny-control-widgets">List of Shiny Control Widgets</h3>
+<ol type="1">
+<li><strong><code>actionButton(inputId, label)</code></strong>
+<ul>
+<li><strong>Description</strong>: Creates a button that triggers an action when clicked.</li>
+<li><strong>Example</strong>: <code>actionButton("submit", "Submit")</code></li>
+</ul></li>
+<li><strong><code>checkboxInput(inputId, label, value = FALSE)</code></strong>
+<ul>
+<li><strong>Description</strong>: Creates a single checkbox that can be checked or unchecked.</li>
+<li><strong>Example</strong>: <code>checkboxInput("agree", "I agree to the terms", value = FALSE)</code></li>
+</ul></li>
+<li><strong><code>checkboxGroupInput(inputId, label, choices, selected = NULL)</code></strong>
+<ul>
+<li><strong>Description</strong>: Creates a group of checkboxes where multiple options can be selected.</li>
+<li><strong>Example</strong>: <code>checkboxGroupInput("fruits", "Choose fruits:", choices = c("Apple", "Banana", "Cherry"))</code></li>
+</ul></li>
+<li><strong><code>dateInput(inputId, label, value = NULL)</code></strong>
+<ul>
+<li><strong>Description</strong>: Provides a calendar widget to select a single date.</li>
+<li><strong>Example</strong>: <code>dateInput("dob", "Date of Birth", value = "2000-01-01")</code></li>
+</ul></li>
+<li><strong><code>dateRangeInput(inputId, label, start = NULL, end = NULL)</code></strong>
+<ul>
+<li><strong>Description</strong>: Provides a pair of calendars to select a date range.</li>
+<li><strong>Example</strong>: <code>dateRangeInput("travel_dates", "Travel Dates", start = "2024-01-01", end = "2024-01-15")</code></li>
+</ul></li>
+<li><strong><code>fileInput(inputId, label, accept = NULL)</code></strong>
+<ul>
+<li><strong>Description</strong>: Allows users to upload a file from their local machine.</li>
+<li><strong>Example</strong>: <code>fileInput("upload", "Upload CSV File", accept = ".csv")</code></li>
+</ul></li>
+<li><strong><code>helpText(text)</code></strong>
+<ul>
+<li><strong>Description</strong>: Displays static text as help or instructions in the UI.</li>
+<li><strong>Example</strong>: <code>helpText("Select options below to filter data.")</code></li>
+</ul></li>
+<li><strong><code>numericInput(inputId, label, value, min = NULL, max = NULL, step = NULL)</code></strong>
+<ul>
+<li><strong>Description</strong>: Creates a numeric input field where users can enter numbers.</li>
+<li><strong>Example</strong>: <code>numericInput("age", "Enter your age", value = 25, min = 1, max = 100, step = 1)</code></li>
+</ul></li>
+<li><strong><code>radioButtons(inputId, label, choices, selected = NULL)</code></strong>
+<ul>
+<li><strong>Description</strong>: Creates a group of radio buttons where only one option can be selected at a time.</li>
+<li><strong>Example</strong>: <code>radioButtons("gender", "Gender", choices = list("Male" = "M", "Female" = "F"))</code></li>
+</ul></li>
+<li><strong><code>selectInput(inputId, label, choices, selected = NULL)</code></strong>
+<ul>
+<li><strong>Description</strong>: Provides a dropdown menu for selecting one option from a list.</li>
+<li><strong>Example</strong>: <code>selectInput("state", "Select State", choices = c("California", "Texas", "New York"))</code></li>
+</ul></li>
+<li><strong><code>sliderInput(inputId, label, min, max, value, step = NULL)</code></strong>
+<ul>
+<li><strong>Description</strong>: Creates a slider bar for selecting a numeric value or range.</li>
+<li><strong>Example</strong>: <code>sliderInput("range", "Select Range", min = 0, max = 100, value = c(25, 75), step = 5)</code></li>
+</ul></li>
+<li><strong><code>submitButton(text = "Submit")</code></strong>
+<ul>
+<li><strong>Description</strong>: Creates a button that submits the form when clicked. Unlike <code>actionButton</code>, this one waits for a manual trigger to update all inputs.</li>
+<li><strong>Example</strong>: <code>submitButton("Apply Changes")</code></li>
+</ul></li>
+<li><strong><code>textInput(inputId, label, value = "")</code></strong>
+<ul>
+<li><strong>Description</strong>: Provides a text input field where users can enter text.</li>
+<li><strong>Example</strong>: <code>textInput("name", "Enter your name", value = "John Doe")</code></li>
+</ul></li>
+</ol>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,411 @@
+---
+title: "Using Spatial Data"  
+subtitle: "ST 437 Data Visualization"  
+author:  
+  - Erin Howard  
+  - Brian Cervantes Alvarez  
+date: today  
+date-format: long  
+format:  
+    OSUstyle-html:  
+        toc: true  
+        toc-location: right  
+        toc-depth: 5  
+execute:  
+  echo: true  
+  warning: false  
+webr:  
+  packages: ['ggplot2', 'dplyr', 'sf', 'leaflet', 'readr', 'rnaturalearth', 'rnaturalearthdata', 'magrittr']  
+  show-startup-message: false  
+filters:  
+  - webr 
+---
+
+## What is Different with Spatial Data?
+
+When working with spatial data, it's crucial to understand the different types of data storage formats and the important columns or variables involved. Spatial data typically comes in two main types: **vector** and **raster** data.
+
+1. **Vector Data**: This type of spatial data represents geographic features using points, lines, or polygons. It's commonly stored in formats like Shapefiles (`.shp`), GeoJSON, and the simple features (SF) format in R. The key columns in vector data often include:
+
+   - **Geometry**: Defines the shape and location of the feature (e.g., point, line, or polygon).
+   - **Attribute columns**: These store additional information related to the feature, such as country names, population counts, or GDP values.
+
+2. **Raster Data**: Raster data represents geographic features as a grid of cells or pixels, with each cell holding a value (e.g., elevation, temperature). Raster data is commonly stored in formats like GeoTIFF or as `raster` objects in R.
+
+For successful spatial data visualization, it's important to have the correct columns or variables in your dataset:
+
+- **Geometry/Location Information**: Without this, the data cannot be plotted on a map.
+- **Attributes**: Relevant data like population, income, or land use types are necessary to create meaningful visualizations.
+- **Coordinate Reference System (CRS)**: Ensures that the data is plotted in the correct location on the map.
+
+Ensuring these components are present is essential; otherwise, the data cannot be visualized spatially, which is a foundational aspect of creating maps. Missing or incorrect spatial data can lead to inaccurate visualizations, which may mislead or confuse your audience.
+
+Sure! Here's the additional section:
+
+
+## Plotting with Map Data
+
+When plotting spatial data, you often need to integrate it with map data that includes names and boundaries of geographic entities such as countries, states, counties, or districts. This is especially important when you want to overlay your data onto a map to provide context or to show patterns relative to known locations.
+
+### Common Map Data Components:
+
+1. **Country Names**: Essential for global visualizations, allowing you to display data by country. For example, you might want to compare population growth across different countries.
+
+2. **State/Province Names**: Useful for national or regional visualizations, helping you break down data within a country. For instance, you could visualize unemployment rates by state in the U.S.
+
+3. **County Names**: Important for more localized visualizations within a state or province. This can be helpful for public health data, such as mapping COVID-19 infection rates by county.
+
+4. **District Names**: Crucial for urban or administrative data visualizations, such as mapping school district performance or voting patterns.
+
+### Why These Components Matter:
+
+- **Alignment with Attribute Data**: For example, if you’re visualizing data on income by state, your dataset should include state names that match the names in your map data. This ensures accurate plotting.
+
+- **Overlay and Intersection**: Being able to accurately overlay your data onto geographic boundaries allows for meaningful analysis. For instance, overlaying crime data on district boundaries can reveal hotspots.
+
+- **Error Prevention**: Ensuring that names and boundaries match between your data and map layers helps prevent errors in visualization. Mismatches can lead to incorrect data being displayed in the wrong location.
+
+
+## The Challenge of Data Joining
+
+One of the biggest challenges in mapping data is ensuring that your specific data aligns with the map data components. This often involves joining your data, such as population figures or income levels, with geographic identifiers like country or state names. Mastering data wrangling techniques, especially data joining, is crucial. Without precise joins, your maps may not accurately reflect the data, leading to misleading or incorrect visualizations.
+
+**Examples**
+
+- **Easy**: Joining a dataset containing country names and population data to a world map based on the `country` column. This straightforward join works well when country names in both datasets match exactly.
+
+- **Medium**: Joining state-level unemployment data to a U.S. map by matching `state` names. This can become tricky if state names are abbreviated in one dataset but spelled out in the other, requiring additional steps for standardization.
+
+- **Difficult**: Joining district-level school performance data to a city map, where district names may have variations in spelling, formatting, or may not exactly match map boundaries. This may require advanced data cleaning and fuzzy matching techniques to ensure an accurate join.
+
+
+## Creating Static and/or Interactive Maps
+
+
+### Example 1 | Static Maps with `ggplot2` and `sf`
+
+Static maps are an essential tool when you need to present geographic information in a clear and concise manner. Unlike interactive maps, which allow users to explore data by zooming or clicking, static maps provide a snapshot of the data at a specific point in time. These maps are particularly useful in reports, presentations, or publications where you want to convey a specific message or highlight key patterns without requiring user interaction.
+
+In this example, we’ll create a static map that visualizes global population data. By using population data from the World Bank, we'll be able to show how the population is distributed across different countries. This type of visualization can help you easily identify regions with high or low population densities, making it easier to communicate insights in a report or presentation setting.
+
+#### Step 0 | Load the Necessary Libraries
+
+First, let's load the libraries we need.
+
+```{r}
+library(sf)                 # Handles spatial data and geometries in R using simple features
+library(ggplot2)            # Creates data visualizations based on the grammar of graphics
+library(dplyr)              # Provides tools for data manipulation and transformation
+library(readr)              # Reads rectangular data, like CSV files, into R
+library(leaflet)            # Creates interactive maps using the Leaflet JavaScript library
+library(rnaturalearth)      # Accesses map data of countries and regions, suitable for visualization
+library(rnaturalearthdata)  # Provides additional map data from Natural Earth
+library(htmltools)          # Provides tools for generating HTML elements in R, often used in Shiny apps
+```
+
+#### Step 1 | Load and Explore Spatial Data
+
+We start by loading the global country boundaries and population data.
+
+```{webr-r}
+# Load the world map with country boundaries
+world <- ne_countries(scale = "medium", returnclass = "sf")
+# Download the population data
+url <- "https://raw.githubusercontent.com/howarder/ST_437_Data_Viz/main/Assets/Datasets/population.csv"
+download.file(url, "population.csv")
+
+# Load the population data into R
+pop_data <- read_csv("population.csv", show_col_types = FALSE)
+
+
+pop_data <- pop_data %>% 
+  rename(Country_Code = "Country Code",
+         Country_Name = "Country Name" )
+
+# Check the first few rows of population data
+head(pop_data, 5)
+pop_data
+```
+
+#### Step 2 | Combine `population.csv` and `world.sf`
+
+Now, we'll merge the population data with the world map based on the country codes.
+
+```{webr-r}
+# Merge population data with the world map using country codes
+world_pop <- world %>%
+  left_join(pop_data, by = c("iso_a3" = "Country_Code"))
+
+# Filter the dataset to keep only the relevant columns, rename "Value" to "Population",
+# and select only the data for the latest year
+world_pop_2021 <- world_pop %>%
+  filter(Year == max(Year, na.rm = TRUE)) %>%
+  select(
+    Country = name,
+    CountryCode = iso_a3,
+    Continent = continent,   # Include the region column
+    Population = Value,
+    Year,
+    GDP = gdp_md,
+    geometry
+  )
+
+# Preview the filtered dataset
+head(world_pop_2021)
+```
+
+##### Dataset we will be working with: `world_pop_2021`
+
+**Column Descriptions:**
+
+- **Country**: The name of the country.
+- **CountryCode**: The three-letter ISO code for the country.
+- **Continent**: The continent where the country is located.
+- **Population**: The total population of the country in the year 2021.
+- **Year**: The year of the data collection, which is 2021.
+- **GDP**: The Gross Domestic Product (GDP) of the country in million USD for the year 2021.
+- **geometry**: This contains the shapes and locations of countries on a map. Each country is represented by a `MULTIPOLYGON`, which is a set of polygons that outline the country's borders. This is useful for countries with many islands or complex borders. The coordinates use the WGS 84 system, which is the standard for GPS and maps. Essentially, this column lets you visualize the countries on a map by storing the data that defines their shapes and locations.
+
+
+#### Step 3 | Basic Map Plotting
+
+To visualize global population distribution using `ggplot2`, we leverage the `geom_sf()` function, which is designed to handle spatial data stored in the `geometry` column. First, we determine the most recent year in our dataset using `max(world_pop_2021$Year)` to ensure our map reflects the latest data. The `geom_sf()` function then plots the map, filling each country based on its population. The `geometry` column, which contains the shapes of countries, is crucial here as it allows `geom_sf()` to correctly position and draw each country on the map.
+
+We use `scale_fill_gradient()` to apply a color gradient from white (lower population) to green (higher population), making it easier to see population differences. The population data is displayed in billions for clarity. The map's title is dynamically updated with the latest year using `paste()`, ensuring the information is current. Lastly, we apply `theme_minimal()` to give the map a clean and simple appearance, which helps focus attention on the data.
+
+```{webr-r}
+# Get the most current year from the data
+current_year <- max(world_pop_2021$Year)
+
+# Create a basic population map with updated title and color scale
+ggplot(data = world_pop_2021) +
+  geom_sf(aes(fill = Population), color = "black") +
+  scale_fill_gradient(
+    low = "white", high = "green4", 
+    trans = "log10", 
+    breaks = c(1e8, 1e9, 2e9),
+    labels = scales::number_format(scale = 1e-9, suffix = "B")
+  ) +
+  labs(
+    title = paste("Global Population Distribution", current_year),
+    fill = "Population",
+    caption = "Data Source: World Bank and Natural Earth"
+  ) +
+  theme_minimal()
+```
+
+
+#### Step 4 | Filtering Specific Areas
+
+##### What if You Select a Specific Continent?
+
+When you filter the dataset to focus on a specific continent, such as `"North America"`, the map might not display as expected. This could be due to the map's default scaling, which may not appropriately zoom in on the region you're interested in.
+
+##### Focusing on North America
+
+```{webr-r}
+# Filter the dataset to include only countries in North America
+continent_data <- world_pop_2021 %>%
+  filter(Continent == "North America")
+
+# Create a map focusing on North America
+ggplot(data = continent_data) +
+  geom_sf(aes(fill = Population), color = "black") +
+  scale_fill_gradient(
+    low = "white", high = "green4", 
+    trans = "log10", 
+    breaks = c(1e7, 1e8, 5e8),
+    labels = scales::number_format(scale = 1e-9, suffix = "B")
+  ) +
+  labs(
+    title = paste("Population Distribution in North America", current_year),
+    fill = "Population",
+    caption = "Data Source: World Bank and Natural Earth"
+  ) +
+  coord_sf(
+    xlim = c(-170, -30),   # Set longitude limits to focus on North America
+    ylim = c(5, 85)        # Set latitude limits to focus on North America
+  ) +
+  theme_minimal()
+```
+
+##### What Happens to the Scale?
+
+When you select a specific continent, the default map scale might make certain regions appear distorted or improperly centered. This occurs because the default settings in `ggplot2` are designed to accommodate a global view, and they may not automatically adjust when you narrow the focus to a specific continent.
+
+##### How `coord_sf()` helps
+
+To correct this, you can use the `coord_sf()` function, which allows you to manually set the longitude (`xlim`) and latitude (`ylim`) limits. By doing so, you can zoom in on the specific geographic area you're interested in, ensuring the map is properly centered and displayed. Adjusting these values helps you focus the map on your continent of interest, making the visualization accurate and meaningful.
+
+
+### Example 2 | Interactive Maps with `leaflet`
+
+Interactive maps let users explore data by zooming, panning, and clicking on different areas. We’ll use the `leaflet` package to make a map that you can interact with.
+
+Here’s how you can explain the code to your students, breaking down each step to ensure they understand how the `leaflet` package is used to create a simple interactive map:
+
+
+#### Simple `leaflet` Interactive Map
+
+Creating an interactive map in R is straightforward using the `leaflet` package. Let’s walk through a basic example where we'll plot markers for two well-known cities: San Francisco and New York.
+
+```{r}
+# Create a basic interactive map
+m <- leaflet() %>%
+  addTiles() %>%  # Add default map tiles
+  addMarkers(lng = c(-122.4194, -74.0060), lat = c(37.7749, 40.7128),
+             popup = c("San Francisco", "New York"))
+
+# Display the map
+m
+```
+
+**Explanation**:
+
+1. **`leaflet()`**:
+   - This line initializes a new `leaflet` map object. Think of it as creating a blank canvas where you can add various map features, like tiles, markers, and shapes. 
+   - At this point, the map is just an empty container with no visible content yet.
+
+2. **`addTiles()`**:
+   - This function adds the default map tiles to your `leaflet` object. 
+   - Map tiles are the actual images that make up the background of your map (roads, terrain, etc.). By default, `leaflet` uses OpenStreetMap tiles, which are free and open-source.
+   - Adding tiles is like adding the background layer of the map so that you have something to visualize.
+
+3. **`addMarkers()`**:
+   - **Markers** are points on the map that indicate specific locations.
+   - `lng` and `lat` specify the longitude and latitude of the markers, respectively. In this case, we're adding two markers:
+     - `-122.4194, 37.7749` corresponds to San Francisco.
+     - `-74.0060, 40.7128` corresponds to New York.
+   - The `popup` argument defines the text that appears when you click on a marker. For each marker, a small window will pop up showing the name of the city ("San Francisco" or "New York").
+   - This step is like placing pins on a map to mark specific locations and labeling them.
+
+#### Summary
+
+This simple example shows how easy it is to create an interactive map with `leaflet` in R. By initializing a map, adding a background layer (tiles), and placing markers, you can quickly visualize geographic data. This foundational knowledge will help you as you move on to more complex map visualizations, such as choropleth maps or maps with multiple layers of data.
+
+### Example 2 | Interactive Choropleth Map with `leaflet`
+
+Interactive maps are a great way to explore data because they allow you to zoom in, pan around, and click on different areas to get more information. In this example, we’ll create an interactive map using the `leaflet` package to visualize global population and GDP data for the year 2021. Our map will show the population in billions or millions, depending on the country, and we’ll also display GDP in trillions, billions, or millions of USD.
+
+#### Step 1 | Prepare the Data
+
+Before creating the map, we need to prepare our data. This involves making sure our population and GDP figures are correctly formatted so that they display in the appropriate units (trillions, billions, or millions).
+
+```{r}
+# url <- "https://raw.githubusercontent.com/howarder/ST_437_Data_Viz/main/Assets/Datasets/world_population_2021.gpkg"
+# download.file(url, "world_population_2021.gpkg")
+world_pop_2021 <- st_read("world_population_2021.gpkg")
+
+world_pop_2021 <- st_read("../../Assets/Datasets/world_population_2021.gpkg")
+# world_pop_2021 <- st_read("Assets/Datasets/world_population_2021.gpkg")
+glimpse(world_pop_2021)
+
+
+# Convert population and GDP to trillions, billions, and millions
+world_pop_2021 <- world_pop_2021 %>%
+  mutate(
+    PopulationBillions = Population / 1e9,  # Convert population to billions
+    PopulationMillions = Population / 1e6,  # Convert population to millions
+    GDPTrillions = GDP / 1e6,  # Convert GDP to trillions (since GDP is in millions)
+    GDPBillions = GDP / 1e3,    # Convert GDP to billions
+    GDPMillions = GDP           # GDP remains in millions
+  )
+
+# Create custom labels for population and GDP
+world_pop_2021 <- world_pop_2021 %>%
+  mutate(
+    PopulationLabel = ifelse(
+      PopulationBillions >= 1,
+      sprintf("%.2f B", PopulationBillions),  # Use billions if population >= 1 billion
+      sprintf("%.2f M", PopulationMillions)   # Use millions if population < 1 billion
+    ),
+    GDPLabel = case_when(
+      GDP >= 1e6 ~ sprintf("%.2f T USD", GDPTrillions),  # Use trillions if GDP >= 1 trillion
+      GDP >= 1e3 ~ sprintf("%.2f B USD", GDPBillions),   # Use billions if GDP >= 1 billion
+      TRUE       ~ sprintf("%.2f M USD", GDPMillions)    # Use millions if GDP < 1 billion
+    )
+  )
+```
+
+**Explanation**: 
+
+1. **Filtering the Data**: The `filter(!is.na(Population))` line removes any countries from the dataset where population data is missing. This ensures that our map only includes countries with valid data.
+
+2. **Converting Units**: We then convert population data into billions and millions. GDP, originally in millions, is also converted into billions and trillions where appropriate. This makes it easier to display large numbers in a way that's easy to read.
+
+3. **Creating Labels**: We use conditional statements to create labels. If a country's population is over 1 billion, it’s displayed in billions; otherwise, it's shown in millions. For GDP, we use trillions for values over 1 trillion, billions for values over 1 billion, and millions for smaller values.
+
+### Step 2 | Create the Leaflet Map with Custom Labels
+
+Now that our data is ready, we can create the map. We’ll use `leaflet` to generate an interactive map that displays our custom labels when you hover over a country.
+
+```{r}
+# Create formatted labels with HTML for the hover-over information
+labels <- sprintf(
+  "<strong>Country:</strong> %s<br/><strong>Population:</strong> %s<br/><strong>GDP:</strong> %s<br/><strong>Continent:</strong> %s",
+  world_pop_2021$Country,
+  world_pop_2021$PopulationLabel,
+  world_pop_2021$GDPLabel,
+  world_pop_2021$Continent
+) %>% lapply(htmltools::HTML)
+```
+
+**labels**: We create labels that combine country name, population, GDP, and continent information. The `sprintf()` function is used to format these labels, and `htmltools::HTML` is applied to make sure the labels are properly displayed as HTML.
+
+
+```{r}
+# Create a leaflet map with enhanced hover-over information displayed vertically
+# Convert your data to an sf object (if it isn't already)
+
+m <- leaflet(world_pop_2021) %>%
+  addTiles() %>%  # Add default map tiles
+  addPolygons(
+    fillColor = ~colorNumeric("YlGn", PopulationBillions)(PopulationBillions),
+    weight = 1,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlightOptions = highlightOptions(
+      weight = 3,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = labels,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto"
+    )
+  ) %>%
+  addLegend(
+    pal = colorNumeric("YlGn", world_pop_2021$PopulationBillions),
+    values = ~PopulationBillions,
+    title = "Population (Billions)",
+    position = "bottomright"
+  )
+
+m
+```
+
+**Explanation**:
+
+- **addTiles()**: This function adds a base map layer, which is the visual background of the map (like streets, terrain, etc.).
+
+- **addPolygons()**: This function adds the country borders to the map and fills them with color based on the population. It also includes settings for the label that pops up when you hover over a country, which we customized earlier.
+
+- **addLegend()**: Finally, we add a legend to the map to explain the color coding. It shows what population values correspond to different shades of color.
+
+#### Summary
+
+This exercise shows how to use the `leaflet` package to create interactive maps that display detailed information when you hover over different areas. By customizing the labels for population and GDP, we ensure the information is both accurate and easy to understand. Interactive maps like these are powerful tools for exploring geographic data and can make your data presentations more engaging and informative.
+
+
+## The Power of Spatial Visualization
+
+Spatial visualization is an incredibly powerful tool for uncovering patterns and insights that are tied to geographic locations. However, it's important to remember that this type of visualization is most effective when applied to data that has a clear spatial component. Whether you're analyzing population distributions, economic indicators, or public health trends, the key is ensuring that your data is well-suited to mapping. 
+
+By mastering the techniques covered in this lab, you'll be equipped to create visualizations that not only convey complex information in an intuitive way but also drive meaningful insights specific to the geographic context of your data. Use this power wisely, and always ensure that your data is properly aligned with the map data components for accurate and impactful visualizations. 
+
