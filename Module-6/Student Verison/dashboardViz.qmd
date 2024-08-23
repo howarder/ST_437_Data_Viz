@@ -1,0 +1,351 @@
+---
+title: "Financial Risk Assessment Dashboard"
+author: "your name"
+date: today
+format: 
+    dashboard:
+        orientation: columns
+execute: 
+  warning: false
+  message: false
+---
+
+
+```{r}
+#| label: load-packages
+#| message: false
+library(tidyverse)
+library(gt)
+library(plotly)
+library(gtExtras)
+library(scales)
+```
+
+```{r}
+#| label: load-data
+#| message: false
+ds <- read_csv("https://raw.githubusercontent.com/howarder/ST_437_Data_Viz/main/Assets/Datasets/financial_risk_assessment.csv")
+
+# Rename columns to camelCase and remove missing values
+ds <- ds %>%
+  rename_with(~ str_replace_all(., "-", " ") %>%      # Replace hyphens with spaces
+                str_replace_all(., " ", "") %>%      # Remove spaces
+                str_replace_all(., "\\b([a-z])", function(x) tolower(x)) %>%  # Ensure the first letter is lowercase
+                str_replace_all(., "\\s([A-Z])", function(x) tolower(x)) %>%  # Lowercase any space followed by an uppercase letter
+                str_replace_all(., "(.)([A-Z])", "\\1\\2") %>%  # Remove additional uppercase after first word
+                str_replace_all(., "(.)To(.)", "\\1To\\2") %>% # Fix "To" capitalization
+                str_replace_all(., "([a-z])([A-Z])", "\\1\\2") %>% # Handle remaining cases
+                str_replace(., "^([A-Z])", tolower))  # Ensure the first character is lowercase
+
+# Remove rows with any missing values
+ds <- ds %>% drop_na()
+```
+
+## Column - Key Visualizations {width=50%}
+
+### Row - Debt to Income {height=55%}
+
+```{r}
+#| title: Loan Amount by Employment Status
+#| fig-width: 12
+#| fig-height: 8
+
+
+# Prepare the data
+plot_data <- ds |>
+  filter(!is.na(loanAmount) & !is.na(employmentStatus)) |>
+  group_by(employmentStatus) |>
+  summarize(avgLoanAmount = mean(loanAmount))
+
+# Create the lollipop chart
+plot_ly(
+  plot_data,
+  x = ~employmentStatus,
+  y = ~avgLoanAmount,
+  type = 'scatter',
+  mode = 'markers+lines',
+  line = list(color = '#24465b', width = 2),
+  marker = list(size = 10, color = '#24465b')
+) |>
+  layout(
+    title = list(
+      text = "Average Loan Amount by Employment Status",
+      font = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 24, color = "black")
+    ),
+    xaxis = list(
+      title = "Employment Status",
+      titlefont = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 18, color = "black"),
+      tickfont = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 14, color = "black"),
+      linecolor = "black",
+      linewidth = 2,
+      gridcolor = "rgba(0, 0, 0, 0.3)",
+      zeroline = FALSE
+    ),
+    yaxis = list(
+      title = "Average Loan Amount",
+      titlefont = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 18, color = "black"),
+      tickfont = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 14, color = "black"),
+      linecolor = "black",
+      linewidth = 2,
+      gridcolor = "rgba(0, 0, 0, 0.3)",
+      zeroline = FALSE
+    ),
+    margin = list(l = 60, r = 30, t = 60, b = 60),
+    plot_bgcolor = "rgba(255, 255, 255, 1)",
+    paper_bgcolor = "rgba(255, 255, 255, 1)"
+  )
+
+```
+
+### Row - Credit Score Distribution by Gender {height=45%}
+
+
+```{r}
+#| label: credit-score-distribution-facet
+#| title: Boxplot of Debt to Income Ratio by Income Group
+#| fig-width: 8
+#| fig-height: 6
+
+# Prepare the data by grouping into income bins
+plot_data <- ds |>
+  filter(!is.na(income) & !is.na(loanAmount)) |>
+  mutate(debtToIncome = loanAmount / income,
+         incomeGroup = cut(income, breaks = 5, labels = c("Low", "Lower-Mid", "Middle", "Upper-Mid", "High")))
+
+# Create the boxplot
+plot_ly(
+  plot_data,
+  x = ~incomeGroup,
+  y = ~debtToIncome,
+  type = 'box',
+  marker = list(color = '#24465b')
+) |>
+  layout(
+    title = list(
+      text = "Debt to Income Ratio by Income Group",
+      font = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 24, color = "black")
+    ),
+    xaxis = list(
+      title = "Income Group",
+      titlefont = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 18, color = "black"),
+      tickfont = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 14, color = "black"),
+      linecolor = "black",
+      linewidth = 2,
+      gridcolor = "rgba(0, 0, 0, 0.3)",
+      zeroline = FALSE
+    ),
+    yaxis = list(
+      title = "Debt to Income Ratio",
+      titlefont = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 18, color = "black"),
+      tickfont = list(family = "Comic Neue, Comic Sans MS, sans-serif", size = 14, color = "black"),
+      linecolor = "black",
+      linewidth = 2,
+      gridcolor = "rgba(0, 0, 0, 0.3)",
+      zeroline = FALSE
+    ),
+    margin = list(l = 60, r = 30, t = 60, b = 60),
+    plot_bgcolor = "rgba(255, 255, 255, 1)",
+    paper_bgcolor = "rgba(255, 255, 255, 1)"
+  )
+
+```
+
+
+## Column - Key Metrics {width=60%}
+
+### Row - Value Boxes {height=35%}
+
+```{r}
+#| label: calculate-key-metrics
+
+mostDefaultsByMaritalStatus <- ds |>
+  filter(!is.na(maritalStatus) & !is.na(previousDefaults)) |>
+  group_by(maritalStatus) |>
+  summarize(totalDefaults = sum(previousDefaults)) |>
+  slice_max(order_by = totalDefaults, n = 1)
+
+# Calculate Most Common Loan Purpose
+loanPurposeStats <- ds |>
+  filter(!is.na(loanPurpose)) |>
+  count(loanPurpose) |>
+  mutate(percentage = n / sum(n) * 100) |>
+  slice_max(order_by = n, n = 1)
+
+# Calculate Education Level with Highest Total Loan Amount
+educationLoanStats <- ds |>
+  filter(!is.na(loanAmount) & !is.na(educationLevel)) |>
+  group_by(educationLevel) |>
+  summarize(totalLoanAmount = sum(loanAmount)) |>
+  mutate(percentage = totalLoanAmount / sum(totalLoanAmount) * 100) |>
+  slice_max(order_by = totalLoanAmount, n = 1)
+
+mostCommonEmploymentStatus <- ds |>
+  filter(!is.na(employmentStatus)) |>
+  count(employmentStatus) |>
+  mutate(percentage = n / sum(n) * 100) |>
+  slice_max(order_by = n, n = 1)
+
+
+```
+
+```{r}
+#| content: valuebox
+#| title: "Marital Status with Most Defaults"
+list(
+  icon = "heartbreak",
+  color = "danger",
+  value = paste(mostDefaultsByMaritalStatus$maritalStatus, "-", mostDefaultsByMaritalStatus$totalDefaults),
+  caption = "Total Defaults"
+)
+
+```
+
+
+```{r}
+#| content: valuebox
+#| title: "Most Common Loan Purpose"
+list(
+  icon = "clipboard-check",
+  color = "primary",
+  value = paste(loanPurposeStats$loanPurpose, "-", round(loanPurposeStats$percentage, 1), "%"),
+  caption = "Loan Purpose"
+)
+
+```
+
+```{r}
+#| content: valuebox
+#| title: "Highest Loans by Education Level"
+list(
+  icon = "mortarboard",
+  color = "info",
+  value = paste(educationLoanStats$educationLevel, "-", round(educationLoanStats$percentage, 1), "%"),
+  caption = "Education Level"
+)
+
+```
+
+```{r}
+#| content: valuebox
+#| title: "Most Common Employment Status"
+list(
+  icon = "person-vcard-fill",
+  color = "primary",
+  value = paste(mostCommonEmploymentStatus$employmentStatus, "-", round(mostCommonEmploymentStatus$percentage, 1), "%"),
+  caption = "Employment Status"
+)
+```
+
+
+### Row - Interactive Tables {height=65% .tabset}
+
+::: {.card title="Top 10 Highest Incomes"}
+
+```{r}
+ds |>
+  arrange(desc(income)) |>
+  slice_head(n = 10) |>
+  select(age, gender, income, creditScore, loanAmount) |>
+  gt() |>
+  tab_header(title = "Top 10 Highest Incomes") |>
+  fmt_currency(columns = income, currency = "USD") |>
+  fmt_number(columns = c(creditScore, loanAmount), decimals = 0) |>
+  cols_label(
+    age = "Age",
+    gender = "Gender",
+    income = "Income",
+    creditScore = "Credit Score",
+    loanAmount = "Loan Amount"
+  ) |>
+  opt_table_font(
+    font = list(
+      gt::google_font("Comic Neue"),
+      gt::default_fonts()
+    )
+  ) |>
+  tab_options(
+    table.font.color = "black",
+    table.border.top.color = "black",
+    table.border.bottom.color = "black"
+  ) |>
+  opt_interactive(
+    use_pagination = TRUE,
+    page_size_default = 25,
+  )
+
+```
+:::
+
+::: {.card title="Top 10 Highest Loan Amounts"}
+
+```{r}
+ds |>
+  arrange(desc(loanAmount)) |>
+  slice_head(n = 10) |>
+  select(age, gender, income, creditScore, loanAmount) |>
+  gt() |>
+  tab_header(title = "Top 10 Highest Loan Amounts") |>
+  fmt_currency(columns = loanAmount, currency = "USD") |>
+  fmt_number(columns = c(creditScore, income), decimals = 0) |>
+  cols_label(
+    age = "Age",
+    gender = "Gender",
+    income = "Income",
+    creditScore = "Credit Score",
+    loanAmount = "Loan Amount"
+  ) |>
+  opt_table_font(
+    font = list(
+      gt::google_font("Comic Neue"),
+      gt::default_fonts()
+    )
+  ) |>
+  tab_options(
+    table.font.color = "black",
+    table.border.top.color = "black",
+    table.border.bottom.color = "black"
+  ) |>
+  opt_interactive(
+    use_pagination = TRUE,
+    page_size_default = 25,
+  )
+
+```
+:::
+
+::: {.card title="Top 10 Individuals with the Longest Job Tenure"}
+
+```{r}
+ds |>
+  arrange(desc(yearsatCurrentJob)) |>
+  slice_head(n = 10) |>
+  select(age, gender, income, loanAmount, yearsatCurrentJob) |>
+  gt() |>
+  tab_header(title = "Top 10 Individuals with the Longest Job Tenure") |>
+  fmt_currency(columns = c(income, loanAmount), currency = "USD") |>
+  fmt_number(columns = yearsatCurrentJob, decimals = 0) |>
+  cols_label(
+    age = "Age",
+    gender = "Gender",
+    income = "Income",
+    loanAmount = "Loan Amount",
+    yearsatCurrentJob = "Years at Current Job"
+  ) |>
+  opt_table_font(
+    font = list(
+      gt::google_font("Comic Neue"),
+      gt::default_fonts()
+    )
+  ) |>
+  tab_options(
+    table.font.color = "black",
+    table.border.top.color = "black",
+    table.border.bottom.color = "black"
+  ) |>
+  opt_interactive(
+    use_pagination = TRUE,
+    page_size_default = 25,
+  )
+
+```
+:::

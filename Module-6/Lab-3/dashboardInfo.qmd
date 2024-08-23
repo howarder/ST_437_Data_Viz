@@ -1,0 +1,246 @@
+---
+title: "Financial Risk Assessment Dashboard"
+subtitle: "How to use Quarto Dashboards"
+author: "Your Name"
+date: today
+format: html
+execute: 
+  warning: false
+---
+
+
+## Quarto Dashboard Documentation
+
+In this document, you'll learn how the `quarto` dashboard syntax is used to structure and build the Financial Risk Assessment Dashboard. This guide will break down the key components of the dashboard, explain the importance of each Quarto command, and demonstrate how these commands translate into a cohesive dashboard. This explanation is designed for undergraduate students with minimal prior knowledge.
+
+### Dashboard Structure Overview
+
+The Quarto dashboard is defined in the YAML header at the beginning of the `.qmd` file. This header contains metadata and formatting instructions that guide how the dashboard is built and displayed. Let's break down the key sections of this header:
+
+```yaml
+---
+title: "Financial Risk Assessment Dashboard"
+subtitle: "Detailed Insights into Financial Profiles"
+author: "Your Name"
+date: today
+format: 
+    dashboard:
+        orientation: columns
+execute: 
+  warning: false
+  message: false
+theme: sketchy
+---
+```
+
+**1. Title and Subtitle:**
+   - The `title` and `subtitle` are used to give your dashboard a name and brief description. These appear at the top of the dashboard, giving viewers an immediate understanding of what the dashboard is about.
+
+**2. Author and Date:**
+   - `author` specifies the creator of the dashboard, and `date` can be set to show when the dashboard was created or last updated.
+
+**3. Description:**
+   - The `description` provides a brief overview of the dashboard's purpose, which is useful for users to understand the scope and content of the dashboard.
+
+**4. Format and Orientation:**
+   - The `format` section defines the type of document being created, which is a `dashboard` in this case.
+   - `orientation: columns` specifies that the content should be arranged in columns rather than rows. This is crucial for the layout, ensuring that visualizations and tables are displayed side by side.
+
+**5. Logo and Image:**
+   - `logo` and `image` are used to include branding elements, like logos, at the top of the dashboard. This helps in visually branding the dashboard and making it recognizable.
+
+**6. Execute Options:**
+   - `execute` is where you manage the execution of code blocks within the document. Setting `warning: false` and `message: false` hides warnings and messages that could clutter the dashboard.
+
+**7. Theme:**
+   - The `theme: sketchy` command applies a specific visual style to the entire dashboard, giving it a hand-drawn, sketchy appearance that matches the creative theme of the dashboard.
+
+
+## Dashboard Layout in Quarto
+
+**Navigation Bar:**
+
+   - Quarto dashboards include a top-level navigation bar that provides a title and (optionally) a logo and author. If your dashboard has multiple pages, the navigation bar will also include links to each page.
+   - The `format` section allows you to customize the navigation bar by adding buttons for social media platforms like LinkedIn, Twitter, and GitHub.
+
+   Example:
+
+   ```yaml
+   format:
+     dashboard:
+       logo: /Assets/Images/financial-logo.svg
+       nav-buttons: [linkedin, twitter, github]
+   ```
+
+**Row and Column Layout:**
+
+   - Dashboard components are laid out using alternating sets of rows and columns. Rows and columns are defined by markdown headings and computational cells.
+   - For example, if you want to display a full-width chart in the first row and two charts side by side in the second row, you would define them as follows:
+
+   ```r
+   ## Row {height=70%}
+   ```
+
+   ```r
+   # Full-width chart here
+   ```
+
+   ```r
+   ## Row {height=30%}
+   ```
+
+   ```r
+   # First chart in the second row
+   ```
+
+   ```r
+   # Second chart in the second row
+   ```
+
+   - **Orientation:** By default, the layout is first by row, then by column. However, you can change this to a column-first layout by specifying `orientation: columns` in the YAML header.
+
+   Example:
+
+   ```yaml
+   format: 
+     dashboard:
+       orientation: columns
+   ```
+
+**Filling vs. Flowing Content:**
+
+   - Quarto automatically adjusts the size of each row in your dashboard based on the content. By default, rows fill the available space, but you can also set them to flow naturally if that’s more appropriate for your content.
+
+   Example:
+
+   ```yaml
+   ## Row {.fill}
+   ## Row {.flow}
+   ```
+
+**Scrolling:**
+
+   - If your content exceeds the available space, you can enable scrolling by setting `scrolling: true` in the YAML header. This allows users to scroll through content that doesn’t fit on the page.
+
+   Example:
+
+   ```yaml
+   format: 
+     dashboard:
+       scrolling: true
+   ```
+
+**Pages and Tabsets:**
+
+   - Quarto allows you to organize your dashboard into multiple pages, each with its own layout. You define pages using level 1 headings (`#`), and these pages will automatically appear as links in the navigation bar.
+
+   Example:
+
+   ```r
+   # Page 1
+   ## Row
+
+   # Page 2 {orientation="columns" scrolling="true"}
+   ## Column
+   ```
+
+   - **Tabsets:** Use tabsets to group related content within a row or column. This is useful for comparing different views of data without overcrowding the main display.
+
+   Example:
+
+   ```r
+   ## Row {.tabset}
+
+   # Tab 1 content
+   ```
+
+   ```r
+   # Tab 2 content
+   ```
+
+**Cards:**
+
+   - Cards are the fundamental units of display in a Quarto dashboard. Each block of content (e.g., a chart, table, or text) is automatically placed within a card.
+
+   - You can customize cards by adding titles, removing padding, or making them expandable. For example:
+
+   ```r
+   #| title: "World Map"
+   #| padding: 0px
+   ```
+
+   - Cards can be expanded to zoom in on the content using the expand button, which is enabled by default. This feature can be disabled with `expandable: false`.
+
+### Code Blocks and Quarto Commands
+
+Within the dashboard, code blocks are used to load data, create visualizations, and build interactive elements. Each code block is preceded by specific Quarto commands (`#|`) that control how the code is executed and displayed.
+
+Example:
+```r
+#| label: load-packages
+#| message: false
+library(tidyverse)
+library(gt)
+library(plotly)
+library(gtExtras)
+library(scales)
+```
+
+**1. `#| label`:**
+   - Labels are used to identify code blocks. This can be useful when you need to reference or troubleshoot specific parts of your code.
+
+**2. `#| message: false`:**
+   - This command suppresses messages that would normally appear when loading packages, keeping the dashboard clean and focused on the output.
+
+### Value Boxes and Interactive Tables
+
+Value boxes and interactive tables are essential elements of the dashboard that highlight key metrics and allow users to explore data in a more detailed way.
+
+**Value Boxes:**
+
+   - Value boxes are small boxes that highlight a key metric or statistic. These boxes are created using the `#| content: valuebox` command, and each box can be customized with an icon, color, and title.
+
+   Example:
+
+   ```r
+   #| content: valuebox
+   #| title: "Marital Status with Most Defaults"
+   list(
+     icon = "heartbreak",
+     color = "danger",
+     value = paste(mostDefaultsByMaritalStatus$maritalStatus, "-", mostDefaultsByMaritalStatus$totalDefaults),
+     caption = "Total Defaults"
+   )
+   ```
+
+**Interactive Tables:**
+   - Interactive tables allow users to paginate and explore data dynamically. The `gt()` function is used to create tables, and the `opt_interactive()` command makes them interactive.
+
+   Example:
+
+   ```r
+   ds |>
+     arrange(desc(income)) |>
+     slice_head(n = 10) |>
+     select(age, gender, income, creditScore, loanAmount) |>
+     gt() |>
+     tab_header(title = "Top 10 Highest Incomes") |>
+     opt_interactive(
+       use_pagination = TRUE,
+       page_size_default = 25,
+     )
+   ```
+
+## Conclusion
+
+You should now have a solid foundation for creating and customizing your own Quarto dashboards. Remember, the layout, interactivity, and overall presentation of the dashboard are all controlled by the Quarto engine, which ensures that your data is presented in a visually appealing manner.
+
+Here's the updated section with links to the relevant resources:
+
+**Additional Resources:**
+
+- **[Data Display](https://quarto.org/docs/dashboards/data-display.html):** Learn how to effectively display data using plots, tables, and text within your dashboard.
+- **[Inputs](https://quarto.org/docs/dashboards/inputs.html):** Explore ways to include interactive inputs, such as sidebars and toolbars, for dynamic data exploration.
+- **[Theming](https://quarto.org/docs/dashboards/theming.html):** Customize the fonts, colors, and layout to match your brand or aesthetic preferences.
+- **[Deployment](https://quarto.org/docs/dashboards/deployment.html):** Understand how to deploy your dashboard, whether as a static site or a dynamic, interactive application.
+
