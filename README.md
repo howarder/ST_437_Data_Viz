@@ -27,13 +27,13 @@ Welcome to the **ST 437 Data Visualization** course resources. This repository c
 
 Here are the active presentations for the course:
 
-- [Teaching WebR](https://howarder.github.io/ST_437_Data_Viz/Teaching-WebR)
+- [Teaching WebR](https://howarder.github.io/ST_437_Data_Viz/Slides/Teaching-WebR)
 
 ### Slide Link TEMPLATE
 
 For future presentations, use the following template to access the slides:
 
-- `https://howarder.github.io/ST_437_Data_Viz/[Folder Name]`
+- `https://howarder.github.io/ST_437_Data_Viz/Slides/[Presentation Folder]`
 
 ---
 
@@ -43,13 +43,13 @@ For future presentations, use the following template to access the slides:
 
 Below are the links to active HTML documents for each module:
 
-- [Module-1 Intro to Data Viz](https://howarder.github.io/ST_437_Data_Viz/Module-1/Intro_to_Data_Viz)
-- [Module-1 Lab](https://howarder.github.io/ST_437_Data_Viz/Module-1/Lab)
+- [Module-1 Intro to Data Viz](https://howarder.github.io/ST_437_Data_Viz/Module-1/Intro_to_Data_Viz) - *pending*
+- [Module-1 Lab](https://howarder.github.io/ST_437_Data_Viz/Module-1/Lab) - *pending*
 - [Module-2 Data Wrangling](https://howarder.github.io/ST_437_Data_Viz/Module-2/Data_Wrangling)
 - [Module-2 Lab](https://howarder.github.io/ST_437_Data_Viz/Module-2/Lab)
-- [Module-6 Advanced Visualization Lab-1](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-1)
-- [Module-6 Advanced Visualization Lab-2](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-2)
-- [Module-6 Advanced Visualization Lab-3](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-3)
+- [Module-6 Advanced Visualization Lab-1](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-1) - **Shiny Lab**
+- [Module-6 Advanced Visualization Lab-2](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-2) - **Spatial Lab**
+- [Module-6 Advanced Visualization Lab-3](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-3) - **Dashboard Lab**
 
 ### Reference Future Documents TEMPLATE
 
@@ -74,19 +74,13 @@ You can download the active datasets directly using the links below:
 - [world_population_2021.gpkg](https://raw.githubusercontent.com/howarder/ST_437_Data_Viz/main/Assets/Datasets/world_population_2021.gpkg)
 - [world_population_data.rds](https://raw.githubusercontent.com/howarder/ST_437_Data_Viz/main/Assets/Datasets/world_population_data.rds)
 
-### Reference Future Datasets TEMPLATE
-
-For future dataset downloads, use this template:
-
-- `https://howarder.github.io/ST_437_Data_Viz/Datasets/[Dataset Name]`
-
 ---
 
 ## Data Download Instructions
 
 To download any dataset, use the following base URL format:
 
-- `https://raw.githubusercontent.com/howarder/ST_437_Data_Viz/main/Assets/Datasets/`
+- `https://raw.githubusercontent.com/howarder/ST_437_Data_Viz/main/Assets/Datasets/[Dataset]`
 
 ---
 
