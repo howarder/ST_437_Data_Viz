@@ -2,13 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.55">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Erin Howard">
 <meta name="author" content="Brian Cervantes Alvarez">
-<meta name="dcterms.date" content="2024-08-09">
 
 <title>Lab 2 | Data Wrangling in R</title>
 <style>
@@ -949,12 +948,6 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 9, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -1007,14 +1000,14 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 </section>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
-<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>ggplot2</code>, and <code>tidyr</code> packages for our examples.</p>
+<p>First, ensure you have the necessary packages installed and loaded. We will use the <code>dplyr</code>, <code>lubridate</code>, <code>readr</code>, <code>ggplot2</code>, and <code>tidyr</code> packages for our examples. If you haven’t previousy used any of these packages, you’ll need to install them using the <code>install.packages()</code> function.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Downloading R-packages
+Installing R-packages
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1045,6 +1038,7 @@ Running Code Block Shortcuts
 <p><code>Windows users</code>: Use ctrl + enter to run single or highlighted line(s). Use shift + enter to run entire code block</p>
 </div>
 </div>
+<div class="cell" data-autorun="true">
 <div id="qwebr-insertion-location-1"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1080,6 +1074,7 @@ countriesExtraDs <- read_csv("countriesExtraInfo.csv", show_col_types = FALSE)`,
   1);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
 <section id="verify-datasets-with-head" class="level4">
 <h4 class="anchored" data-anchor-id="verify-datasets-with-head">Verify Datasets with <code>head()</code></h4>
 <div id="qwebr-insertion-location-2"></div>
@@ -1160,7 +1155,7 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `filteredData <- countriesDs %>%
+  `filteredData <- countriesDs |>
   filter(year >= 2010 & year <= 2020 & region == "Asia")
 
 head(filteredData, 5)`, 
@@ -1219,8 +1214,8 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `filteredData <- countriesDs %>%
-  filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000) %>%
+  `filteredData <- countriesDs|>
+  filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000) |>
   left_join(countriesExtraDs, by = "country")
 
 head(filteredData, 5)`, 
@@ -1311,7 +1306,7 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `selectedData <- filteredData %>%
+  `selectedData <- filteredData |>
   select(country, year, gdp_per_capita, life_expectancy)
 
 head(selectedData, 5)`, 
@@ -1376,7 +1371,7 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `mutatedData <- countriesDs %>%
+  `mutatedData <- countriesDs |>
   mutate(gdp_total = gdp_per_capita * population)
 
 head(mutatedData, 5)`, 
@@ -1441,8 +1436,8 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `summaryData <- countriesDs %>%
-  group_by(country) %>%
+  `summaryData <- countriesDs |>
+  group_by(country) |>
   summarize(
     avg_life_expectancy = mean(life_expectancy, na.rm = TRUE),
     total_population = sum(population, na.rm = TRUE)
@@ -1580,7 +1575,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `# Create a wide format from the existing long format
-wideData <- countriesDs %>%
+wideData <- countriesDs |>
   pivot_wider(names_from = year, values_from = c(population, gdp))
 
 # Preview the wide data
@@ -1605,7 +1600,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `# Convert the wide format back to long format
-longData <- wideData %>%
+longData <- wideData |>
   pivot_longer(cols = starts_with(c("population", "gdp")),
                names_to = c(".value", "year"),
                names_sep = "_")
@@ -1640,7 +1635,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `# Create a dataset with misspelled column names
-misspelledHeaders <- countriesDs %>%
+misspelledHeaders <- countriesDs |>
   rename(
     poplation = population,
     gdp_pper_capita = gdp_per_capita,
@@ -1671,7 +1666,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `# Correct the misspelled column names
-correctedHeaders <- misspelledHeaders %>%
+correctedHeaders <- misspelledHeaders |>
   rename(
     population = poplation,
     gdp_per_capita = gdp_pper_capita,
@@ -1708,7 +1703,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `# Combine 'country' and 'year' into a single column
-mergedData <- countriesDs %>%
+mergedData <- countriesDs |>
   unite("country_year", country, year, sep = "_")
 
 # Preview the merged dataset
@@ -1735,7 +1730,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `# Split the 'country_year' column back into 'country' and 'year'
-splitData <- mergedData %>%
+splitData <- mergedData |>
   separate(country_year, into = c("country", "year"), sep = "_")
 
 # Preview the split dataset
@@ -1771,11 +1766,11 @@ currentDocumentLocation.appendChild(initializedElement);
 qwebrCreateMonacoEditorInstance(
   `# Ensure the lubridate package is loaded
 # Convert the year column to a date format (January 1st of each year)
-countriesDs <- countriesDs %>%
+countriesDs <- countriesDs |>
   mutate(year_date = ymd(paste0(year, "-01-01")))
 
-# Check the first few rows to see the new column
-head(countriesDs, 5)`, 
+# Check the first 5 rows and last column
+countriesDs[5, ncol(countriesDs)]`, 
   21);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
@@ -1812,7 +1807,7 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs %>%
+  `countriesDs <- countriesDs |>
   mutate(year_end_date = ymd(paste0(year, "-12-31")))
 
 head(countriesDs, 5)`, 
@@ -1839,7 +1834,7 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs %>%
+  `countriesDs <- countriesDs |>
   mutate(quarter_date = ymd(paste0(year, "-03-31")))
 
 head(countriesDs, 5)`, 
@@ -1866,7 +1861,7 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs %>%
+  `countriesDs <- countriesDs |>
   mutate(mid_year_date = ymd(paste0(year, "-06-30")))
 
 head(countriesDs, 5)`, 
@@ -1894,7 +1889,7 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `chosen_month <- "11"
-countriesDs <- countriesDs %>%
+countriesDs <- countriesDs |>
   mutate(chosen_month_date = ymd(paste0(year, "-", chosen_month, "-30")))
 
 head(countriesDs, 5)`, 
@@ -1921,7 +1916,7 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs %>%
+  `countriesDs <- countriesDs |>
   mutate(fiscal_year_start = ymd(paste0(year, "-04-01")))
 
 head(countriesDs, 5)`, 
@@ -1985,7 +1980,7 @@ currentDocumentLocation.appendChild(initializedElement);
 qwebrCreateMonacoEditorInstance(
   `set.seed(10)  # For reproducibility
 # Directly introduce missing values in a random sample of rows
-mar_data <- countriesDs %>%
+mar_data <- countriesDs |>
   mutate(
     gdp_per_capita = ifelse(runif(n()) < 0.4, NA, gdp_per_capita)  # 20% chance of being NA
   )
@@ -2015,7 +2010,7 @@ currentDocumentLocation.appendChild(initializedElement);
 qwebrCreateMonacoEditorInstance(
   `set.seed(456)  # For reproducibility
 
-mnar_data <- countriesDs %>%
+mnar_data <- countriesDs |>
   mutate(
     life_expectancy = ifelse(life_expectancy < 60 & runif(n()) < 0.4, NA, life_expectancy)
   )
@@ -2104,7 +2099,7 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `mar_data_imputed <- mar_data %>%
+  `mar_data_imputed <- mar_data |>
   mutate(
     gdp_per_capita = ifelse(is.na(gdp_per_capita), median(gdp_per_capita, na.rm = TRUE), gdp_per_capita)
   )
@@ -2131,7 +2126,7 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `mnar_data_imputed <- mnar_data %>%
+  `mnar_data_imputed <- mnar_data |>
   mutate(
     life_expectancy = ifelse(is.na(life_expectancy), median(life_expectancy, na.rm = TRUE), life_expectancy)
   )
@@ -2226,27 +2221,27 @@ currentDocumentLocation.appendChild(initializedElement);
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
   `# Step 1: Filter the dataset for Asian and European countries from 2020 to 2023
-filteredData <- countriesDs %>%
+filteredData <- countriesDs |>
   filter(year >= 2020 & year <= 2023)
 
 # Step 2: Join with the additional dataset to get continent information
-joinedData <- filteredData %>%
+joinedData <- filteredData |>
   left_join(countriesExtraDs, by = "country")
 
 # Step 3: Select relevant columns for analysis
-selectedData <- joinedData %>%
+selectedData <- joinedData |>
   select(country, year, population, gdp_per_capita, life_expectancy, birth_rate, continent)
 
 # Step 4: Mutate the data to create new metrics
-mutatedData <- selectedData %>%
+mutatedData <- selectedData |>
   mutate(
     gdp_total = gdp_per_capita * population,
     year_date = ymd(paste0(year, "-", ifelse(runif(n()) > 0.5, "06-30", "12-31")))
   )
 
 # Step 5: Summarize the data to get average life expectancy, GDP per capita, and total population by country and continent
-summaryData <- mutatedData %>%
-  group_by(continent, country) %>%
+summaryData <- mutatedData |>
+  group_by(continent, country) |>
   summarize(
     avg_life_expectancy = mean(life_expectancy, na.rm = TRUE),
     avg_gdp_per_capita = mean(gdp_per_capita, na.rm = TRUE),

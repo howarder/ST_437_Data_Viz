@@ -4,8 +4,8 @@ subtitle: "ST 437 Data Visualization"
 author: 
   - Erin Howard
   - Brian Cervantes Alvarez
-date: today
-date-format: long
+# date: today
+# date-format: long
 format: 
     OSUstyle-html:
         toc: true
@@ -69,10 +69,10 @@ Mastering data wrangling is crucial because you might have to handle datasets wi
 
 ## Getting Started
 
-First, ensure you have the necessary packages installed and loaded. We will use the `dplyr`, `lubridate`, `readr`, `ggplot2`, and `tidyr` packages for our examples. 
+First, ensure you have the necessary packages installed and loaded. We will use the `dplyr`, `lubridate`, `readr`, `ggplot2`, and `tidyr` packages for our examples. If you haven't previousy used any of these packages, you'll need to install them using the `install.packages()` function. 
 
 ::: {.callout-important}
-## Downloading R-packages
+## Installing R-packages
 
 Use `install.packages('Name of Package')` to install an R package. Careful! Package names are case sensitive, so install.packages('GGplot2') will not work, but `install.packages('ggplot2')` will.
 :::
@@ -97,7 +97,7 @@ library(lubridate)
 :::
 
 
-```{webr-r}
+```{webr}
 #| autorun: TRUE
 # Specify the data URL using HTTPS
 url1 <- "https://howarder.github.io/ST_437_Data_Viz/Assets/Datasets/countries.csv"
@@ -162,11 +162,13 @@ You are tasked with visualizing trends in life expectancy in Asian countries bet
 
 ##### Filtering Process
 ```{webr-r}
-filteredData <- countriesDs %>%
+filteredData <- countriesDs |>
   filter(year >= 2010 & year <= 2020 & region == "Asia")
 
 head(filteredData, 5)
 ```
+
+
 
 ##### Visualization
 ```{webr-r}
@@ -186,8 +188,8 @@ Analyze the relationship between GDP per capita and life expectancy in European 
 
 ##### Filtering Process
 ```{webr-r}
-filteredData <- countriesDs %>%
-  filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000) %>%
+filteredData <- countriesDs|>
+  filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000) |>
   left_join(countriesExtraDs, by = "country")
 
 head(filteredData, 5)
@@ -235,7 +237,7 @@ Selecting allows you to focus on specific columns relevant to your analysis.
 #### Example 1
 
 ```{webr-r}
-selectedData <- filteredData %>%
+selectedData <- filteredData |>
   select(country, year, gdp_per_capita, life_expectancy)
 
 head(selectedData, 5)
@@ -264,7 +266,7 @@ Mutating helps create new columns based on existing data.
 #### Example 1
 
 ```{webr-r}
-mutatedData <- countriesDs %>%
+mutatedData <- countriesDs |>
   mutate(gdp_total = gdp_per_capita * population)
 
 head(mutatedData, 5)
@@ -293,8 +295,8 @@ Summarizing aggregates data by country, year, or region to find totals and avera
 #### Example 1
 
 ```{webr-r}
-summaryData <- countriesDs %>%
-  group_by(country) %>%
+summaryData <- countriesDs |>
+  group_by(country) |>
   summarize(
     avg_life_expectancy = mean(life_expectancy, na.rm = TRUE),
     total_population = sum(population, na.rm = TRUE)
@@ -366,7 +368,7 @@ To demonstrate this, let's take our dataset and convert it into a wide format, t
 
 ```{webr-r}
 # Create a wide format from the existing long format
-wideData <- countriesDs %>%
+wideData <- countriesDs |>
   pivot_wider(names_from = year, values_from = c(population, gdp))
 
 # Preview the wide data
@@ -377,7 +379,7 @@ Now, let's convert this wide data back to a long format.
 
 ```{webr-r}
 # Convert the wide format back to long format
-longData <- wideData %>%
+longData <- wideData |>
   pivot_longer(cols = starts_with(c("population", "gdp")),
                names_to = c(".value", "year"),
                names_sep = "_")
@@ -398,7 +400,7 @@ Let's create a dataset with intentionally misspelled column names and then fix t
 
 ```{webr-r}
 # Create a dataset with misspelled column names
-misspelledHeaders <- countriesDs %>%
+misspelledHeaders <- countriesDs |>
   rename(
     poplation = population,
     gdp_pper_capita = gdp_per_capita,
@@ -413,7 +415,7 @@ head(misspelledHeaders, 5)
 
 ```{webr-r}
 # Correct the misspelled column names
-correctedHeaders <- misspelledHeaders %>%
+correctedHeaders <- misspelledHeaders |>
   rename(
     population = poplation,
     gdp_per_capita = gdp_pper_capita,
@@ -436,7 +438,7 @@ Let's take the `country` and `year` columns and merge them into a single column.
 
 ```{webr-r}
 # Combine 'country' and 'year' into a single column
-mergedData <- countriesDs %>%
+mergedData <- countriesDs |>
   unite("country_year", country, year, sep = "_")
 
 # Preview the merged dataset
@@ -447,7 +449,7 @@ head(mergedData, 5)
 
 ```{webr-r}
 # Split the 'country_year' column back into 'country' and 'year'
-splitData <- mergedData %>%
+splitData <- mergedData |>
   separate(country_year, into = c("country", "year"), sep = "_")
 
 # Preview the split dataset
@@ -469,11 +471,11 @@ Let's convert the `year` column into a date format, setting it as January 1st of
 ```{webr-r}
 # Ensure the lubridate package is loaded
 # Convert the year column to a date format (January 1st of each year)
-countriesDs <- countriesDs %>%
+countriesDs <- countriesDs |>
   mutate(year_date = ymd(paste0(year, "-01-01")))
 
-# Check the first few rows to see the new column
-head(countriesDs, 5)
+# Check the first 5 rows and last column
+head(countriesDs)
 ```
 
 ##### What did we do here?
@@ -489,7 +491,7 @@ This creates a new column, `year_date`, which is now in the proper date format.
    - **Purpose**: Useful for representing data that summarizes annual results.
 
    ```{webr-r}
-   countriesDs <- countriesDs %>%
+   countriesDs <- countriesDs |>
      mutate(year_end_date = ymd(paste0(year, "-12-31")))
 
    head(countriesDs, 5)
@@ -500,7 +502,7 @@ This creates a new column, `year_date`, which is now in the proper date format.
    - **Purpose**: Useful for quarterly analysis.
 
    ```{webr-r}
-   countriesDs <- countriesDs %>%
+   countriesDs <- countriesDs |>
      mutate(quarter_date = ymd(paste0(year, "-03-31")))
 
    head(countriesDs, 5)
@@ -511,7 +513,7 @@ This creates a new column, `year_date`, which is now in the proper date format.
    - **Purpose**: Represents mid-year data points.
 
    ```{webr-r}
-   countriesDs <- countriesDs %>%
+   countriesDs <- countriesDs |>
      mutate(mid_year_date = ymd(paste0(year, "-06-30")))
 
    head(countriesDs, 5)
@@ -523,7 +525,7 @@ This creates a new column, `year_date`, which is now in the proper date format.
 
    ```{webr-r}
    chosen_month <- "11"
-   countriesDs <- countriesDs %>%
+   countriesDs <- countriesDs |>
      mutate(chosen_month_date = ymd(paste0(year, "-", chosen_month, "-30")))
 
    head(countriesDs, 5)
@@ -534,7 +536,7 @@ This creates a new column, `year_date`, which is now in the proper date format.
    - **Purpose**: Useful for financial and budgetary analyses.
 
    ```{webr-r}
-   countriesDs <- countriesDs %>%
+   countriesDs <- countriesDs |>
      mutate(fiscal_year_start = ymd(paste0(year, "-04-01")))
 
    head(countriesDs, 5)
@@ -565,7 +567,7 @@ We'll create a scenario where `gdp_per_capita` is more likely to be missing if t
 ```{webr-r}
 set.seed(10)  # For reproducibility
 # Directly introduce missing values in a random sample of rows
-mar_data <- countriesDs %>%
+mar_data <- countriesDs |>
   mutate(
     gdp_per_capita = ifelse(runif(n()) < 0.4, NA, gdp_per_capita)  # 20% chance of being NA
   )
@@ -579,7 +581,7 @@ We'll simulate a scenario where the likelihood of `life_expectancy` being missin
 ```{webr-r}
 set.seed(456)  # For reproducibility
 
-mnar_data <- countriesDs %>%
+mnar_data <- countriesDs |>
   mutate(
     life_expectancy = ifelse(life_expectancy < 60 & runif(n()) < 0.4, NA, life_expectancy)
   )
@@ -617,7 +619,7 @@ To handle the missing data, we'll apply a simple imputation strategy, filling in
 
 ##### Imputing Missing Values for MAR Data
 ```{webr-r}
-mar_data_imputed <- mar_data %>%
+mar_data_imputed <- mar_data |>
   mutate(
     gdp_per_capita = ifelse(is.na(gdp_per_capita), median(gdp_per_capita, na.rm = TRUE), gdp_per_capita)
   )
@@ -627,7 +629,7 @@ summary(mar_data_imputed$gdp_per_capita)
 
 ##### Imputing Missing Values for MNAR Data
 ```{webr-r}
-mnar_data_imputed <- mnar_data %>%
+mnar_data_imputed <- mnar_data |>
   mutate(
     life_expectancy = ifelse(is.na(life_expectancy), median(life_expectancy, na.rm = TRUE), life_expectancy)
   )
@@ -672,27 +674,27 @@ Here’s a step-by-step guide to transform and visualize data from 10 countries 
 
 ```{webr-r}
 # Step 1: Filter the dataset for Asian and European countries from 2020 to 2023
-filteredData <- countriesDs %>%
+filteredData <- countriesDs |>
   filter(year >= 2020 & year <= 2023)
 
 # Step 2: Join with the additional dataset to get continent information
-joinedData <- filteredData %>%
+joinedData <- filteredData |>
   left_join(countriesExtraDs, by = "country")
 
 # Step 3: Select relevant columns for analysis
-selectedData <- joinedData %>%
+selectedData <- joinedData |>
   select(country, year, population, gdp_per_capita, life_expectancy, birth_rate, continent)
 
 # Step 4: Mutate the data to create new metrics
-mutatedData <- selectedData %>%
+mutatedData <- selectedData |>
   mutate(
     gdp_total = gdp_per_capita * population,
     year_date = ymd(paste0(year, "-", ifelse(runif(n()) > 0.5, "06-30", "12-31")))
   )
 
 # Step 5: Summarize the data to get average life expectancy, GDP per capita, and total population by country and continent
-summaryData <- mutatedData %>%
-  group_by(continent, country) %>%
+summaryData <- mutatedData |>
+  group_by(continent, country) |>
   summarize(
     avg_life_expectancy = mean(life_expectancy, na.rm = TRUE),
     avg_gdp_per_capita = mean(gdp_per_capita, na.rm = TRUE),
