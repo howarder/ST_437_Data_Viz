@@ -2,6 +2,7 @@
 title: "Lab 2 | Data Wrangling in R"
 subtitle: "ST 437 Data Visualization"
 author: "Student Name"
+format: html
 date: today
 date-format: long
 execute: 

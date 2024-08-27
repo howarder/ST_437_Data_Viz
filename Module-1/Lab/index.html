@@ -8,7 +8,6 @@
 
 <meta name="author" content="Erin Howard">
 <meta name="author" content="Brian Cervantes Alvarez">
-<meta name="dcterms.date" content="2024-08-09">
 
 <title>Lab 1 | Introduction to Data Visualization</title>
 <style>
@@ -70,6 +69,636 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs/editor/editor.main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  
+<style type="text/css">.monaco-editor pre {
+  background-color: unset !important;
+}
+
+.qwebr-icon-status-spinner {
+  color: #7894c4;
+}
+
+.qwebr-icon-run-code {
+  color: #0d9c29
+}
+
+.qwebr-output-code-stdout {
+  color: #111;
+}
+
+.qwebr-output-code-stderr {
+  color: #db4133;
+}
+
+.qwebr-editor {
+  font-size: 16px !important;
+  overflow: auto;
+  box-shadow: 0 6px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.qwebr-button-run {
+  font-size: 16px;  /* Updated font size */
+  background-color: #EEEEEE;
+  text-align: center;
+  margin-bottom: 5px;
+  cursor: pointer;
+  outline: none;
+  color: #000;  /* White text color */
+  border: none;
+  border-radius: 0.5rem;  /* Updated border-radius */
+  display: inline-block;
+  line-height: 1.5;
+  font-weight: 600;
+  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+
+.qwebr-button-run:active {
+  background-color: #D73F09 !important;  /* Your orange color */;
+  transform: translateY(4px);  /* Button moves down when clicked */
+}
+
+.qwebr-button-run:disabled,
+.qwebr-button-run.disabled,
+fieldset:disabled .qwebr-button-run {
+  pointer-events: none;
+  opacity: .65;
+}
+
+
+
+/* Custom styling for RevealJS Presentations*/
+
+/* Reset the style of the interactive area */
+.reveal div.qwebr-interactive-area {
+  display: block;
+  box-shadow: none;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 16px !important;
+} 
+
+/* Provide space to entries */
+.reveal div.qwebr-output-code-area pre div {
+  margin: 1px 2px 1px 10px;
+}
+
+/* Collapse the inside code tags to avoid extra space between line outputs */
+.reveal pre div code.qwebr-output-code-stdout, .reveal pre div code.qwebr-output-code-stderr {
+  padding: 0;
+  display: contents;
+}
+
+.reveal pre div code.qwebr-output-code-stdout {
+  color: #111;
+  font-size: 16px !important;
+}
+
+.reveal pre div code.qwebr-output-code-stderr {
+  color: #db4133;
+  font-size: 16px !important;
+}
+
+
+/* Create a border around console and output (does not effect graphs) */
+.reveal div.qwebr-console-area {
+  border: 1px solid #EEEEEE;
+  box-shadow: 2px 2px 10px #EEEEEE;
+  font-size: 16px !important;
+}
+
+/* Cap output height and allow text to scroll */
+/* TODO: Is there a better way to fit contents/max it parallel to the monaco editor size? */
+.reveal div.qwebr-output-code-area pre {
+  max-height: 400px;
+  overflow: scroll;
+  font-size: 16px !important;
+}
+</style>
+<script type="module">// Start a timer
+const initializeWebRTimerStart = performance.now();
+
+// Determine if we need to install R packages
+var installRPackagesList = ['lubridate', 'ggplot2', 'readr', 'dplyr', 'lubridate', 'tidyr', 'AER'];
+// Check to see if we have an empty array, if we do set to skip the installation.
+var setupRPackages = !(installRPackagesList.indexOf("") !== -1);
+var autoloadRPackages = true;
+
+// Display a startup message?
+var showStartupMessage = false;
+var showHeaderMessage = false;
+if (showStartupMessage) {
+
+  // Get references to header elements
+  const headerHTML = document.getElementById("title-block-header");
+  const headerRevealJS = document.getElementById("title-slide");
+
+  // Create the outermost div element for metadata
+  const quartoTitleMeta = document.createElement("div");
+  quartoTitleMeta.classList.add("quarto-title-meta");
+
+  // Create the first inner div element
+  const firstInnerDiv = document.createElement("div");
+  firstInnerDiv.setAttribute("id", "qwebr-status-message-area");
+
+  // Create the second inner div element for "WebR Status" heading and contents
+  const secondInnerDiv = document.createElement("div");
+  secondInnerDiv.setAttribute("id", "qwebr-status-message-title");
+  secondInnerDiv.classList.add("quarto-title-meta-heading");
+  secondInnerDiv.innerText = "WebR Status";
+
+  // Create another inner div for contents
+  const secondInnerDivContents = document.createElement("div");
+  secondInnerDivContents.setAttribute("id", "qwebr-status-message-body");
+  secondInnerDivContents.classList.add("quarto-title-meta-contents");
+
+  // Describe the WebR state
+  var startupMessageWebR = document.createElement("p");
+  startupMessageWebR.innerText = "🟡 Loading...";
+  startupMessageWebR.setAttribute("id", "qwebr-status-message-text");
+  // Add `aria-live` to auto-announce the startup status to screen readers
+  startupMessageWebR.setAttribute("aria-live", "assertive");
+
+  // Append the startup message to the contents
+  secondInnerDivContents.appendChild(startupMessageWebR);
+
+  // Add a status indicator for COOP and COEP Headers if needed
+  if (showHeaderMessage) {
+    const crossOriginMessage = document.createElement("p");
+    crossOriginMessage.innerText = `${crossOriginIsolated ? '🟢' : '🟡'} COOP & COEP Headers`;
+    crossOriginMessage.setAttribute("id", "qwebr-coop-coep-header");
+    secondInnerDivContents.appendChild(crossOriginMessage);
+  }
+
+  // Combine the inner divs and contents
+  firstInnerDiv.appendChild(secondInnerDiv);
+  firstInnerDiv.appendChild(secondInnerDivContents);
+  quartoTitleMeta.appendChild(firstInnerDiv);
+
+  // Determine where to insert the quartoTitleMeta element
+  if (headerHTML) {
+    // Append to the existing "title-block-header" element
+    headerHTML.appendChild(quartoTitleMeta);
+  } else if (headerRevealJS) {
+    // If using RevealJS, add to the "title-slide" div
+    headerRevealJS.appendChild(firstInnerDiv);
+  } else {
+    // If neither headerHTML nor headerRevealJS is found, insert after "webr-monaco-editor-init" script
+    const monacoScript = document.getElementById("qwebr-monaco-editor-init");
+    const header = document.createElement("header");
+    header.setAttribute("id", "title-block-header");
+    header.appendChild(quartoTitleMeta);
+    monacoScript.after(header);
+  }
+}
+
+// Retrieve the webr.mjs
+import { WebR, ChannelType } from "https://webr.r-wasm.org/v0.2.2/webr.mjs";
+
+// Populate WebR options with defaults or new values based on 
+// webr meta
+globalThis.webR = new WebR({
+  "baseURL": "https://webr.r-wasm.org/v0.2.2/",
+  "serviceWorkerUrl": "",
+  "homedir": "/home/web_user", 
+  "channelType": ChannelType.Automatic
+});
+
+// Initialization WebR
+await webR.init();
+
+// Setup a shelter
+globalThis.webRCodeShelter = await new webR.Shelter();
+
+// Setup a pager to allow processing help documentation 
+await webR.evalRVoid('webr::pager_install()'); 
+
+// Function to set the button text
+function qwebrSetInteractiveButtonState(buttonText, enableCodeButton = true) {
+  document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+    btn.innerHTML = buttonText;
+    btn.disabled = !enableCodeButton;
+  });
+}
+
+// Function to update the status message
+function qwebrUpdateStatusHeader(message) {
+  startupMessageWebR.innerHTML = `
+    <i class="qwebr-icon-status-spinner"></i>
+    <span>${message}</span>`;
+}
+
+// Function to install a single package
+async function qwebrInstallRPackage(packageName) {
+  await globalThis.webR.installPackages([packageName]);
+}
+
+// Function to load a single package
+async function qwebrLoadRPackage(packageName) {
+  await globalThis.webR.evalRVoid(`library(${packageName});`);
+}
+
+// Generic function to process R packages
+async function qwebrProcessRPackagesWithStatus(packages, processType, displayStatusMessageUpdate = true) {
+  // Switch between contexts
+  const messagePrefix = processType === 'install' ? 'Installing' : 'Loading';
+
+  // Modify button state
+  qwebrSetInteractiveButtonState(`🟡 ${messagePrefix} package ...`, false);
+
+  // Iterate over packages
+  for (let i = 0; i < packages.length; i++) {
+    const activePackage = packages[i];
+    const formattedMessage = `${messagePrefix} package ${i + 1} out of ${packages.length}: ${activePackage}`;
+    
+    // Display the update
+    if (displayStatusMessageUpdate) {
+      qwebrUpdateStatusHeader(formattedMessage);
+    }
+
+    // Run package installation
+    if (processType === 'install') {
+      await qwebrInstallRPackage(activePackage);
+    } else {
+      await qwebrLoadRPackage(activePackage);
+    }
+  }
+
+  // Clean slate
+  if (processType === 'load') {
+    await globalThis.webR.flush();
+  }
+}
+
+
+// Check to see if any packages need to be installed
+if (setupRPackages) {
+  // Obtain only a unique list of packages
+  const uniqueRPackageList = Array.from(new Set(installRPackagesList));
+
+  // Install R packages one at a time (either silently or with a status update)
+  await qwebrProcessRPackagesWithStatus(uniqueRPackageList, 'install', showStartupMessage);
+
+  if(autoloadRPackages) {
+    // Load R packages one at a time (either silently or with a status update)
+    await qwebrProcessRPackagesWithStatus(uniqueRPackageList, 'load', showStartupMessage);
+  }
+}
+
+// Stop timer
+const initializeWebRTimerEnd = performance.now();
+
+// Release document status as ready
+if (showStartupMessage) {
+  startupMessageWebR.innerText = "🟢 Ready!"
+}
+
+qwebrSetInteractiveButtonState(
+  `<i class="qwebr-icon-run-code"></i> <span>Run Code</span>`, 
+  true
+);
+
+// Global version of the Escape HTML function that converts HTML 
+// characters to their HTML entities.
+globalThis.qwebrEscapeHTMLCharacters = function(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};</script>
+<script type="module">// Supported Evaluation Types for Context
+globalThis.EvalTypes = Object.freeze({
+    Interactive: 'interactive',
+    Setup: 'setup',
+    Output: 'output',
+});
+
+// Function to verify a given JavaScript Object is empty
+globalThis.qwebrIsObjectEmpty = function (arr) {
+    return Object.keys(arr).length === 0;
+}
+
+// Function to parse the pager results
+globalThis.qwebrParseTypePager = async function (msg) { 
+
+    // Split out the event data
+    const { path, title, deleteFile } = msg.data; 
+
+    // Process the pager data by reading the information from disk
+    const paged_data = await webR.FS.readFile(path).then((data) => {
+        // Obtain the file content
+        let content = new TextDecoder().decode(data);
+
+        // Remove excessive backspace characters until none remain
+        while(content.match(/.[\b]/)){
+        content = content.replace(/.[\b]/g, '');
+        }
+
+        // Returned cleaned data
+        return content;
+    });
+
+    // Unlink file if needed
+    if (deleteFile) { 
+        await webR.FS.unlink(path); 
+    } 
+
+    // Return extracted data with spaces
+    return paged_data;
+} 
+
+// Function to run the code using webR and parse the output
+globalThis.qwebrComputeEngine = async function(
+    codeToRun, 
+    elements, 
+    options) {
+
+    // Call into the R compute engine that persists within the document scope.
+    // To be prepared for all scenarios, the following happens: 
+    // 1. We setup a canvas device to write to by making a namespace call into the {webr} package
+    // 2. We use values inside of the options array to set the figure size.
+    // 3. We capture the output stream information (STDOUT and STERR)
+    // 4. While parsing the results, we disable image creation.
+
+    // Create a canvas variable for graphics
+    let canvas = undefined;
+
+    // Create a pager variable for help/file contents
+    let pager = [];
+
+    // ---- 
+
+    // Initialize webR
+    await webR.init();
+
+    // Setup a webR canvas by making a namespace call into the {webr} package
+    await webR.evalRVoid(`webr::canvas(width=${options["fig-width"]}, height=${options["fig-height"]})`);
+
+    const result = await webRCodeShelter.captureR(codeToRun, {
+        withAutoprint: true,
+        captureStreams: true,
+        captureConditions: false//,
+        // env: webR.objs.emptyEnv, // maintain a global environment for webR v0.2.0
+    });
+
+    // -----
+
+    // Start attempting to parse the result data
+    try {
+
+        // Stop creating images
+        await webR.evalRVoid("dev.off()");
+
+        // Merge output streams of STDOUT and STDErr (messages and errors are combined.)
+        const out = result.output
+        .filter(evt => evt.type === "stdout" || evt.type === "stderr")
+        .map((evt, index) => {
+            const className = `qwebr-output-code-${evt.type}`;
+            return `<code id="${className}-editor-${elements.id}-result-${index + 1}" class="${className}">${qwebrEscapeHTMLCharacters(evt.data)}</code>`;
+        })
+        .join("\n");
+
+
+        // Clean the state
+        // We're now able to process both graphics and pager events.
+        // As a result, we cannot maintain a true 1-to-1 output order 
+        // without individually feeding each line
+        const msgs = await webR.flush();
+
+        // Output each image event stored
+        msgs.forEach((msg) => {
+        // Determine if old canvas can be used or a new canvas is required.
+        if (msg.type === 'canvas'){
+            // Add image to the current canvas
+            if (msg.data.event === 'canvasImage') {
+                canvas.getContext('2d').drawImage(msg.data.image, 0, 0);
+            } else if (msg.data.event === 'canvasNewPage') {
+                // Generate a new canvas element
+                canvas = document.createElement("canvas");
+                canvas.setAttribute("width", 2 * options["fig-width"]);
+                canvas.setAttribute("height", 2 * options["fig-height"]);
+                canvas.style.width = "700px";
+                canvas.style.display = "block";
+                canvas.style.margin = "auto";
+            }
+        } 
+        });
+
+        // Use `map` to process the filtered "pager" events asynchronously
+        const pager = await Promise.all(
+            msgs.filter(msg => msg.type === 'pager').map(
+                async (msg) => {
+                    return await qwebrParseTypePager(msg);
+                }
+            )
+        );
+
+        // Nullify the output area of content
+        elements.outputCodeDiv.innerHTML = "";
+        elements.outputGraphDiv.innerHTML = "";
+
+        // Design an output object for messages
+        const pre = document.createElement("pre");
+        if (/\S/.test(out)) {
+            // Display results as HTML elements to retain output styling
+            const div = document.createElement("div");
+            div.innerHTML = out;
+            pre.appendChild(div);
+        } else {
+            // If nothing is present, hide the element.
+            pre.style.visibility = "hidden";
+        }
+
+        elements.outputCodeDiv.appendChild(pre);
+
+        // Place the graphics on the canvas
+        if (canvas) {
+            elements.outputGraphDiv.appendChild(canvas);
+        }
+
+        // Display the pager data
+        if (pager) {
+        // Use the `pre` element to preserve whitespace.
+        pager.forEach((paged_data, index) => {
+            let pre_pager = document.createElement("pre");
+            pre_pager.innerText = paged_data;
+            pre_pager.classList.add("qwebr-output-code-pager");
+            pre_pager.setAttribute("id", `qwebr-output-code-pager-editor-${elements.id}-result-${index + 1}`);
+            elements.outputCodeDiv.appendChild(pre_pager);
+        });
+        }
+    } finally {
+        // Clean up the remaining code
+        webRCodeShelter.purge();
+    }
+}
+
+// Function to execute the code (accepts code as an argument)
+globalThis.qwebrExecuteCode = async function (
+    codeToRun,
+    id,
+    evalType = EvalTypes.Interactive,
+    options = {}) {
+
+    // If options are not passed, we fall back on the bare minimum to handle the computation
+    if (qwebrIsObjectEmpty(options)) {
+        options = { "fig-width": 504, "fig-height": 360 };
+    }
+
+    // Next, we access the compute areas values
+    const elements = {
+        runButton: document.getElementById(`qwebr-button-run-${id}`),
+        outputCodeDiv: document.getElementById(`qwebr-output-code-area-${id}`),
+        outputGraphDiv: document.getElementById(`qwebr-output-graph-area-${id}`),
+        id: id,
+    }
+
+    // Disallowing execution of other code cells
+    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+        btn.disabled = true;
+    });
+
+    if (evalType == EvalTypes.Interactive) {
+        // Emphasize the active code cell
+        elements.runButton.innerHTML = '<i class="qwebr-icon-status-spinner"></i> <span>Run Code</span>';
+    }
+
+    // Evaluate the code and parse the output into the document
+    await qwebrComputeEngine(codeToRun, elements, options);
+
+    // Switch to allowing execution of code
+    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+        btn.disabled = false;
+    });
+
+    if (evalType == EvalTypes.Interactive) {
+        // Revert to the initial code cell state
+        elements.runButton.innerHTML = '<i class="qwebr-icon-run-code"></i> <span>Run Code</span>';
+    }
+}
+</script>
+<script type="module">// Function that dispatches the creation request
+globalThis.qwebrCreateHTMLElement = function (insertElement,
+  qwebrCounter, 
+  evalType = EvalTypes.Interactive,
+  options = {}) {
+
+  // Figure out the routine to use to insert the element.
+  let qwebrElement;
+  switch ( evalType ) {
+    case EvalTypes.Interactive: 
+      qwebrElement = qwebrCreateInteractiveElement(qwebrCounter);
+    case EvalTypes.Output: 
+      qwebrElement = qwebrCreateNonInteractiveOutputElement(qwebrCounter);
+    case EvalTypes.Setup: 
+      qwebrElement = qwebrCreateNonInteractiveSetupElement(qwebrCounter);
+    default: 
+      qwebrElement = document.createElement('div');
+      qwebrElement.textContent = 'Error creating element';
+  }
+
+  // Insert the dynamically generated object at the document location.
+  insertElement.appendChild(qwebrElement);
+};
+
+// Function that setups the interactive element creation
+globalThis.qwebrCreateInteractiveElement = function (qwebrCounter) {
+
+  // Create main div element
+  var mainDiv = document.createElement('div');
+  mainDiv.id = 'qwebr-interactive-area-' + qwebrCounter;
+  mainDiv.className = 'qwebr-interactive-area';
+
+  // Create button element
+  var button = document.createElement('button');
+  button.className = 'btn btn-default qwebr-button-run';
+  button.disabled = true;
+  button.type = 'button';
+  button.id = 'qwebr-button-run-' + qwebrCounter;
+  button.textContent = '🟡 Loading webR...';
+
+  // Create console area div
+  var consoleAreaDiv = document.createElement('div');
+  consoleAreaDiv.id = 'qwebr-console-area-' + qwebrCounter;
+  consoleAreaDiv.className = 'qwebr-console-area';
+
+  // Create editor div
+  var editorDiv = document.createElement('div');
+  editorDiv.id = 'qwebr-editor-' + qwebrCounter;
+  editorDiv.className = 'qwebr-editor';
+
+  // Create output code area div
+  var outputCodeAreaDiv = document.createElement('div');
+  outputCodeAreaDiv.id = 'qwebr-output-code-area-' + qwebrCounter;
+  outputCodeAreaDiv.className = 'qwebr-output-code-area';
+  outputCodeAreaDiv.setAttribute('aria-live', 'assertive');
+
+  // Create pre element inside output code area
+  var preElement = document.createElement('pre');
+  preElement.style.visibility = 'hidden';
+  outputCodeAreaDiv.appendChild(preElement);
+
+  // Create output graph area div
+  var outputGraphAreaDiv = document.createElement('div');
+  outputGraphAreaDiv.id = 'qwebr-output-graph-area-' + qwebrCounter;
+  outputGraphAreaDiv.className = 'qwebr-output-graph-area';
+
+  // Append all elements to the main div
+  mainDiv.appendChild(button);
+  consoleAreaDiv.appendChild(editorDiv);
+  consoleAreaDiv.appendChild(outputCodeAreaDiv);
+  mainDiv.appendChild(consoleAreaDiv);
+  mainDiv.appendChild(outputGraphAreaDiv);
+
+  return mainDiv;
+}
+
+// Function that adds output structure for non-interactive output
+globalThis.qwebrCreateNonInteractiveOutputElement = function(qwebrCounter) {
+  // Create main div element
+  var mainDiv = document.createElement('div');
+  mainDiv.id = 'qwebr-noninteractive-area-' + qwebrCounter;
+  mainDiv.className = 'qwebr-noninteractive-area';
+
+  // Create output code area div
+  var outputCodeAreaDiv = document.createElement('div');
+  outputCodeAreaDiv.id = 'qwebr-output-code-area-' + qwebrCounter;
+  outputCodeAreaDiv.className = 'qwebr-output-code-area';
+  outputCodeAreaDiv.setAttribute('aria-live', 'assertive');
+
+  // Create pre element inside output code area
+  var preElement = document.createElement('pre');
+  preElement.style.visibility = 'hidden';
+  outputCodeAreaDiv.appendChild(preElement);
+
+  // Create output graph area div
+  var outputGraphAreaDiv = document.createElement('div');
+  outputGraphAreaDiv.id = 'qwebr-output-graph-area-' + qwebrCounter;
+  outputGraphAreaDiv.className = 'qwebr-output-graph-area';
+
+  // Append all elements to the main div
+  mainDiv.appendChild(outputCodeAreaDiv);
+  mainDiv.appendChild(outputGraphAreaDiv);
+
+  return mainDiv;
+};
+
+// Function that adds a stub in the page to indicate a setup cell was used.
+globalThis.qwebrCreateNonInteractiveSetupElement = function(qwebrCounter) {
+  // Create main div element
+  var mainDiv = document.createElement('div');
+  mainDiv.id = 'qwebr-noninteractive-setup-area-' + qwebrCounter;
+  mainDiv.className = 'qwebr-noninteractive-setup-area';
+
+  return mainDiv;
+}</script>
 
 
 </head>
@@ -83,18 +712,144 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#using-quarto" id="toc-using-quarto" class="nav-link" data-scroll-target="#using-quarto">Using Quarto</a>
+  <ul>
   <li><a href="#what-is-a-quarto-document" id="toc-what-is-a-quarto-document" class="nav-link" data-scroll-target="#what-is-a-quarto-document">What is a Quarto document?</a>
   <ul>
   <li><a href="#the-yaml-header" id="toc-the-yaml-header" class="nav-link" data-scroll-target="#the-yaml-header">The YAML Header</a></li>
   <li><a href="#code-blocks" id="toc-code-blocks" class="nav-link" data-scroll-target="#code-blocks">Code Blocks</a></li>
   </ul></li>
   <li><a href="#markdown-text" id="toc-markdown-text" class="nav-link" data-scroll-target="#markdown-text">Markdown text</a></li>
+  <li><a href="#source-vs.-visual-editing" id="toc-source-vs.-visual-editing" class="nav-link" data-scroll-target="#source-vs.-visual-editing">Source vs.&nbsp;Visual Editing</a></li>
   <li><a href="#installing-r-packages" id="toc-installing-r-packages" class="nav-link" data-scroll-target="#installing-r-packages">Installing R-packages</a></li>
-  <li><a href="#running-code-from-a-quarto-file" id="toc-running-code-from-a-quarto-file" class="nav-link" data-scroll-target="#running-code-from-a-quarto-file">Running Code from a Quarto file</a></li>
+  <li><a href="#running-code-from-a-quarto-file" id="toc-running-code-from-a-quarto-file" class="nav-link" data-scroll-target="#running-code-from-a-quarto-file">Running Code from a Quarto File</a></li>
+  <li><a href="#rendering-a-quarto-document" id="toc-rendering-a-quarto-document" class="nav-link" data-scroll-target="#rendering-a-quarto-document">Rendering a Quarto Document</a>
+  <ul>
+  <li><a href="#rendering-to-pdf" id="toc-rendering-to-pdf" class="nav-link" data-scroll-target="#rendering-to-pdf">Rendering to PDF</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#exploring-data-with-visualizations" id="toc-exploring-data-with-visualizations" class="nav-link" data-scroll-target="#exploring-data-with-visualizations">Exploring Data with Visualizations</a>
+  <ul>
+  <li><a href="#scatterplots" id="toc-scatterplots" class="nav-link" data-scroll-target="#scatterplots">Scatterplots</a>
+  <ul>
+  <li><a href="#task-1" id="toc-task-1" class="nav-link" data-scroll-target="#task-1">Task 1</a></li>
+  </ul></li>
+  <li><a href="#bar-graphs" id="toc-bar-graphs" class="nav-link" data-scroll-target="#bar-graphs">Bar Graphs</a>
+  <ul>
+  <li><a href="#task-2" id="toc-task-2" class="nav-link" data-scroll-target="#task-2">Task 2</a></li>
+  </ul></li>
+  <li><a href="#histograms" id="toc-histograms" class="nav-link" data-scroll-target="#histograms">Histograms</a>
+  <ul>
+  <li><a href="#task-3" id="toc-task-3" class="nav-link" data-scroll-target="#task-3">Task 3</a></li>
+  </ul></li>
+  <li><a href="#density-plots" id="toc-density-plots" class="nav-link" data-scroll-target="#density-plots">Density Plots</a>
+  <ul>
+  <li><a href="#task-4" id="toc-task-4" class="nav-link" data-scroll-target="#task-4">Task 4</a></li>
+  </ul></li>
+  <li><a href="#boxplots" id="toc-boxplots" class="nav-link" data-scroll-target="#boxplots">Boxplots</a>
+  <ul>
+  <li><a href="#task-5" id="toc-task-5" class="nav-link" data-scroll-target="#task-5">Task 5</a></li>
+  </ul></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up">Wrap Up</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
 <main class="content" id="quarto-document-content">
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs/loader.js"></script>
+<script type="module" id="qwebr-monaco-editor-init">
+
+  // Configure the Monaco Editor's loader
+  require.config({
+    paths: {
+      'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs'
+    }
+  });
+</script>
+<script type="module">// Global dictionary to store Monaco Editor instances
+const qwebrEditorInstances = {};
+
+// Function that builds and registers a Monaco Editor instance    
+globalThis.qwebrCreateMonacoEditorInstance = function (
+    initialCode, 
+    qwebrCounter) {
+
+  // Retrieve the previously created document elements
+  let runButton = document.getElementById(`qwebr-button-run-${qwebrCounter}`);
+  let editorDiv = document.getElementById(`qwebr-editor-${qwebrCounter}`);
+  
+  // Load the Monaco Editor and create an instance
+  let editor;
+  require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(editorDiv, {
+      value: initialCode,
+      language: 'r',
+      theme: 'vs-light',                // Use the vs-light theme
+      automaticLayout: true,            // Works wonderfully with RevealJS
+      scrollBeyondLastLine: false,
+      minimap: {
+        enabled: false
+      },
+      fontSize: '16px',                // Bootstrap is 1 rem
+      renderLineHighlight: "none",     // Disable current line highlighting
+      hideCursorInOverviewRuler: true  // Remove cursor indicator in right-hand side scroll bar
+    });
+
+    // Other editor initialization code remains the same...
+    editor.__qwebrCounter = qwebrCounter;
+    editor.__qwebrEditorId = `qwebr-editor-${qwebrCounter}`;
+    editor.__qwebrinitialCode = initialCode;
+
+    const updateHeight = () => {
+      const contentHeight = editor.getContentHeight();
+      editorDiv.style.height = `${contentHeight}px`;
+      editor.layout();
+    };
+
+    function isEmptyCodeText(selectedCodeText) {
+      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
+    }
+
+    const addWebRKeyboardShortCutCommands = () => {
+      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+        qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter);
+      });
+
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
+        if (isEmptyCodeText(selectedText)) {
+          let currentPosition = editor.getPosition();
+          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
+          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
+
+          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
+            editor.executeEdits("addNewLine", [{
+              range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
+              text: "\n", 
+              forceMoveMarkers: true,
+            }]);
+          }
+
+          qwebrExecuteCode(currentLine, editor.__qwebrCounter, EvalTypes.Interactive);
+          editor.setPosition(newPosition);
+        } else {
+          qwebrExecuteCode(selectedText, editor.__qwebrCounter, EvalTypes.Interactive);
+        }
+      });
+    }
+
+    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
+    editor.onDidContentSizeChange(updateHeight);
+    updateHeight();
+
+    qwebrEditorInstances[editor.__qwebrCounter] = editor;
+  });
+
+  runButton.onclick = function () {
+    qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter, EvalTypes.Interactive);
+  };
+}
+</script>
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -114,12 +869,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 9, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -129,12 +878,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="learning-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
+<section id="learning-objectives" class="level1">
+<h1>Learning Objectives</h1>
 <ol type="1">
-<li><strong>LO</strong>: description</li>
+<li>Identify the components of a Quarto document.</li>
+<li>Write and run code chunks from a Quarto document.</li>
+<li>Render a Quarto document to both HTML and PDF.</li>
+<li>Create basic visualizations using both base R and `gglot2` functions.</li>
 </ol>
 </section>
+<section id="using-quarto" class="level1">
+<h1>Using Quarto</h1>
 <section id="what-is-a-quarto-document" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-a-quarto-document">What is a Quarto document?</h2>
 <p>This is a quarto document! A quarto document (.qmd) is a special kind of file that combines code and plain text to produce polished, shareable reports and presentations. In this class we’ll use Quarto documents to record our work.</p>
@@ -164,21 +918,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="markdown-text" class="level2">
 <h2 class="anchored" data-anchor-id="markdown-text">Markdown text</h2>
-<p>Anything else in the document outside of YAML header and the code blocks is interpreted as Markdown - a syntax for controlling the text of the document.</p>
+<p>Anything else in the document outside of the YAML header and the code blocks is interpreted as Markdown - a syntax for controlling the text of the document.</p>
 <p>For example, to indicate a header, use <code>#</code>. To indicate a subheader, use <code>##</code>, and so on.</p>
 <p>For help with Markdown syntax, check out <a href="https://quarto.org/docs/authoring/markdown-basics.html" class="uri">https://quarto.org/docs/authoring/markdown-basics.html</a>.</p>
-<p><span class="text-purple"><strong>Brian</strong></span> <em>Can we make this look like the preview window on the second slide of https://mine-cetinkaya-rundel.github.io/quarto-world-of-possibilities-jsm24/talks/1-presentations/ ?</em></p>
-<!-- :::: {.codewindow .quarto} -->
-<!-- index.qmd -->
-<!-- ``` md -->
-<!-- {{< include includes/basics.qmd >}} -->
-<!-- ``` -->
-<!-- ::: -->
+</section>
+<section id="source-vs.-visual-editing" class="level2">
+<h2 class="anchored" data-anchor-id="source-vs.-visual-editing">Source vs.&nbsp;Visual Editing</h2>
+<p>When working in a .qmd file in RStudio, you have the option of editing your file in <em>Source</em> mode or <em>Visual</em> mode. In the top left corner of your .qmd file, take a look at both options by clicking the Source and Visual buttons. <em>Source</em> provides a more raw markdown format and <em>Visual</em> is bit more what-you-see-is-what-you-get and may be easier to navigate if this is your first time working in a Quarto document. Use whichever option you prefer!</p>
 </section>
 <section id="installing-r-packages" class="level2">
 <h2 class="anchored" data-anchor-id="installing-r-packages">Installing R-packages</h2>
-<p>In this lab, we’ll rely on a few functions that aren’t a part of Base R. Instead, they are dependent on a package - a collection of code, data, and documentation typically used to run more advanced functions. Here, we’ll need the<code>ggplot2</code> package.</p>
+<p>In this lab, we’ll rely on a few functions that aren’t a part of Base R. Instead, they are dependent on a package - a collection of code, data, and documentation typically used to run more advanced functions. Here, we’ll need the<code>ggplot2</code> and <code>AER</code> packages.</p>
 <p>You may have received a warning at the start of your .qmd file that says <code>Package ggplot2 is required but is not installed.</code> If you see this warning, you can easily install the package by clicking the <code>Install</code> option. You can also install packages using <code>install.packages('Name of Package')</code>. Careful! Package names are case sensitive, so install.packages(‘GGplot2’) will not work, but <code>install.packages('ggplot2')</code> will.</p>
+<p>You only need to install a package once, so instead of including the code to install <code>ggplot2</code> and <code>AER</code> as a code chunk, navigate to the <strong>Console</strong> of your RStudio window, type <code>install.packages(c('ggplot2', 'AER'))</code> and hit enter. Give R a moment to install the packages.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -197,7 +949,7 @@ Loading Packages
 </div>
 </section>
 <section id="running-code-from-a-quarto-file" class="level2">
-<h2 class="anchored" data-anchor-id="running-code-from-a-quarto-file">Running Code from a Quarto file</h2>
+<h2 class="anchored" data-anchor-id="running-code-from-a-quarto-file">Running Code from a Quarto File</h2>
 <p>The .qmd file is simply a static document. If we want to actually run code from the document, we need to send the code from the .qmd code block to the RStudio console.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -220,6 +972,474 @@ Running Code Block Shortcuts
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now trying adding x to y. Run your code.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># By the way, this is a comment! Anything prefaced by</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># the # symbol in an R code chunk won't be treated as code.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="rendering-a-quarto-document" class="level2">
+<h2 class="anchored" data-anchor-id="rendering-a-quarto-document">Rendering a Quarto Document</h2>
+<p>Up until this point, you’ve likely been reading this document directly in your RStudio window. Typically, we want to <strong>render</strong> our Quarto documents so that they are presentable and easily shareable. If you scroll back up to the YAML, you’ll see we set the format of this document to HTML. If you need to render your document as a PDF or docx document, I recommend holding off on changing the format, until you are done editing your document. The rendering speed is much faster for HTML.</p>
+<p>To render and preview your document, click the Render option in the horizontal menu across the top of your .qmd file. If a preview of your document does not appear in the Viewer pane on the right side of your RStudio window, click the gear icon next to the Render option and make sure Preview in Viewer Pane is selected.</p>
+<section id="rendering-to-pdf" class="level3">
+<h3 class="anchored" data-anchor-id="rendering-to-pdf">Rendering to PDF</h3>
+<p>To render your document to PDF, change the format option in the YAML from <code>html</code> to <code>pdf</code>.</p>
+<p>In order to create PDFs you will need to install a recent distribution of TeX. We recommend the use of TinyTeX, which you can install by running the following command in the <strong>Terminal</strong>. To open the Terminal, select the tab just to the right of the Console below. Simply type the following three words and hit return/enter.</p>
+<pre><code>quarto install tinytex</code></pre>
+<p>Now try rendering your .qmd file as a PDF.</p>
+</section>
+</section>
+</section>
+<section id="exploring-data-with-visualizations" class="level1">
+<h1>Exploring Data with Visualizations</h1>
+<p>For the remainder of this lab, we’ll use a variety of visualization techniques to explore data. If we’re interested in creating visualizations solely to get a quick-and-dirty understanding of our data, we may not need to spend a lot of time creating pretty visualizations. If that’s the case, it may be more efficient to create visualizations using R’s base graphics. If instead, we want to create visualizations to share with others, we should spend a little more time crafting nicer visualizations using the `ggplot2` package. In the following exercises, we’ll do both!</p>
+<p>Start by loading the <code>AER</code> package. The dataset we’ll use for the following exercises, <code>CASchools</code>, is stored in this package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AER)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When a dataset (or function) is stored as a part of an R package, we can read more about it by opening the help documentation. Help documentation can be found by searching in the <strong>Help</strong> tab on the right-hand side of the RStudio window or by using a <code>?</code> as the prefix for the object you want to learn about.</p>
+<p><em>Did you notice the additional argument at the start of the code chunk above? What do you think this argument does? Hint: render your document and try to locate this code chunk.</em></p>
+<p>To let R know that we want to use the <code>CASchools</code>, call in into your <strong>Environment</strong> by using the <code>data()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(CASchools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next week, we’ll look at how to import and use data that aren’t already stored in an R function.</p>
+<section id="scatterplots" class="level2">
+<h2 class="anchored" data-anchor-id="scatterplots">Scatterplots</h2>
+<p>A scatterplot displays bivariate (two variables) data. For each observation in the dataset, the value of one variable is plotted on the x-axis and the other on the y-axis.</p>
+<p>To quickly create a scatterplot, use the base R function <code>plot()</code> with the x-axis variable as the first argument and the y-axis variable as the second argument.</p>
+<p>The code plot displays the <code>expenditure</code> and <code>read</code> variables from the <code>CASchools</code> dataset as the x- and y-axis variables, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(CASchools<span class="sc">$</span>expenditure, CASchools<span class="sc">$</span>read)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Using the <code>ggplot2</code> package, we can create a similar, slightly tidier plot using the <code>ggplot()</code> function.</p>
+<p>The first line, <code>ggplot()</code>, tells it to create a plot object, and the second part, <code>geom_point()</code>, tells it to add a <strong>layer</strong> of points to the plot.</p>
+<p>The usual way to use <code>ggplot()</code> is to pass it a data frame (<code>CASchools</code>) and then tell it which columns to use for the x and y values as the <strong>aesthetic</strong> (<code>aes</code>) arguments.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> CASchools, <span class="fu">aes</span>(<span class="at">x =</span> expenditure, <span class="at">y =</span> read)) <span class="sc">+</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="task-1" class="level3">
+<h3 class="anchored" data-anchor-id="task-1">Task 1</h3>
+<p>Take a look at the help documentation and descriptions of the variables available in this dataset. Select two other numerical variables from the CASchools dataset and create a scatterplot using the base R function</p>
+<div class="cell">
+<div id="qwebr-insertion-location-1"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-1");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    1
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  1);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+<p>and the <code>ggplot2</code> package.</p>
+<div class="cell">
+<div id="qwebr-insertion-location-2"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-2");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    2
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  2);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+</section>
+</section>
+<section id="bar-graphs" class="level2">
+<h2 class="anchored" data-anchor-id="bar-graphs">Bar Graphs</h2>
+<p>Bar graphs are a handy visualization tool when we want to display the size of the categories of a categorical variable.</p>
+<p>The base R code below uses the <code>barplot()</code> function to create a barplot for the <code>grades</code> variable. In the code chunk below, we have a function <code>table()</code> nested within <code>barplot()</code>. Try highlighting and running just the <code>table(CASchools$grades)</code> component of the code to see what information the <code>barplot()</code> function takes as input.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(CASchools<span class="sc">$</span>grades))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can create a similar plot using the <code>ggplot()</code> function by setting <code>grades</code> as the <code>x</code> aesthetic and then adding the <code>geom_bar()</code> layer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> CASchools, <span class="fu">aes</span>(<span class="at">x =</span> grades)) <span class="sc">+</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="task-2" class="level3">
+<h3 class="anchored" data-anchor-id="task-2">Task 2</h3>
+<p>The <code>county</code> variable is another categorical variable in this dataset that might lend itself nicely to a barplot. Using the same ggplot structure as we did above, create a barplot for the county variable.</p>
+<div class="cell">
+<div id="qwebr-insertion-location-3"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-3");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    3
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  3);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+<p>Because there are 45 different counties present in this dataset, it’s probably pretty difficult to make any meaning out of the plot. There are a lot of different formatting options we can use in <code>ggplot2</code> to fix this issue. For now, we’ll just opt for the quick fix of flipping the axes in the plot. Create a barplot using the <code>ggplot()</code> functions so that county is a <code>y</code> aesthetic instead of <code>x</code>.</p>
+<div class="cell">
+<div id="qwebr-insertion-location-4"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-4");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    4
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  4);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+</section>
+</section>
+<section id="histograms" class="level2">
+<h2 class="anchored" data-anchor-id="histograms">Histograms</h2>
+<p>A histogram is useful for visualizing the distribution of a numerical variable. Each recorded value is placed in a <strong>bin</strong> and the bins are displayed as bars where the height of each bar corresponds to the number of observations within the bin.</p>
+<p>The base R function <code>hist()</code> takes a single numerical variable as its only required argument. The code below creates a histogram of the <code>expenditure</code> variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(CASchools<span class="sc">$</span>expenditure)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Again, we can create a similar, yet slightly more presentable version of the plot using the <code>ggplot()</code> function and the <code>geom_histogram()</code> layer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> CASchools, <span class="fu">aes</span>(<span class="at">x =</span> expenditure)) <span class="sc">+</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s start to take advantage of the some of the nicer plotting features that the <code>ggplot2</code> package offers. We can specify some formatting options, such as outline color, fill color, and number of bins, specific to the <code>geom_histogram()</code> layer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> CASchools, <span class="fu">aes</span>(<span class="at">x =</span> expenditure)) <span class="sc">+</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"orange"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="task-3" class="level3">
+<h3 class="anchored" data-anchor-id="task-3">Task 3</h3>
+<p>Take a look at the help documentation and descriptions of the variables available in this dataset. Select a different numerical variable from the CASchools dataset and create a histogram of the data using the base R function</p>
+<div class="cell">
+<div id="qwebr-insertion-location-5"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-5");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    5
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  5);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+<p>and the <code>ggplot2</code> package. Customize your histogram by adjusting the number of bins and the outline and fill colors.</p>
+<div class="cell">
+<div id="qwebr-insertion-location-6"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-6");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    6
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  6);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+</section>
+</section>
+<section id="density-plots" class="level2">
+<h2 class="anchored" data-anchor-id="density-plots">Density Plots</h2>
+<p>A density plot is an alternative visualization to a histogram and can be particularly useful when the numerical variable we’re interested in is continuous. It is a smooth version of the histogram that uses something called the <em>kernel density estimate</em> to create the curve. We won’t get into get into how the kernel density estimate is determined in this class, but if you’d like to <a href="https://towardsdatascience.com/kernel-density-estimation-explained-step-by-step-7cc5b5bc4517">read more</a>, you’re welcome to.</p>
+<p>We can use the <code>density()</code> function nested within the <code>plot()</code> function to create a density plot of the <code>expenditure</code> variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(CASchools<span class="sc">$</span>expenditure))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Better yet, we can use the <code>ggplot()</code> and the <code>geom_density()</code> layer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> CASchools, <span class="fu">aes</span>(<span class="at">x =</span> expenditure)) <span class="sc">+</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="task-4" class="level3">
+<h3 class="anchored" data-anchor-id="task-4">Task 4</h3>
+<p>Select a different numerical variable from the CASchools dataset and create a density plot using the base R function</p>
+<div class="cell">
+<div id="qwebr-insertion-location-7"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-7");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    7
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  7);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+<p>and the <code>ggplot2</code> package.</p>
+<div class="cell">
+<div id="qwebr-insertion-location-8"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-8");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    8
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  8);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+</section>
+</section>
+<section id="boxplots" class="level2">
+<h2 class="anchored" data-anchor-id="boxplots">Boxplots</h2>
+<p>The last type of basic plot we’ll look at in this lab is a boxplot. Boxplots, also used to displayed numerical data, can be useful for displaying a number of summary statistics. Read more about boxplots <a href="https://r4ds.hadley.nz/data-visualize?#visualizing-relationships">here</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(CASchools<span class="sc">$</span>expenditure)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> CASchools, <span class="fu">aes</span>(<span class="at">y =</span> expenditure)) <span class="sc">+</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Boxplots can be especially useful when we want to compare the distributions of some numerical variable for multiple categorical variables.</p>
+<p>The chunks of code below create side-by-side boxplots of the <code>expenditure</code> variable for each <code>grade</code> category, using the base R and <code>ggplot2</code> functions, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(CASchools<span class="sc">$</span>grades, CASchools<span class="sc">$</span>expenditure)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> CASchools, <span class="fu">aes</span>(<span class="at">x =</span> grades, <span class="at">y =</span> expenditure)) <span class="sc">+</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Earlier, we saw how to add customization arguments (e.g.&nbsp;<code>fill</code> and <code>color</code>) to change features of the entire plot. We may also want to customize our plot based on variables within our visualization. This is where aesthetic mappings comes into play. Let’s <strong>map</strong> the <code>grades</code> variable to color. To do this, we must specify <code>color = grades</code> within the aesthetic function inside the <code>geom_boxplot</code> layer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> CASchools, <span class="fu">aes</span>(<span class="at">x =</span> grades, <span class="at">y =</span> expenditure)) <span class="sc">+</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">color =</span> grades))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Compare how mapping <code>grades</code> to the color argument within the <code>aes()</code> function creates a different plot than specifying a specific color outside the <code>aes()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> CASchools, <span class="fu">aes</span>(<span class="at">x =</span> grades, <span class="at">y =</span> expenditure)) <span class="sc">+</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="task-5" class="level3">
+<h3 class="anchored" data-anchor-id="task-5">Task 5</h3>
+<p>Select a different numerical variable from the CASchools dataset and create side-by-side boxplots of the data grouped by the <code>grades</code> variable using the base R function</p>
+<div class="cell">
+<div id="qwebr-insertion-location-9"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-9");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    9
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  9);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+<p>and the <code>ggplot2</code> package.</p>
+<div class="cell">
+<div id="qwebr-insertion-location-10"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-10");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    10
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code goes here...`, 
+  10);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+</section>
+</section>
+<section id="wrap-up" class="level2">
+<h2 class="anchored" data-anchor-id="wrap-up">Wrap Up</h2>
+<p>We’ve now seen how to create a number of plot types using both base R functions and the <code>ggplot2</code> package. You may have noticed that there is quite a bit of inconsistency in the syntax used to create the base R plots. Base R plots are useful if you just want to look at your data quickly and you already have the code committed to memory. The <code>ggplot2</code> functions, on the other hand, all follow the same consistent structure. The layering technique we saw in each of the ggplot examples will allow us to easily customize and fine tune the visualizations we create throughout this course. All of the plots that you submit in this course will need to be created using the <code>ggplot2</code> package, unless specified otherwise, so if you’re looking to commit one of these plotting techniques to memory, focus on the family of <code>ggplot()</code> functions.</p>
+</section>
 </section>
 
 </main>
