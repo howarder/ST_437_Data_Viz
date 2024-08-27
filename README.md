@@ -44,7 +44,7 @@ For future presentations, use the following template to access the slides:
 Below are the links to active HTML documents for each module:
 
 - [Module-1 Intro to Data Viz](https://howarder.github.io/ST_437_Data_Viz/Module-1/Intro_to_Data_Viz) - *pending*
-- [Module-1 Lab](https://howarder.github.io/ST_437_Data_Viz/Module-1/Lab) - *pending*
+- [Module-1 Lab](https://howarder.github.io/ST_437_Data_Viz/Module-1/Lab)
 - [Module-2 Data Wrangling](https://howarder.github.io/ST_437_Data_Viz/Module-2/Data_Wrangling)
 - [Module-2 Lab](https://howarder.github.io/ST_437_Data_Viz/Module-2/Lab)
 - [Module-6 Advanced Visualization Lab-1](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-1) - **Shiny Lab**
