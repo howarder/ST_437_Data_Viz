@@ -14,8 +14,6 @@ format:
 execute: 
   echo: true
   warning: false
-revealjs-plugins:
-  - codewindow
 webr:
   packages: ['lubridate', 'ggplot2', 'readr', 'dplyr', 'lubridate', 'tidyr', 'AER'] # Install R packages on document open
   show-startup-message: false    # Disable displaying status of webR initialization

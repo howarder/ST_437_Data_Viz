@@ -1,25 +1,31 @@
 ---
 title: "Introduction to Data Visualization"
-format: 
-  revealjs:
+
+# date: today
+# date-format: long
+format:
+  OSUstyle-revealjs:
+    logo: "images/OSULogo.png"
+    auto-stretch: false
     scrollable: true
     incremental: true
-editor: visual
-webr:
-  show-startup-message: false
-  packages: ['ggplot2', 'dplyr'] # Install R packages on document open
 execute: 
   echo: true
   warning: false
-filters: 
+webr:
+  packages: ['ggplot2', 'dplyr'] # Install R packages on document open
+  show-startup-message: false    # Disable displaying status of webR initialization
+filters:
   - webr
 ---
+
+## Learning Objectives
 
 ```{r echo=FALSE}
 library(countdown)
 ```
 
-## Share a Data Visualization {.smaller}
+## Share a Data Visualization
 
 -   Form groups of 2-3
 -   Start by introducing yourself to your group (name, major, why you're taking this class, etc.)
