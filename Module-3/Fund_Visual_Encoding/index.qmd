@@ -1,0 +1,39 @@
+---
+title: "Fundamentals of Visual Encoding"
+
+# date: today
+# date-format: long
+format:
+  OSUstyle-revealjs:
+    logo: "images/OSULogo.png"
+    auto-stretch: false
+    scrollable: true
+    incremental: true
+execute: 
+  echo: true
+  warning: false
+webr:
+  packages: ['ggplot2', 'dplyr', 'bakeoff'] # Install R packages on document open
+  show-startup-message: false    # Disable displaying status of webR initialization
+filters:
+  - webr
+---
+
+## Learning Objectives
+
+## What is Visual Encoding?
+
+## Poor Visual
+
+```{r}
+library(stevedata)
+library(dplyr)
+states <- c("Oregon", "Alaska", "California", "Washington", "Idaho", "Nevada")
+turnout_nw <- filter(election_turnout, state %in% states)
+turnout_nw <- turnout_nw |>
+  mutate(per_no_hs = 100 - perhsed, 
+         per_hs = perhsed - percoled)
+turnout_nw <- turnout_nw |> 
+  dplyr::select(state, per_no_hs, per_hs, percoled)
+```
+

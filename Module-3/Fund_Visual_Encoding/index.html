@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="test_files/libs/clipboard/clipboard.min.js"></script>
-<script src="test_files/libs/quarto-html/tabby.min.js"></script>
-<script src="test_files/libs/quarto-html/popper.min.js"></script>
-<script src="test_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="test_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="test_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="test_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="test_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/tabby.min.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.56">
 
-  <title>Introduction to Data Visualization</title>
+  <title>Fundamentals of Visual Encoding</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="test_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="test_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -28,12 +28,77 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="test_files/libs/revealjs/dist/theme/quarto.css">
-  <link href="test_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="test_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="test_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="test_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="index_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -320,739 +385,13 @@
       margin-right: 0; 
     }
   </style>
-  <link href="test_files/libs/countdown-0.4.0/countdown.css" rel="stylesheet">
-  <script src="test_files/libs/countdown-0.4.0/countdown.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs/editor/editor.main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    
-  <style type="text/css">.monaco-editor pre {
-    background-color: unset !important;
-  }
-
-  .qwebr-icon-status-spinner {
-    color: #7894c4;
-  }
-
-  .qwebr-icon-run-code {
-    color: #0d9c29
-  }
-
-  .qwebr-output-code-stdout {
-    color: #111;
-  }
-
-  .qwebr-output-code-stderr {
-    color: #db4133;
-  }
-
-  .qwebr-editor {
-    font-size: 16px !important;
-    overflow: auto;
-    box-shadow: 0 6px 4px rgba(0, 0, 0, 0.1);
-  }
-
-
-
-  .qwebr-button-run {
-    font-size: 16px;  /* Updated font size */
-    background-color: #EEEEEE;
-    text-align: center;
-    margin-bottom: 5px;
-    cursor: pointer;
-    outline: none;
-    color: #000;  /* White text color */
-    border: none;
-    border-radius: 0.5rem;  /* Updated border-radius */
-    display: inline-block;
-    line-height: 1.5;
-    font-weight: 600;
-    transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, transform 0.15s ease-in-out;
-  }
-
-  .qwebr-button-run:active {
-    background-color: #D73F09 !important;  /* Your orange color */;
-    transform: translateY(4px);  /* Button moves down when clicked */
-  }
-
-  .qwebr-button-run:disabled,
-  .qwebr-button-run.disabled,
-  fieldset:disabled .qwebr-button-run {
-    pointer-events: none;
-    opacity: .65;
-  }
-
-
-
-  /* Custom styling for RevealJS Presentations*/
-
-  /* Reset the style of the interactive area */
-  .reveal div.qwebr-interactive-area {
-    display: block;
-    box-shadow: none;
-    max-width: 100%;
-    max-height: 100%;
-    margin: 0;
-    padding: 0;
-    font-size: 16px !important;
-  } 
-
-  /* Provide space to entries */
-  .reveal div.qwebr-output-code-area pre div {
-    margin: 1px 2px 1px 10px;
-  }
-
-  /* Collapse the inside code tags to avoid extra space between line outputs */
-  .reveal pre div code.qwebr-output-code-stdout, .reveal pre div code.qwebr-output-code-stderr {
-    padding: 0;
-    display: contents;
-  }
-
-  .reveal pre div code.qwebr-output-code-stdout {
-    color: #111;
-    font-size: 16px !important;
-  }
-
-  .reveal pre div code.qwebr-output-code-stderr {
-    color: #db4133;
-    font-size: 16px !important;
-  }
-
-
-  /* Create a border around console and output (does not effect graphs) */
-  .reveal div.qwebr-console-area {
-    border: 1px solid #EEEEEE;
-    box-shadow: 2px 2px 10px #EEEEEE;
-    font-size: 16px !important;
-  }
-
-  /* Cap output height and allow text to scroll */
-  /* TODO: Is there a better way to fit contents/max it parallel to the monaco editor size? */
-  .reveal div.qwebr-output-code-area pre {
-    max-height: 400px;
-    overflow: scroll;
-    font-size: 16px !important;
-  }
-  </style>
-  <script type="module">// Start a timer
-  const initializeWebRTimerStart = performance.now();
-
-  // Determine if we need to install R packages
-  var installRPackagesList = ['ggplot2', 'dplyr'];
-  // Check to see if we have an empty array, if we do set to skip the installation.
-  var setupRPackages = !(installRPackagesList.indexOf("") !== -1);
-  var autoloadRPackages = true;
-
-  // Display a startup message?
-  var showStartupMessage = false;
-  var showHeaderMessage = false;
-  if (showStartupMessage) {
-
-    // Get references to header elements
-    const headerHTML = document.getElementById("title-block-header");
-    const headerRevealJS = document.getElementById("title-slide");
-
-    // Create the outermost div element for metadata
-    const quartoTitleMeta = document.createElement("div");
-    quartoTitleMeta.classList.add("quarto-title-meta");
-
-    // Create the first inner div element
-    const firstInnerDiv = document.createElement("div");
-    firstInnerDiv.setAttribute("id", "qwebr-status-message-area");
-
-    // Create the second inner div element for "WebR Status" heading and contents
-    const secondInnerDiv = document.createElement("div");
-    secondInnerDiv.setAttribute("id", "qwebr-status-message-title");
-    secondInnerDiv.classList.add("quarto-title-meta-heading");
-    secondInnerDiv.innerText = "WebR Status";
-
-    // Create another inner div for contents
-    const secondInnerDivContents = document.createElement("div");
-    secondInnerDivContents.setAttribute("id", "qwebr-status-message-body");
-    secondInnerDivContents.classList.add("quarto-title-meta-contents");
-
-    // Describe the WebR state
-    var startupMessageWebR = document.createElement("p");
-    startupMessageWebR.innerText = "🟡 Loading...";
-    startupMessageWebR.setAttribute("id", "qwebr-status-message-text");
-    // Add `aria-live` to auto-announce the startup status to screen readers
-    startupMessageWebR.setAttribute("aria-live", "assertive");
-
-    // Append the startup message to the contents
-    secondInnerDivContents.appendChild(startupMessageWebR);
-
-    // Add a status indicator for COOP and COEP Headers if needed
-    if (showHeaderMessage) {
-      const crossOriginMessage = document.createElement("p");
-      crossOriginMessage.innerText = `${crossOriginIsolated ? '🟢' : '🟡'} COOP & COEP Headers`;
-      crossOriginMessage.setAttribute("id", "qwebr-coop-coep-header");
-      secondInnerDivContents.appendChild(crossOriginMessage);
-    }
-
-    // Combine the inner divs and contents
-    firstInnerDiv.appendChild(secondInnerDiv);
-    firstInnerDiv.appendChild(secondInnerDivContents);
-    quartoTitleMeta.appendChild(firstInnerDiv);
-
-    // Determine where to insert the quartoTitleMeta element
-    if (headerHTML) {
-      // Append to the existing "title-block-header" element
-      headerHTML.appendChild(quartoTitleMeta);
-    } else if (headerRevealJS) {
-      // If using RevealJS, add to the "title-slide" div
-      headerRevealJS.appendChild(firstInnerDiv);
-    } else {
-      // If neither headerHTML nor headerRevealJS is found, insert after "webr-monaco-editor-init" script
-      const monacoScript = document.getElementById("qwebr-monaco-editor-init");
-      const header = document.createElement("header");
-      header.setAttribute("id", "title-block-header");
-      header.appendChild(quartoTitleMeta);
-      monacoScript.after(header);
-    }
-  }
-
-  // Retrieve the webr.mjs
-  import { WebR, ChannelType } from "https://webr.r-wasm.org/v0.2.2/webr.mjs";
-
-  // Populate WebR options with defaults or new values based on 
-  // webr meta
-  globalThis.webR = new WebR({
-    "baseURL": "https://webr.r-wasm.org/v0.2.2/",
-    "serviceWorkerUrl": "",
-    "homedir": "/home/web_user", 
-    "channelType": ChannelType.Automatic
-  });
-
-  // Initialization WebR
-  await webR.init();
-
-  // Setup a shelter
-  globalThis.webRCodeShelter = await new webR.Shelter();
-
-  // Setup a pager to allow processing help documentation 
-  await webR.evalRVoid('webr::pager_install()'); 
-
-  // Function to set the button text
-  function qwebrSetInteractiveButtonState(buttonText, enableCodeButton = true) {
-    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
-      btn.innerHTML = buttonText;
-      btn.disabled = !enableCodeButton;
-    });
-  }
-
-  // Function to update the status message
-  function qwebrUpdateStatusHeader(message) {
-    startupMessageWebR.innerHTML = `
-      <i class="qwebr-icon-status-spinner"></i>
-      <span>${message}</span>`;
-  }
-
-  // Function to install a single package
-  async function qwebrInstallRPackage(packageName) {
-    await globalThis.webR.installPackages([packageName]);
-  }
-
-  // Function to load a single package
-  async function qwebrLoadRPackage(packageName) {
-    await globalThis.webR.evalRVoid(`library(${packageName});`);
-  }
-
-  // Generic function to process R packages
-  async function qwebrProcessRPackagesWithStatus(packages, processType, displayStatusMessageUpdate = true) {
-    // Switch between contexts
-    const messagePrefix = processType === 'install' ? 'Installing' : 'Loading';
-
-    // Modify button state
-    qwebrSetInteractiveButtonState(`🟡 ${messagePrefix} package ...`, false);
-
-    // Iterate over packages
-    for (let i = 0; i < packages.length; i++) {
-      const activePackage = packages[i];
-      const formattedMessage = `${messagePrefix} package ${i + 1} out of ${packages.length}: ${activePackage}`;
-      
-      // Display the update
-      if (displayStatusMessageUpdate) {
-        qwebrUpdateStatusHeader(formattedMessage);
-      }
-
-      // Run package installation
-      if (processType === 'install') {
-        await qwebrInstallRPackage(activePackage);
-      } else {
-        await qwebrLoadRPackage(activePackage);
-      }
-    }
-
-    // Clean slate
-    if (processType === 'load') {
-      await globalThis.webR.flush();
-    }
-  }
-
-
-  // Check to see if any packages need to be installed
-  if (setupRPackages) {
-    // Obtain only a unique list of packages
-    const uniqueRPackageList = Array.from(new Set(installRPackagesList));
-
-    // Install R packages one at a time (either silently or with a status update)
-    await qwebrProcessRPackagesWithStatus(uniqueRPackageList, 'install', showStartupMessage);
-
-    if(autoloadRPackages) {
-      // Load R packages one at a time (either silently or with a status update)
-      await qwebrProcessRPackagesWithStatus(uniqueRPackageList, 'load', showStartupMessage);
-    }
-  }
-
-  // Stop timer
-  const initializeWebRTimerEnd = performance.now();
-
-  // Release document status as ready
-  if (showStartupMessage) {
-    startupMessageWebR.innerText = "🟢 Ready!"
-  }
-
-  qwebrSetInteractiveButtonState(
-    `<i class="qwebr-icon-run-code"></i> <span>Run Code</span>`, 
-    true
-  );
-
-  // Global version of the Escape HTML function that converts HTML 
-  // characters to their HTML entities.
-  globalThis.qwebrEscapeHTMLCharacters = function(unsafe) {
-    return unsafe
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  };</script>
-  <script type="module">// Supported Evaluation Types for Context
-  globalThis.EvalTypes = Object.freeze({
-      Interactive: 'interactive',
-      Setup: 'setup',
-      Output: 'output',
-  });
-
-  // Function to verify a given JavaScript Object is empty
-  globalThis.qwebrIsObjectEmpty = function (arr) {
-      return Object.keys(arr).length === 0;
-  }
-
-  // Function to parse the pager results
-  globalThis.qwebrParseTypePager = async function (msg) { 
-
-      // Split out the event data
-      const { path, title, deleteFile } = msg.data; 
-
-      // Process the pager data by reading the information from disk
-      const paged_data = await webR.FS.readFile(path).then((data) => {
-          // Obtain the file content
-          let content = new TextDecoder().decode(data);
-
-          // Remove excessive backspace characters until none remain
-          while(content.match(/.[\b]/)){
-          content = content.replace(/.[\b]/g, '');
-          }
-
-          // Returned cleaned data
-          return content;
-      });
-
-      // Unlink file if needed
-      if (deleteFile) { 
-          await webR.FS.unlink(path); 
-      } 
-
-      // Return extracted data with spaces
-      return paged_data;
-  } 
-
-  // Function to run the code using webR and parse the output
-  globalThis.qwebrComputeEngine = async function(
-      codeToRun, 
-      elements, 
-      options) {
-
-      // Call into the R compute engine that persists within the document scope.
-      // To be prepared for all scenarios, the following happens: 
-      // 1. We setup a canvas device to write to by making a namespace call into the {webr} package
-      // 2. We use values inside of the options array to set the figure size.
-      // 3. We capture the output stream information (STDOUT and STERR)
-      // 4. While parsing the results, we disable image creation.
-
-      // Create a canvas variable for graphics
-      let canvas = undefined;
-
-      // Create a pager variable for help/file contents
-      let pager = [];
-
-      // ---- 
-
-      // Initialize webR
-      await webR.init();
-
-      // Setup a webR canvas by making a namespace call into the {webr} package
-      await webR.evalRVoid(`webr::canvas(width=${options["fig-width"]}, height=${options["fig-height"]})`);
-
-      const result = await webRCodeShelter.captureR(codeToRun, {
-          withAutoprint: true,
-          captureStreams: true,
-          captureConditions: false//,
-          // env: webR.objs.emptyEnv, // maintain a global environment for webR v0.2.0
-      });
-
-      // -----
-
-      // Start attempting to parse the result data
-      try {
-
-          // Stop creating images
-          await webR.evalRVoid("dev.off()");
-
-          // Merge output streams of STDOUT and STDErr (messages and errors are combined.)
-          const out = result.output
-          .filter(evt => evt.type === "stdout" || evt.type === "stderr")
-          .map((evt, index) => {
-              const className = `qwebr-output-code-${evt.type}`;
-              return `<code id="${className}-editor-${elements.id}-result-${index + 1}" class="${className}">${qwebrEscapeHTMLCharacters(evt.data)}</code>`;
-          })
-          .join("\n");
-
-
-          // Clean the state
-          // We're now able to process both graphics and pager events.
-          // As a result, we cannot maintain a true 1-to-1 output order 
-          // without individually feeding each line
-          const msgs = await webR.flush();
-
-          // Output each image event stored
-          msgs.forEach((msg) => {
-          // Determine if old canvas can be used or a new canvas is required.
-          if (msg.type === 'canvas'){
-              // Add image to the current canvas
-              if (msg.data.event === 'canvasImage') {
-                  canvas.getContext('2d').drawImage(msg.data.image, 0, 0);
-              } else if (msg.data.event === 'canvasNewPage') {
-                  // Generate a new canvas element
-                  canvas = document.createElement("canvas");
-                  canvas.setAttribute("width", 2 * options["fig-width"]);
-                  canvas.setAttribute("height", 2 * options["fig-height"]);
-                  canvas.style.width = "700px";
-                  canvas.style.display = "block";
-                  canvas.style.margin = "auto";
-              }
-          } 
-          });
-
-          // Use `map` to process the filtered "pager" events asynchronously
-          const pager = await Promise.all(
-              msgs.filter(msg => msg.type === 'pager').map(
-                  async (msg) => {
-                      return await qwebrParseTypePager(msg);
-                  }
-              )
-          );
-
-          // Nullify the output area of content
-          elements.outputCodeDiv.innerHTML = "";
-          elements.outputGraphDiv.innerHTML = "";
-
-          // Design an output object for messages
-          const pre = document.createElement("pre");
-          if (/\S/.test(out)) {
-              // Display results as HTML elements to retain output styling
-              const div = document.createElement("div");
-              div.innerHTML = out;
-              pre.appendChild(div);
-          } else {
-              // If nothing is present, hide the element.
-              pre.style.visibility = "hidden";
-          }
-
-          elements.outputCodeDiv.appendChild(pre);
-
-          // Place the graphics on the canvas
-          if (canvas) {
-              elements.outputGraphDiv.appendChild(canvas);
-          }
-
-          // Display the pager data
-          if (pager) {
-          // Use the `pre` element to preserve whitespace.
-          pager.forEach((paged_data, index) => {
-              let pre_pager = document.createElement("pre");
-              pre_pager.innerText = paged_data;
-              pre_pager.classList.add("qwebr-output-code-pager");
-              pre_pager.setAttribute("id", `qwebr-output-code-pager-editor-${elements.id}-result-${index + 1}`);
-              elements.outputCodeDiv.appendChild(pre_pager);
-          });
-          }
-      } finally {
-          // Clean up the remaining code
-          webRCodeShelter.purge();
-      }
-  }
-
-  // Function to execute the code (accepts code as an argument)
-  globalThis.qwebrExecuteCode = async function (
-      codeToRun,
-      id,
-      evalType = EvalTypes.Interactive,
-      options = {}) {
-
-      // If options are not passed, we fall back on the bare minimum to handle the computation
-      if (qwebrIsObjectEmpty(options)) {
-          options = { "fig-width": 504, "fig-height": 360 };
-      }
-
-      // Next, we access the compute areas values
-      const elements = {
-          runButton: document.getElementById(`qwebr-button-run-${id}`),
-          outputCodeDiv: document.getElementById(`qwebr-output-code-area-${id}`),
-          outputGraphDiv: document.getElementById(`qwebr-output-graph-area-${id}`),
-          id: id,
-      }
-
-      // Disallowing execution of other code cells
-      document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
-          btn.disabled = true;
-      });
-
-      if (evalType == EvalTypes.Interactive) {
-          // Emphasize the active code cell
-          elements.runButton.innerHTML = '<i class="qwebr-icon-status-spinner"></i> <span>Run Code</span>';
-      }
-
-      // Evaluate the code and parse the output into the document
-      await qwebrComputeEngine(codeToRun, elements, options);
-
-      // Switch to allowing execution of code
-      document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
-          btn.disabled = false;
-      });
-
-      if (evalType == EvalTypes.Interactive) {
-          // Revert to the initial code cell state
-          elements.runButton.innerHTML = '<i class="qwebr-icon-run-code"></i> <span>Run Code</span>';
-      }
-  }
-  </script>
-  <script type="module">// Function that dispatches the creation request
-  globalThis.qwebrCreateHTMLElement = function (insertElement,
-    qwebrCounter, 
-    evalType = EvalTypes.Interactive,
-    options = {}) {
-
-    // Figure out the routine to use to insert the element.
-    let qwebrElement;
-    switch ( evalType ) {
-      case EvalTypes.Interactive: 
-        qwebrElement = qwebrCreateInteractiveElement(qwebrCounter);
-      case EvalTypes.Output: 
-        qwebrElement = qwebrCreateNonInteractiveOutputElement(qwebrCounter);
-      case EvalTypes.Setup: 
-        qwebrElement = qwebrCreateNonInteractiveSetupElement(qwebrCounter);
-      default: 
-        qwebrElement = document.createElement('div');
-        qwebrElement.textContent = 'Error creating element';
-    }
-
-    // Insert the dynamically generated object at the document location.
-    insertElement.appendChild(qwebrElement);
-  };
-
-  // Function that setups the interactive element creation
-  globalThis.qwebrCreateInteractiveElement = function (qwebrCounter) {
-
-    // Create main div element
-    var mainDiv = document.createElement('div');
-    mainDiv.id = 'qwebr-interactive-area-' + qwebrCounter;
-    mainDiv.className = 'qwebr-interactive-area';
-
-    // Create button element
-    var button = document.createElement('button');
-    button.className = 'btn btn-default qwebr-button-run';
-    button.disabled = true;
-    button.type = 'button';
-    button.id = 'qwebr-button-run-' + qwebrCounter;
-    button.textContent = '🟡 Loading webR...';
-
-    // Create console area div
-    var consoleAreaDiv = document.createElement('div');
-    consoleAreaDiv.id = 'qwebr-console-area-' + qwebrCounter;
-    consoleAreaDiv.className = 'qwebr-console-area';
-
-    // Create editor div
-    var editorDiv = document.createElement('div');
-    editorDiv.id = 'qwebr-editor-' + qwebrCounter;
-    editorDiv.className = 'qwebr-editor';
-
-    // Create output code area div
-    var outputCodeAreaDiv = document.createElement('div');
-    outputCodeAreaDiv.id = 'qwebr-output-code-area-' + qwebrCounter;
-    outputCodeAreaDiv.className = 'qwebr-output-code-area';
-    outputCodeAreaDiv.setAttribute('aria-live', 'assertive');
-
-    // Create pre element inside output code area
-    var preElement = document.createElement('pre');
-    preElement.style.visibility = 'hidden';
-    outputCodeAreaDiv.appendChild(preElement);
-
-    // Create output graph area div
-    var outputGraphAreaDiv = document.createElement('div');
-    outputGraphAreaDiv.id = 'qwebr-output-graph-area-' + qwebrCounter;
-    outputGraphAreaDiv.className = 'qwebr-output-graph-area';
-
-    // Append all elements to the main div
-    mainDiv.appendChild(button);
-    consoleAreaDiv.appendChild(editorDiv);
-    consoleAreaDiv.appendChild(outputCodeAreaDiv);
-    mainDiv.appendChild(consoleAreaDiv);
-    mainDiv.appendChild(outputGraphAreaDiv);
-
-    return mainDiv;
-  }
-
-  // Function that adds output structure for non-interactive output
-  globalThis.qwebrCreateNonInteractiveOutputElement = function(qwebrCounter) {
-    // Create main div element
-    var mainDiv = document.createElement('div');
-    mainDiv.id = 'qwebr-noninteractive-area-' + qwebrCounter;
-    mainDiv.className = 'qwebr-noninteractive-area';
-
-    // Create output code area div
-    var outputCodeAreaDiv = document.createElement('div');
-    outputCodeAreaDiv.id = 'qwebr-output-code-area-' + qwebrCounter;
-    outputCodeAreaDiv.className = 'qwebr-output-code-area';
-    outputCodeAreaDiv.setAttribute('aria-live', 'assertive');
-
-    // Create pre element inside output code area
-    var preElement = document.createElement('pre');
-    preElement.style.visibility = 'hidden';
-    outputCodeAreaDiv.appendChild(preElement);
-
-    // Create output graph area div
-    var outputGraphAreaDiv = document.createElement('div');
-    outputGraphAreaDiv.id = 'qwebr-output-graph-area-' + qwebrCounter;
-    outputGraphAreaDiv.className = 'qwebr-output-graph-area';
-
-    // Append all elements to the main div
-    mainDiv.appendChild(outputCodeAreaDiv);
-    mainDiv.appendChild(outputGraphAreaDiv);
-
-    return mainDiv;
-  };
-
-  // Function that adds a stub in the page to indicate a setup cell was used.
-  globalThis.qwebrCreateNonInteractiveSetupElement = function(qwebrCounter) {
-    // Create main div element
-    var mainDiv = document.createElement('div');
-    mainDiv.id = 'qwebr-noninteractive-setup-area-' + qwebrCounter;
-    mainDiv.className = 'qwebr-noninteractive-setup-area';
-
-    return mainDiv;
-  }</script>
 </head>
 <body class="quarto-light">
-<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs/loader.js"></script>
-<script type="module" id="qwebr-monaco-editor-init">
-
-  // Configure the Monaco Editor's loader
-  require.config({
-    paths: {
-      'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs'
-    }
-  });
-</script>
-<script type="module">// Global dictionary to store Monaco Editor instances
-const qwebrEditorInstances = {};
-
-// Function that builds and registers a Monaco Editor instance    
-globalThis.qwebrCreateMonacoEditorInstance = function (
-    initialCode, 
-    qwebrCounter) {
-
-  // Retrieve the previously created document elements
-  let runButton = document.getElementById(`qwebr-button-run-${qwebrCounter}`);
-  let editorDiv = document.getElementById(`qwebr-editor-${qwebrCounter}`);
-  
-  // Load the Monaco Editor and create an instance
-  let editor;
-  require(['vs/editor/editor.main'], function () {
-    editor = monaco.editor.create(editorDiv, {
-      value: initialCode,
-      language: 'r',
-      theme: 'vs-light',                // Use the vs-light theme
-      automaticLayout: true,            // Works wonderfully with RevealJS
-      scrollBeyondLastLine: false,
-      minimap: {
-        enabled: false
-      },
-      fontSize: '16px',                // Bootstrap is 1 rem
-      renderLineHighlight: "none",     // Disable current line highlighting
-      hideCursorInOverviewRuler: true  // Remove cursor indicator in right-hand side scroll bar
-    });
-
-    // Other editor initialization code remains the same...
-    editor.__qwebrCounter = qwebrCounter;
-    editor.__qwebrEditorId = `qwebr-editor-${qwebrCounter}`;
-    editor.__qwebrinitialCode = initialCode;
-
-    const updateHeight = () => {
-      const contentHeight = editor.getContentHeight();
-      editorDiv.style.height = `${contentHeight}px`;
-      editor.layout();
-    };
-
-    function isEmptyCodeText(selectedCodeText) {
-      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
-    }
-
-    const addWebRKeyboardShortCutCommands = () => {
-      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
-        qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter);
-      });
-
-      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
-        if (isEmptyCodeText(selectedText)) {
-          let currentPosition = editor.getPosition();
-          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
-          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
-
-          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
-            editor.executeEdits("addNewLine", [{
-              range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
-              text: "\n", 
-              forceMoveMarkers: true,
-            }]);
-          }
-
-          qwebrExecuteCode(currentLine, editor.__qwebrCounter, EvalTypes.Interactive);
-          editor.setPosition(newPosition);
-        } else {
-          qwebrExecuteCode(selectedText, editor.__qwebrCounter, EvalTypes.Interactive);
-        }
-      });
-    }
-
-    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
-    editor.onDidContentSizeChange(updateHeight);
-    updateHeight();
-
-    qwebrEditorInstances[editor.__qwebrCounter] = editor;
-  });
-
-  runButton.onclick = function () {
-    qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter, EvalTypes.Interactive);
-  };
-}
-</script>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Introduction to Data Visualization</h1>
+  <h1 class="title">Fundamentals of Visual Encoding</h1>
 
 <div class="quarto-title-authors">
 </div>
@@ -1061,50 +400,20 @@ globalThis.qwebrCreateMonacoEditorInstance = function (
 <section id="learning-objectives" class="slide level2">
 <h2>Learning Objectives</h2>
 </section>
-<section id="share-a-data-visualization" class="slide level2">
-<h2>Share a Data Visualization</h2>
-<ul>
-<li class="fragment">Form groups of 2-3</li>
-<li class="fragment">Start by introducing yourself to your group (name, major, why you’re taking this class, etc.)</li>
-<li class="fragment">As a group, explore one member’s data visualization. Answer the following questions:
-<ul>
-<li class="fragment">q1</li>
-<li class="fragment">q2</li>
-<li class="fragment">q3</li>
-</ul></li>
-<li class="fragment">When the timer runs out switch to new group member’s visualization and answer the same questions above.</li>
-</ul>
-<div class="cell">
-<div class="cell-output-display">
-<div class="countdown" id="timer_6401c061" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
-<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
-<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
-</div>
-</div>
-</div>
+<section id="what-is-visual-encoding" class="slide level2">
+<h2>What is Visual Encoding?</h2>
 </section>
-<section id="webr" class="slide level2">
-<h2>webr</h2>
-<div id="qwebr-insertion-location-1"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-1");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    1
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `ggplot(data = mtcars, aes(x = disp, y = mpg)) + 
-  geom_point()`, 
-  1);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="poor-visual" class="slide level2">
+<h2>Poor Visual</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(stevedata)</span>
+<span id="cb1-2"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href=""></a>states <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Oregon"</span>, <span class="st">"Alaska"</span>, <span class="st">"California"</span>, <span class="st">"Washington"</span>, <span class="st">"Idaho"</span>, <span class="st">"Nevada"</span>)</span>
+<span id="cb1-4"><a href=""></a>turnout_nw <span class="ot">&lt;-</span> <span class="fu">filter</span>(election_turnout, state <span class="sc">%in%</span> states)</span>
+<span id="cb1-5"><a href=""></a>turnout_nw <span class="ot">&lt;-</span> turnout_nw <span class="sc">|&gt;</span></span>
+<span id="cb1-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">per_no_hs =</span> <span class="dv">100</span> <span class="sc">-</span> perhsed, </span>
+<span id="cb1-7"><a href=""></a>         <span class="at">per_hs =</span> perhsed <span class="sc">-</span> percoled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div class="quarto-auto-generated-content">
 <p><img src="images/OSULogo.png" class="slide-logo"></p>
 <div class="footer footer-default">
@@ -1116,19 +425,19 @@ qwebrCreateMonacoEditorInstance(
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="test_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="index_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="test_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="test_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="test_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="test_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="test_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="index_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="index_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="test_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="test_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="test_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="test_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="index_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="index_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="index_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="index_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
