@@ -13,27 +13,266 @@ execute:
   echo: true
   warning: false
 webr:
-  packages: ['ggplot2', 'dplyr', 'bakeoff'] # Install R packages on document open
+  packages: ['ggplot2', 'dplyr', 'stevedata', 'tidyr'] # Install R packages on document open
   show-startup-message: false    # Disable displaying status of webR initialization
 filters:
   - webr
 ---
 
+```{r}
+#| echo: false
+library(stevedata)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(viridis)
+library(openintro)
+library(ggmosaic)
+library(palmerpenguins)
+```
+
 ## Learning Objectives
+
+::: nonincremental
+-   Define visual encoding and decoding
+-   Identify channels for visual encoding
+-   Compare and critique the effectiveness of different channels
+-   
+:::
 
 ## What is Visual Encoding?
 
-## Poor Visual
+::: fragment
+::: columns
+::: {.column width="30%"}
+**Visual encoding** is the process of translating data into a visual element.
+:::
+
+::: {.column width="70%"}
+![](images/encoding1.png){fig-align="center" width="500"}
+:::
+:::
+:::
+
+[We can think of visual encoding as **mapping** data to visual channels or graphical aesthetics.]{.fragment}
+
+## Ways to Visually Encode Data
+
+What visual channels can we map information to?
+
+::: columns
+::: {.column width="25%"}
+::: {.fragment .nonincremental}
+-   size {{< fa magnifying-glass>}}
+
+-   shape {{< fa shapes >}}
+
+-   color {{< fa palette >}}
+
+-   grouping {{< fa diagram-project >}}
+
+-   position {{< fa chart-simple >}}
+
+-   area {{< fa square>}}
+
+-   saturation {{< fa circle-half-stroke>}}
+
+-   line pattern {{< fa bars-staggered>}}
+
+-   line weight {{< fa barcode >}}
+
+-   angles {{< fa chart-pie >}}
+
+-   connections {{< fa vector-square >}}
+:::
+:::
+
+::: {.column width="75%"}
+::: fragment
+```{r dev.args=list(bg="transparent")}
+#| echo: false
+ggplot(
+  data = penguins,
+  mapping = aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species, shape = species), size = 3) +
+  labs(
+    title = "Body mass and flipper length",
+    subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+    x = "Flipper length (mm)", y = "Body mass (g)",
+    color = "Species", shape = "Species") + 
+scale_color_viridis_d() + 
+theme(panel.background = element_rect(fill='transparent'), 
+  axis.line.x.bottom = element_line(color='black'), 
+  axis.line.y.left = element_line(color='black'), 
+  plot.background = element_rect(fill='transparent', color=NA),
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
+  legend.background = element_rect(fill='transparent'),
+  legend.box.background = element_rect(fill='transparent')) 
+
+```
+:::
+:::
+:::
+
+## Decoding Visualizations
+
+::: fragment
+::: columns
+::: {.column width="60%"}
+![](images/decoding1.png){fig-align="center" width="500"}
+:::
+
+::: {.column width="40%"}
+The viewer(s) of our visualization must understand and interpret information presented by **decoding** the visualization.
+:::
+:::
+:::
+
+## Gestalt Principles
+
+We have a tendency to search for visual relationships. In general, when studying a visualization, the viewer, whether they intend to or not, is typically searching for ways in which individual units can be placed in a larger group.
+
+::: columns
+::: {.column width="40%"}
+::: fragment
+![Source: Kieran Healy](images/gestalt.png){fig-align="center"}
+:::
+:::
+
+::: {.column width="60%"}
+::: incremental
+-   *Proximity:* units closer together are typically thought of as related
+
+-   *Similarity:* units that have a similar appearance may be understood as related
+
+-   *Connection:* units that are visually tied (e.g. with a line) may be considered related
+:::
+:::
+:::
+
+::: incremental
+-   *Continuity:* units partially hidden by others are completed as familiar shapes
+
+-   *Closure:* units that are incomplete are cognitively completed
+
+-   *Figure and Ground:* units are typically categorized as foreground or background elements
+
+-   *Common Fate:* units that share the same direction of movement may be related
+:::
+
+## Preattentive Attributes
+
+[**Preattentive attributes** are visual channels that humans typically process at a high speed by the visual system.]{.fragment}
+
+[*Which visual channels do you think would be considered preattentive attributes?*]{.fragment}
+
+## Color vs. Shape Channels
+
+Identify the blue circle in each panel.
+
+![Source: Kieran Healy](images/preatt.png){fig-align="center"}
+
+## Comparing Attributes
+
+For individual applications, compare the size of the rent and own categories.
+
+::: columns
+::: column
+```{r}
+#| echo: false
+
+## Position
+ggplot(data = loans_full_schema, aes(x = homeownership)) + 
+  geom_bar(aes(fill = application_type)) + 
+  scale_fill_viridis(discrete=TRUE, 
+                     name = "Application Type") + 
+  labs(x = "Homeownership")
+  
+ggplot(loans_full_schema, aes(x=homeownership)) + 
+  geom_bar(aes(fill = homeownership)) + 
+  facet_wrap(~ application_type) + 
+  scale_fill_viridis(discrete=TRUE, guide="none") 
+  
+ggplot(loans_full_schema, aes(x=application_type)) + 
+  geom_bar(aes(fill = application_type)) + 
+  facet_wrap(~ homeownership) + 
+  scale_fill_viridis(discrete=TRUE, guide="none") 
+
+
+
+```
+:::
+
+::: column
+```{r}
+#| echo: false
+loans_full_schema |> 
+  group_by(homeownership, application_type) |>
+  summarise(count = n()) |>
+  group_by(application_type) |>
+  mutate(per = (count/sum(count))*100) |>
+  ggplot() +
+  geom_bar(aes(x = "", y = per, fill = homeownership), 
+    stat = "identity", width = 1) +
+  facet_wrap(~ application_type) +
+  coord_polar(theta = "y") + 
+  scale_fill_viridis(discrete=TRUE) 
+  
+ggplot(data = droplevels(loans_full_schema)) +
+  geom_mosaic(aes(x = product(application_type), fill = homeownership)) +
+  scale_fill_viridis(discrete=TRUE) 
+  
+ggplot(data = droplevels(loans_full_schema)) +
+  geom_mosaic(aes(x = product(homeownership), fill = application_type)) +
+  scale_fill_viridis(discrete=TRUE) 
+
+```
+:::
+:::
+
+## Sketch a Alternative
+
+This plot violates a number of the visual encoding guidelines we've discussed. Identify the violations, then sketch an alternative to this visualization that would allow the viewer to understand the data and relationships more efficiently.
 
 ```{r}
-library(stevedata)
-library(dplyr)
-states <- c("Oregon", "Alaska", "California", "Washington", "Idaho", "Nevada")
-turnout_nw <- filter(election_turnout, state %in% states)
-turnout_nw <- turnout_nw |>
+#| echo: false
+
+turnout <- election_turnout |>
   mutate(per_no_hs = 100 - perhsed, 
-         per_hs = perhsed - percoled)
-turnout_nw <- turnout_nw |> 
-  dplyr::select(state, per_no_hs, per_hs, percoled)
+         per_hs = perhsed - percoled) |>
+  dplyr::select(state, per_no_hs, per_hs, percoled) |>
+  rename(No_HS = per_no_hs, 
+         HS_only = per_hs, 
+         College = percoled)
+
+states <- c("Oregon", "Alaska", "California", "Washington", "Idaho", "Nevada")
+
+turnout_west <- filter(turnout, state %in% states)
+
+west <- turnout_west |> 
+  pivot_longer(c(No_HS, HS_only, College), 
+               names_to = "Edu", values_to = "Percent")
+ggplot(west) +
+  geom_bar(aes(x = "", y = Percent, fill = Edu), 
+    stat = "identity", width = 1) +
+  facet_wrap(~ state) +
+  coord_polar(theta = "y") +
+  theme_minimal(18) + 
+  xlab("") + ylab("") +
+  theme(axis.text = element_blank()) + 
+  scale_fill_brewer(palette = "Blues") + 
+  labs(title = "Washington has a higher percentage of college \ngraduates than nearby states") 
+
+
+# ggplot(west) +
+#   geom_col(aes(x = Percent, y = state, fill = state)) +
+#   facet_wrap(~ Edu) +
+#   scale_fill_brewer(palette = "Set2")
 ```
 
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes=5)
+```
