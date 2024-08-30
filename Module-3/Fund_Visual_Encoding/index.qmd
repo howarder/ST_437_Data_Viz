@@ -133,6 +133,10 @@ The viewer(s) of our visualization must understand and interpret information pre
 
 We have a tendency to search for visual relationships. In general, when studying a visualization, the viewer, whether they intend to or not, is typically searching for ways in which individual units can be placed in a larger group.
 
+![Source: Kieran Healy](images/random.png){fig-align="center"}
+
+## Gestalt Principles
+
 ::: columns
 ::: {.column width="40%"}
 ::: fragment
@@ -166,6 +170,9 @@ We have a tendency to search for visual relationships. In general, when studying
 [**Preattentive attributes** are visual channels that humans typically process at a high speed by the visual system.]{.fragment}
 
 [*Which visual channels do you think would be considered preattentive attributes?*]{.fragment}
+
+
+
 
 ## Color vs. Shape Channels
 
@@ -230,6 +237,26 @@ ggplot(data = droplevels(loans_full_schema)) +
 ```
 :::
 :::
+
+## Some _Guidelines_
+
+These are not meant to be hard and fast rules that apply to every visualization you create, but are guidelines that should be kept in mind when visually encoding data. 
+
+- Humans are generally best at the judging relative position of elements that are aligned on a common scale in a visualization. 
+
+- We commonly misjudge angles (e.g. pie charts) and areas (e.g. area or mosaic plots).
+
+- Unnecessary additional dimensions (e.g. 3D bar charts) make the visualization much more difficult to decode.
+
+- Keep necessary comparisons close in proximity.
+
+- Redundant encoding (e.g. using color and shape to encode the same variable) is often beneficial.
+
+- Conjunctions (e.g. color for one variable, shape for another) are generally not preattentive.
+
+- Don't expect your audience to be able to distinguish more than 7 levels of a channel.
+
+## Using Color
 
 ## Sketch a Alternative
 
