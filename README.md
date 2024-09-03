@@ -47,6 +47,7 @@ Below are the links to active HTML documents for each module:
 - [Module-1 Lab](https://howarder.github.io/ST_437_Data_Viz/Module-1/Lab)
 - [Module-2 Data Wrangling](https://howarder.github.io/ST_437_Data_Viz/Module-2/Data_Wrangling)
 - [Module-2 Lab](https://howarder.github.io/ST_437_Data_Viz/Module-2/Lab)
+- [Module-3 Fundamentals of Visual Encoding](https://howarder.github.io/ST_437_Data_Viz/Module-3/Fund_Visual_Encoding)
 - [Module-6 Advanced Visualization Lab-1](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-1) - **Shiny Lab**
 - [Module-6 Advanced Visualization Lab-2](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-2) - **Spatial Lab**
 - [Module-6 Advanced Visualization Lab-3](https://howarder.github.io/ST_437_Data_Viz/Module-6/Lab-3) - **Dashboard Lab**
