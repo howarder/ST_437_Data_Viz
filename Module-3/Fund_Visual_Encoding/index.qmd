@@ -118,15 +118,11 @@ theme(panel.background = element_rect(fill='transparent'),
 ## Decoding Visualizations
 
 ::: fragment
-::: columns
-::: {.column width="60%"}
-![](images/decoding1.png){fig-align="center" width="500"}
-:::
 
-::: {.column width="40%"}
+![](images/decoding1.png){fig-align="center" width="500"}
+
 The viewer(s) of our visualization must understand and interpret information presented by **decoding** the visualization.
-:::
-:::
+
 :::
 
 ## Gestalt Principles
