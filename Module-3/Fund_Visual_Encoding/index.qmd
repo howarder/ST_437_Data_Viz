@@ -247,11 +247,70 @@ These are not meant to be hard and fast rules that apply to every visualization 
 
 -   Don't expect your audience to be able to distinguish more than 7 levels of a channel.
 
-## Using Color
+## Perceiving Color
+
+-   Cones in our eyes are responsible for perceiving color
+    -   Three types of cones have different levels of light sensitivity
+    -   [Red (long wavelength)]{style="color:red;"}, [Green (medium wavelength)]{style="color:green;"}, [Blue (short wavelength)]{style="color:blue;"} cones
+-   ***Trichromacy*** only need 3 numbers to accurately reflect how our eyes respond to visible light
+-   [R]{style="color:red;"}[G]{style="color:green;"}[B]{style="color:blue;"} used to define any color
+    -   R does this using hexidemical form (e.g. \#[D7]{style="color:red;"}[3F]{style="color:green;"}[09]{style="color:blue;"})
+        -   digits in each unit of the hexidemical code are either 0-9 or A-F
+            -   #000000 is black
+            -   #FFFFFF is white
+
+## Describing Color
+
+::: fragment
+Can you describe the color coded in \#[D7]{style="color:red;"}[3F]{style="color:green;"}[09]{style="color:blue;"}?
+:::
+
+::: fragment
+![](images/orange.png){fig-align="left" width="250"}
+:::
+
+::: fragment
+We can better describe color using the HCL color model
+
+-   Hue - conventionally how we think about color: "orange", "blue", "purple"
+
+-   Chroma - intensity or vividness of the color
+
+-   Luminance - brightness
+:::
+
+## HCL
+
+![](images/HCL.png){fig-align="center" width="800"}
+
+## Color Scales
+
+:::{.fragment}
+![](images/discrete.png){fig-align="" width="850"}
+:::
+:::{.fragment}
+![](images/seq.png){fig-align="left" width="850"}
+:::
+
+:::{.fragment}
+![](images/diverging.png){fig-align="left" width="850"}
+:::
+
+[**When using color, match the variable type to the appropriate type of color scale.**]{.fragment}
 
 ## Making the right decision for your plots
 
-![](images/life_exp_bar_dot.png){fig-align="center"}
+::: fragment
+### Life Expectancy
+
+Identify the similarities and differences between the two plots. Which is better? ![Source: Kieran Healy](images/life_exp_bar_dot.png){fig-align="center"}
+:::
+
+::: fragment
+### Law School Enrollments
+
+Identify the similarities and differences between the two plots. Which is better? ![Source: Kieran Healy](images/law_enrollment.png){fig-align="center"}
+:::
 
 ## Sketch a Alternative
 
