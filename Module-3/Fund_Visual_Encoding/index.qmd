@@ -118,11 +118,9 @@ theme(panel.background = element_rect(fill='transparent'),
 ## Decoding Visualizations
 
 ::: fragment
-
 ![](images/decoding1.png){fig-align="center" width="500"}
 
 The viewer(s) of our visualization must understand and interpret information presented by **decoding** the visualization.
-
 :::
 
 ## Gestalt Principles
@@ -166,9 +164,6 @@ We have a tendency to search for visual relationships. In general, when studying
 [**Preattentive attributes** are visual channels that humans typically process at a high speed by the visual system.]{.fragment}
 
 [*Which visual channels do you think would be considered preattentive attributes?*]{.fragment}
-
-
-
 
 ## Color vs. Shape Channels
 
@@ -234,25 +229,29 @@ ggplot(data = droplevels(loans_full_schema)) +
 :::
 :::
 
-## Some _Guidelines_
+## Some *Guidelines*
 
-These are not meant to be hard and fast rules that apply to every visualization you create, but are guidelines that should be kept in mind when visually encoding data. 
+These are not meant to be hard and fast rules that apply to every visualization you create, but are guidelines that should be kept in mind when visually encoding data.
 
-- Humans are generally best at the judging relative position of elements that are aligned on a common scale in a visualization. 
+-   Humans are generally best at the judging relative position of elements that are aligned on a common scale in a visualization.
 
-- We commonly misjudge angles (e.g. pie charts) and areas (e.g. area or mosaic plots).
+-   We commonly misjudge angles (e.g. pie charts) and areas (e.g. area or mosaic plots).
 
-- Unnecessary additional dimensions (e.g. 3D bar charts) make the visualization much more difficult to decode.
+-   Unnecessary additional dimensions (e.g. 3D bar charts) make the visualization much more difficult to decode.
 
-- Keep necessary comparisons close in proximity.
+-   Keep necessary comparisons close in proximity.
 
-- Redundant encoding (e.g. using color and shape to encode the same variable) is often beneficial.
+-   Redundant encoding (e.g. using color and shape to encode the same variable) is often beneficial.
 
-- Conjunctions (e.g. color for one variable, shape for another) are generally not preattentive.
+-   Conjunctions (e.g. color for one variable, shape for another) are generally not preattentive.
 
-- Don't expect your audience to be able to distinguish more than 7 levels of a channel.
+-   Don't expect your audience to be able to distinguish more than 7 levels of a channel.
 
 ## Using Color
+
+## Making the right decision for your plots
+
+![](images/life_exp_bar_dot.png){fig-align="center"}
 
 ## Sketch a Alternative
 
