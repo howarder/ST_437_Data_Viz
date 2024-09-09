@@ -9,6 +9,7 @@ format:
     auto-stretch: false
     scrollable: true
     incremental: true
+    slide-number: true
 execute: 
   echo: true
   warning: false
@@ -347,12 +348,16 @@ We can better describe color using the HCL color model
 
     -   Use tools to test if your plots are color friendly (e.g. [colororacle.org](colororacle.org))
 
-## Sketch a Alternative
+## Sketch a Alternative 
 
+::: {style="font-size: 70%;"}
 This plot violates a number of the visual encoding guidelines we've discussed. Identify the violations, then sketch an alternative to this visualization that would allow the viewer to understand the data and relationships more efficiently.
+
+:::
 
 ```{r}
 #| echo: false
+
 
 turnout <- election_turnout |>
   mutate(per_no_hs = 100 - perhsed, 
@@ -387,8 +392,9 @@ ggplot(west) +
 #   scale_fill_brewer(palette = "Set2")
 ```
 
-```{r}
-#| echo: false
-library(countdown)
-countdown(minutes=5)
-```
+
+<hr>
+
+::: {style="font-size: 80%;"}
+[Upload an image of your sketch to the *Sketch an Alternative* discussion board on Canvas before 11:59 pm tonight.]{style="color:#D73F09;"}
+:::
