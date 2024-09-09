@@ -1767,18 +1767,7 @@ qwebrCreateMonacoEditorInstance(
 <h4 class="anchored" data-anchor-id="summarizing-challenges">Summarizing Challenges</h4>
 <ol type="1">
 <li><strong>Summarize the dataset</strong> by finding the average temperature for each region.</li>
-<li><strong>Aggregate the data</strong> to find the total population and average life expectancy for each continent.</li>
-<li><strong>Group the data</strong> by country and summarize to find the maximum and minimum GDP per capita for each country.</li>
-<li><strong>Summarize by year</strong> to find the total population and average birth rate each year.</li>
-<li><strong>Create a summary</strong> that calculates the total population and average GDP per capita for countries classified as “First World.”</li>
 </ol>
-</section>
-</section>
-<section id="joining" class="level3">
-<h3 class="anchored" data-anchor-id="joining">Joining</h3>
-<p>Joining combines data from the main dataset with additional data.</p>
-<section id="example-1-4" class="level4">
-<h4 class="anchored" data-anchor-id="example-1-4">Example 1</h4>
 <div id="qwebr-insertion-location-27"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1794,14 +1783,13 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
-
-head(joinedData, 5)`, 
+  `# Your code here`, 
   27);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<section id="visualization-5" class="level5">
-<h5 class="anchored" data-anchor-id="visualization-5">Visualization</h5>
+<ol start="2" type="1">
+<li><strong>Aggregate the data</strong> to find the total population and average life expectancy for each continent.</li>
+</ol>
 <div id="qwebr-insertion-location-28"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -1817,12 +1805,132 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
+  `# Your code here`, 
+  28);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<ol start="3" type="1">
+<li><strong>Group the data</strong> by country and summarize to find the maximum and minimum GDP per capita for each country.</li>
+</ol>
+<div id="qwebr-insertion-location-29"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-29");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    29
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code here`, 
+  29);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<ol start="4" type="1">
+<li><strong>Summarize by year</strong> to find the total population and average birth rate each year.</li>
+</ol>
+<div id="qwebr-insertion-location-30"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-30");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    30
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code here`, 
+  30);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<ol start="5" type="1">
+<li><strong>Create a summary</strong> that calculates the total population and average GDP per capita for countries classified as “First World.”</li>
+</ol>
+<div id="qwebr-insertion-location-31"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-31");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    31
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `# Your code here`, 
+  31);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+</section>
+<section id="joining" class="level3">
+<h3 class="anchored" data-anchor-id="joining">Joining</h3>
+<p>When data are spread across multiple datasets, we may need to join datasets together to produce the desired summaries or visualizations.</p>
+<p>When joining datasets, we’ll consider the main or primary dataset to be the <code>x</code> dataset and the secondary dataset to be <code>y</code>.</p>
+<p>There are a few join functions we’ll use:</p>
+<ul>
+<li><code>inner_join()</code> joins <code>x</code> and <code>y</code> based on a key. Only observations in <code>x</code> that have a matching key <code>y</code> are kept.</li>
+</ul>
+<section id="example-1-4" class="level4">
+<h4 class="anchored" data-anchor-id="example-1-4">Example 1</h4>
+<div id="qwebr-insertion-location-32"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-32");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    32
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `joinedData <- left_join(countriesDs, countriesExtraDs, by = "country")
+
+head(joinedData, 5)`, 
+  32);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="visualization-5" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-5">Visualization</h5>
+<div id="qwebr-insertion-location-33"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-33");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    33
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
   `ggplot(joinedData, aes(x = continent, y = gdp_per_capita, fill = region)) +
   geom_boxplot() +
   labs(title = "GDP per Capita Distribution by Continent and Region",
        x = "Continent", y = "GDP per Capita") +
   theme_minimal()`, 
-  28);
+  33);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
@@ -1847,14 +1955,14 @@ qwebrCreateMonacoEditorInstance(
 <section id="creating-an-untidy-version" class="level4">
 <h4 class="anchored" data-anchor-id="creating-an-untidy-version">Creating an Untidy Version</h4>
 <p>To demonstrate this, let’s take our dataset and convert it into a wide format, then back to a long format.</p>
-<div id="qwebr-insertion-location-29"></div>
+<div id="qwebr-insertion-location-34"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-29");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-34");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    29
+    34
   );
 
 // Add the interactive element into the document scope
@@ -1868,18 +1976,18 @@ wideData <- countriesDs |>
 
 # Preview the wide data
 head(wideData, 5)`, 
-  29);
+  34);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Now, let’s convert this wide data back to a long format.</p>
-<div id="qwebr-insertion-location-30"></div>
+<div id="qwebr-insertion-location-35"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-30");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-35");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    30
+    35
   );
 
 // Add the interactive element into the document scope
@@ -1895,7 +2003,7 @@ longData <- wideData |>
 
 # Preview the long data
 head(longData, 5)`, 
-  30);
+  35);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>This process shows how data can be reshaped for different analytical needs. Wide format is useful for certain analyses but often needs to be converted to long format for modeling and visualization.</p>
@@ -1907,14 +2015,14 @@ head(longData, 5)`,
 <section id="creating-misspelled-header-names" class="level4">
 <h4 class="anchored" data-anchor-id="creating-misspelled-header-names">Creating Misspelled Header Names</h4>
 <p>Let’s create a dataset with intentionally misspelled column names and then fix them.</p>
-<div id="qwebr-insertion-location-31"></div>
+<div id="qwebr-insertion-location-36"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-31");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-36");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    31
+    36
   );
 
 // Add the interactive element into the document scope
@@ -1932,20 +2040,20 @@ misspelledHeaders <- countriesDs |>
 
 # Preview the dataset with misspelled headers
 head(misspelledHeaders, 5)`, 
-  31);
+  36);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="fixing-the-misspelled-column-names" class="level4">
 <h4 class="anchored" data-anchor-id="fixing-the-misspelled-column-names">Fixing the Misspelled Column Names</h4>
-<div id="qwebr-insertion-location-32"></div>
+<div id="qwebr-insertion-location-37"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-32");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-37");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    32
+    37
   );
 
 // Add the interactive element into the document scope
@@ -1963,7 +2071,7 @@ correctedHeaders <- misspelledHeaders |>
 
 # Preview the corrected dataset
 head(correctedHeaders, 5)`, 
-  32);
+  37);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>This illustrates how to identify and correct misspelled column names, which is a crucial step in data cleaning.</p>
@@ -1975,165 +2083,6 @@ head(correctedHeaders, 5)`,
 <section id="merging-two-columns-into-one" class="level4">
 <h4 class="anchored" data-anchor-id="merging-two-columns-into-one">Merging Two Columns into One</h4>
 <p>Let’s take the <code>country</code> and <code>year</code> columns and merge them into a single column.</p>
-<div id="qwebr-insertion-location-33"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-33");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    33
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `# Combine 'country' and 'year' into a single column
-mergedData <- countriesDs |>
-  unite("country_year", country, year, sep = "_")
-
-# Preview the merged dataset
-head(mergedData, 5)`, 
-  33);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-<section id="splitting-the-merged-column-back-into-two" class="level4">
-<h4 class="anchored" data-anchor-id="splitting-the-merged-column-back-into-two">Splitting the Merged Column Back into Two</h4>
-<div id="qwebr-insertion-location-34"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-34");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    34
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `# Split the 'country_year' column back into 'country' and 'year'
-splitData <- mergedData |>
-  separate(country_year, into = c("country", "year"), sep = "_")
-
-# Preview the split dataset
-head(splitData, 5)`, 
-  34);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>This demonstrates how to handle situations where data needs to be recombined or separated for different purposes.</p>
-</section>
-</section>
-<section id="handling-dates" class="level3">
-<h3 class="anchored" data-anchor-id="handling-dates">Handling Dates</h3>
-<p>In some cases, it might be necessary to convert a <code>year</code> column from a numeric format (double) into a proper date format for time series analysis or plotting purposes. Here’s how you can do that in R using the <code>lubridate</code> package.</p>
-<section id="example-1-5" class="level4">
-<h4 class="anchored" data-anchor-id="example-1-5">Example 1</h4>
-<section id="converting-year-to-a-date" class="level5">
-<h5 class="anchored" data-anchor-id="converting-year-to-a-date">Converting <code>year</code> to a Date</h5>
-<p>Let’s convert the <code>year</code> column into a date format, setting it as January 1st of that year.</p>
-<div id="qwebr-insertion-location-35"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-35");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    35
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `# Ensure the lubridate package is loaded
-# Convert the year column to a date format (January 1st of each year)
-countriesDs <- countriesDs |>
-  mutate(year_date = ymd(paste0(year, "-01-01")))
-
-# Check the first 5 rows and last column
-head(countriesDs)`, 
-  35);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-<section id="what-did-we-do-here-2" class="level5">
-<h5 class="anchored" data-anchor-id="what-did-we-do-here-2">What did we do here?</h5>
-<ul>
-<li><strong><code>paste0(year, "-01-01")</code></strong>: Combines the year with the string “-01-01” to create a date string like “2010-01-01”.</li>
-<li><strong><code>ymd()</code></strong>: Converts the resulting string into a date object in the “Year-Month-Day” format.</li>
-</ul>
-<p>This creates a new column, <code>year_date</code>, which is now in the proper date format.</p>
-</section>
-</section>
-<section id="challenges-solutions" class="level4">
-<h4 class="anchored" data-anchor-id="challenges-solutions">Challenges [Solutions]</h4>
-<ol type="1">
-<li><strong>Convert year to end of year date</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, but set it as December 31st of that year.</li>
-<li><strong>Purpose</strong>: Useful for representing data that summarizes annual results.</li>
-</ul>
-<div id="qwebr-insertion-location-36"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-36");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    36
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs |>
-  mutate(year_end_date = ymd(paste0(year, "-12-31")))
-
-head(countriesDs, 5)`, 
-  36);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-<li><strong>Create a quarterly date</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the first quarter (e.g., “2010-03-31”).</li>
-<li><strong>Purpose</strong>: Useful for quarterly analysis.</li>
-</ul>
-<div id="qwebr-insertion-location-37"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-37");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    37
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs |>
-  mutate(quarter_date = ymd(paste0(year, "-03-31")))
-
-head(countriesDs, 5)`, 
-  37);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-<li><strong>Mid-year date conversion</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, setting it as June 30th of each year.</li>
-<li><strong>Purpose</strong>: Represents mid-year data points.</li>
-</ul>
 <div id="qwebr-insertion-location-38"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -2149,18 +2098,18 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs |>
-  mutate(mid_year_date = ymd(paste0(year, "-06-30")))
+  `# Combine 'country' and 'year' into a single column
+mergedData <- countriesDs |>
+  unite("country_year", country, year, sep = "_")
 
-head(countriesDs, 5)`, 
+# Preview the merged dataset
+head(mergedData, 5)`, 
   38);
 </script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-<li><strong>Use year as a dynamic time period</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column to represent the last day of a chosen month (e.g., November).</li>
-<li><strong>Purpose</strong>: Allows for flexibility depending on the analysis context.</li>
-</ul>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="splitting-the-merged-column-back-into-two" class="level4">
+<h4 class="anchored" data-anchor-id="splitting-the-merged-column-back-into-two">Splitting the Merged Column Back into Two</h4>
 <div id="qwebr-insertion-location-39"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -2176,19 +2125,26 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `chosen_month <- "11"
-countriesDs <- countriesDs |>
-  mutate(chosen_month_date = ymd(paste0(year, "-", chosen_month, "-30")))
+  `# Split the 'country_year' column back into 'country' and 'year'
+splitData <- mergedData |>
+  separate(country_year, into = c("country", "year"), sep = "_")
 
-head(countriesDs, 5)`, 
+# Preview the split dataset
+head(splitData, 5)`, 
   39);
 </script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-<li><strong>Convert year to fiscal year start date</strong>:
-<ul>
-<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the start of the fiscal year (e.g., April 1st).</li>
-<li><strong>Purpose</strong>: Useful for financial and budgetary analyses.</li>
-</ul>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>This demonstrates how to handle situations where data needs to be recombined or separated for different purposes.</p>
+</section>
+</section>
+<section id="handling-dates" class="level3">
+<h3 class="anchored" data-anchor-id="handling-dates">Handling Dates</h3>
+<p>In some cases, it might be necessary to convert a <code>year</code> column from a numeric format (double) into a proper date format for time series analysis or plotting purposes. Here’s how you can do that in R using the <code>lubridate</code> package.</p>
+<section id="example-1-5" class="level4">
+<h4 class="anchored" data-anchor-id="example-1-5">Example 1</h4>
+<section id="converting-year-to-a-date" class="level5">
+<h5 class="anchored" data-anchor-id="converting-year-to-a-date">Converting <code>year</code> to a Date</h5>
+<p>Let’s convert the <code>year</code> column into a date format, setting it as January 1st of that year.</p>
 <div id="qwebr-insertion-location-40"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -2204,14 +2160,34 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `countriesDs <- countriesDs |>
-  mutate(fiscal_year_start = ymd(paste0(year, "-04-01")))
+  `# Ensure the lubridate package is loaded
+# Convert the year column to a date format (January 1st of each year)
+countriesDs <- countriesDs |>
+  mutate(year_date = ymd(paste0(year, "-01-01")))
 
-head(countriesDs, 5)`, 
+# Check the first 5 rows and last column
+head(countriesDs)`, 
   40);
 </script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
-</ol>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="what-did-we-do-here-2" class="level5">
+<h5 class="anchored" data-anchor-id="what-did-we-do-here-2">What did we do here?</h5>
+<ul>
+<li><strong><code>paste0(year, "-01-01")</code></strong>: Combines the year with the string “-01-01” to create a date string like “2010-01-01”.</li>
+<li><strong><code>ymd()</code></strong>: Converts the resulting string into a date object in the “Year-Month-Day” format.</li>
+</ul>
+<p>This creates a new column, <code>year_date</code>, which is now in the proper date format.</p>
+</section>
+</section>
+<section id="challenges-solutions" class="level4">
+<h4 class="anchored" data-anchor-id="challenges-solutions">Challenges [Solutions]</h4>
+<ol type="1">
+<li><p><strong>Convert year to end of year date</strong>:</p>
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, but set it as December 31st of that year.</li>
+<li><strong>Purpose</strong>: Useful for representing data that summarizes annual results.</li>
+</ul>
 <div id="qwebr-insertion-location-41"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -2227,12 +2203,144 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs |>
+  mutate(year_end_date = ymd(paste0(year, "-12-31")))
+
+head(countriesDs, 5)`, 
+  41);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><p><strong>Create a quarterly date</strong>:</p>
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the first quarter (e.g., “2010-03-31”).</li>
+<li><strong>Purpose</strong>: Useful for quarterly analysis.</li>
+</ul>
+<div id="qwebr-insertion-location-42"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-42");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    42
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs |>
+  mutate(quarter_date = ymd(paste0(year, "-03-31")))
+
+head(countriesDs, 5)`, 
+  42);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><p><strong>Mid-year date conversion</strong>:</p>
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to a date format, setting it as June 30th of each year.</li>
+<li><strong>Purpose</strong>: Represents mid-year data points.</li>
+</ul>
+<div id="qwebr-insertion-location-43"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-43");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    43
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs |>
+  mutate(mid_year_date = ymd(paste0(year, "-06-30")))
+
+head(countriesDs, 5)`, 
+  43);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><p><strong>Use year as a dynamic time period</strong>:</p>
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column to represent the last day of a chosen month (e.g., November).</li>
+<li><strong>Purpose</strong>: Allows for flexibility depending on the analysis context.</li>
+</ul>
+<div id="qwebr-insertion-location-44"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-44");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    44
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `chosen_month <- "11"
+countriesDs <- countriesDs |>
+  mutate(chosen_month_date = ymd(paste0(year, "-", chosen_month, "-30")))
+
+head(countriesDs, 5)`, 
+  44);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+<li><p><strong>Convert year to fiscal year start date</strong>:</p>
+<ul>
+<li><strong>Task</strong>: Convert the <code>year</code> column into a date representing the start of the fiscal year (e.g., April 1st).</li>
+<li><strong>Purpose</strong>: Useful for financial and budgetary analyses.</li>
+</ul>
+<div id="qwebr-insertion-location-45"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-45");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    45
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `countriesDs <- countriesDs |>
+  mutate(fiscal_year_start = ymd(paste0(year, "-04-01")))
+
+head(countriesDs, 5)`, 
+  45);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+</ol>
+<div id="qwebr-insertion-location-46"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-46");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    46
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
   `ggplot(countriesDs, aes(x = year_date, y = population, color = country)) +
   geom_line(size = 1) +
   labs(title = "Population Trends Over Time by Country",
        x = "Year", y = "Population") +
   theme_minimal()`, 
-  41);
+  46);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
@@ -2251,154 +2359,6 @@ qwebrCreateMonacoEditorInstance(
 <section id="simulating-mar-data" class="level4">
 <h4 class="anchored" data-anchor-id="simulating-mar-data">Simulating MAR Data</h4>
 <p>We’ll create a scenario where <code>gdp_per_capita</code> is more likely to be missing if the population is below a certain threshold, making it “missing at random” based on population size.</p>
-<div id="qwebr-insertion-location-42"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-42");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    42
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `set.seed(10)  # For reproducibility
-# Directly introduce missing values in a random sample of rows
-mar_data <- countriesDs |>
-  mutate(
-    gdp_per_capita = ifelse(runif(n()) < 0.4, NA, gdp_per_capita)  # 20% chance of being NA
-  )
-# Check for missing values
-summary(mar_data$gdp_per_capita)  # Provides a summary of the column, including missing values`, 
-  42);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-<section id="simulating-mnar-data" class="level4">
-<h4 class="anchored" data-anchor-id="simulating-mnar-data">Simulating MNAR Data</h4>
-<p>We’ll simulate a scenario where the likelihood of <code>life_expectancy</code> being missing is higher if life expectancy is lower than 60 years, making it “missing not at random.”</p>
-<div id="qwebr-insertion-location-43"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-43");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    43
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `set.seed(456)  # For reproducibility
-
-mnar_data <- countriesDs |>
-  mutate(
-    life_expectancy = ifelse(life_expectancy < 60 & runif(n()) < 0.4, NA, life_expectancy)
-  )
-# Check for missing values
-summary(mnar_data$life_expectancy)`, 
-  43);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-<section id="missing-data-before-wrangling" class="level4">
-<h4 class="anchored" data-anchor-id="missing-data-before-wrangling">Missing Data | Before Wrangling</h4>
-<section id="before-handling-missing-data" class="level5">
-<h5 class="anchored" data-anchor-id="before-handling-missing-data">Before Handling Missing Data</h5>
-<p>Let’s visualize the data before handling missing values, focusing on the relationship between GDP per capita and life expectancy.</p>
-</section>
-<section id="visualization-with-mar-data" class="level5">
-<h5 class="anchored" data-anchor-id="visualization-with-mar-data">Visualization with MAR Data</h5>
-<div id="qwebr-insertion-location-44"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-44");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    44
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `ggplot(mar_data, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
-  geom_point(size = 2, alpha = 0.6) +
-  labs(title = "GDP per Capita vs. Life Expectancy (with MAR)",
-       x = "GDP per Capita", y = "Life Expectancy") +
-  theme_minimal()`, 
-  44);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-<section id="visualization-with-mnar-data" class="level5">
-<h5 class="anchored" data-anchor-id="visualization-with-mnar-data">Visualization with MNAR Data</h5>
-<div id="qwebr-insertion-location-45"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-45");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    45
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `ggplot(mnar_data, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
-  geom_point(size = 2, alpha = 0.6) +
-  labs(title = "GDP per Capita vs. Life Expectancy (with MNAR)",
-       x = "GDP per Capita", y = "Life Expectancy") +
-  theme_minimal()`, 
-  45);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-</section>
-<section id="missing-data-how-to-wrangle" class="level4">
-<h4 class="anchored" data-anchor-id="missing-data-how-to-wrangle">Missing Data | How to Wrangle</h4>
-<p>To handle the missing data, we’ll apply a simple imputation strategy, filling in missing values with the median of the respective variable.</p>
-<section id="imputing-missing-values-for-mar-data" class="level5">
-<h5 class="anchored" data-anchor-id="imputing-missing-values-for-mar-data">Imputing Missing Values for MAR Data</h5>
-<div id="qwebr-insertion-location-46"></div>
-<script type="module">
-// Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-46");
-
-// Initalize an interactive element
-const initializedElement =   qwebrCreateInteractiveElement(
-    46
-  );
-
-// Add the interactive element into the document scope
-currentDocumentLocation.appendChild(initializedElement);
-
-// Initialize a Monaco Editor Instance
-qwebrCreateMonacoEditorInstance(
-  `mar_data_imputed <- mar_data |>
-  mutate(
-    gdp_per_capita = ifelse(is.na(gdp_per_capita), median(gdp_per_capita, na.rm = TRUE), gdp_per_capita)
-  )
-# Check imputation
-summary(mar_data_imputed$gdp_per_capita)`, 
-  46);
-</script>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-</section>
-<section id="imputing-missing-values-for-mnar-data" class="level5">
-<h5 class="anchored" data-anchor-id="imputing-missing-values-for-mnar-data">Imputing Missing Values for MNAR Data</h5>
 <div id="qwebr-insertion-location-47"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -2414,22 +2374,21 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `mnar_data_imputed <- mnar_data |>
+  `set.seed(10)  # For reproducibility
+# Directly introduce missing values in a random sample of rows
+mar_data <- countriesDs |>
   mutate(
-    life_expectancy = ifelse(is.na(life_expectancy), median(life_expectancy, na.rm = TRUE), life_expectancy)
+    gdp_per_capita = ifelse(runif(n()) < 0.4, NA, gdp_per_capita)  # 20% chance of being NA
   )
-# Check imputation
-summary(mnar_data_imputed$life_expectancy)`, 
+# Check for missing values
+summary(mar_data$gdp_per_capita)  # Provides a summary of the column, including missing values`, 
   47);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-</section>
-<section id="missing-data-after-wrangling" class="level4">
-<h4 class="anchored" data-anchor-id="missing-data-after-wrangling">Missing Data | After Wrangling</h4>
-<p>Let’s visualize the data again after imputing the missing values.</p>
-<section id="visualization-with-mar-data-imputed" class="level5">
-<h5 class="anchored" data-anchor-id="visualization-with-mar-data-imputed">Visualization with MAR Data (Imputed)</h5>
+<section id="simulating-mnar-data" class="level4">
+<h4 class="anchored" data-anchor-id="simulating-mnar-data">Simulating MNAR Data</h4>
+<p>We’ll simulate a scenario where the likelihood of <code>life_expectancy</code> being missing is higher if life expectancy is lower than 60 years, making it “missing not at random.”</p>
 <div id="qwebr-insertion-location-48"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -2445,17 +2404,26 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
-  `ggplot(mar_data_imputed, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
-  geom_point(size = 2, alpha = 0.6) +
-  labs(title = "GDP per Capita vs. Life Expectancy (after MAR Imputation)",
-       x = "GDP per Capita", y = "Life Expectancy") +
-  theme_minimal()`, 
+  `set.seed(456)  # For reproducibility
+
+mnar_data <- countriesDs |>
+  mutate(
+    life_expectancy = ifelse(life_expectancy < 60 & runif(n()) < 0.4, NA, life_expectancy)
+  )
+# Check for missing values
+summary(mnar_data$life_expectancy)`, 
   48);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="visualization-with-mnar-data-imputed" class="level5">
-<h5 class="anchored" data-anchor-id="visualization-with-mnar-data-imputed">Visualization with MNAR Data (Imputed)</h5>
+<section id="missing-data-before-wrangling" class="level4">
+<h4 class="anchored" data-anchor-id="missing-data-before-wrangling">Missing Data | Before Wrangling</h4>
+<section id="before-handling-missing-data" class="level5">
+<h5 class="anchored" data-anchor-id="before-handling-missing-data">Before Handling Missing Data</h5>
+<p>Let’s visualize the data before handling missing values, focusing on the relationship between GDP per capita and life expectancy.</p>
+</section>
+<section id="visualization-with-mar-data" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mar-data">Visualization with MAR Data</h5>
 <div id="qwebr-insertion-location-49"></div>
 <script type="module">
 // Retrieve the insertion point
@@ -2471,12 +2439,152 @@ currentDocumentLocation.appendChild(initializedElement);
 
 // Initialize a Monaco Editor Instance
 qwebrCreateMonacoEditorInstance(
+  `ggplot(mar_data, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (with MAR)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()`, 
+  49);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="visualization-with-mnar-data" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mnar-data">Visualization with MNAR Data</h5>
+<div id="qwebr-insertion-location-50"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-50");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    50
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `ggplot(mnar_data, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (with MNAR)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()`, 
+  50);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+</section>
+<section id="missing-data-how-to-wrangle" class="level4">
+<h4 class="anchored" data-anchor-id="missing-data-how-to-wrangle">Missing Data | How to Wrangle</h4>
+<p>To handle the missing data, we’ll apply a simple imputation strategy, filling in missing values with the median of the respective variable.</p>
+<section id="imputing-missing-values-for-mar-data" class="level5">
+<h5 class="anchored" data-anchor-id="imputing-missing-values-for-mar-data">Imputing Missing Values for MAR Data</h5>
+<div id="qwebr-insertion-location-51"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-51");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    51
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `mar_data_imputed <- mar_data |>
+  mutate(
+    gdp_per_capita = ifelse(is.na(gdp_per_capita), median(gdp_per_capita, na.rm = TRUE), gdp_per_capita)
+  )
+# Check imputation
+summary(mar_data_imputed$gdp_per_capita)`, 
+  51);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="imputing-missing-values-for-mnar-data" class="level5">
+<h5 class="anchored" data-anchor-id="imputing-missing-values-for-mnar-data">Imputing Missing Values for MNAR Data</h5>
+<div id="qwebr-insertion-location-52"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-52");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    52
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `mnar_data_imputed <- mnar_data |>
+  mutate(
+    life_expectancy = ifelse(is.na(life_expectancy), median(life_expectancy, na.rm = TRUE), life_expectancy)
+  )
+# Check imputation
+summary(mnar_data_imputed$life_expectancy)`, 
+  52);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+</section>
+<section id="missing-data-after-wrangling" class="level4">
+<h4 class="anchored" data-anchor-id="missing-data-after-wrangling">Missing Data | After Wrangling</h4>
+<p>Let’s visualize the data again after imputing the missing values.</p>
+<section id="visualization-with-mar-data-imputed" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mar-data-imputed">Visualization with MAR Data (Imputed)</h5>
+<div id="qwebr-insertion-location-53"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-53");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    53
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
+  `ggplot(mar_data_imputed, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
+  geom_point(size = 2, alpha = 0.6) +
+  labs(title = "GDP per Capita vs. Life Expectancy (after MAR Imputation)",
+       x = "GDP per Capita", y = "Life Expectancy") +
+  theme_minimal()`, 
+  53);
+</script>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="visualization-with-mnar-data-imputed" class="level5">
+<h5 class="anchored" data-anchor-id="visualization-with-mnar-data-imputed">Visualization with MNAR Data (Imputed)</h5>
+<div id="qwebr-insertion-location-54"></div>
+<script type="module">
+// Retrieve the insertion point
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-54");
+
+// Initalize an interactive element
+const initializedElement =   qwebrCreateInteractiveElement(
+    54
+  );
+
+// Add the interactive element into the document scope
+currentDocumentLocation.appendChild(initializedElement);
+
+// Initialize a Monaco Editor Instance
+qwebrCreateMonacoEditorInstance(
   `ggplot(mnar_data_imputed, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
   geom_point(size = 2, alpha = 0.6) +
   labs(title = "GDP per Capita vs. Life Expectancy (after MNAR Imputation)",
        x = "GDP per Capita", y = "Life Expectancy") +
   theme_minimal()`, 
-  49);
+  54);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
@@ -2493,14 +2601,14 @@ qwebrCreateMonacoEditorInstance(
 <section id="creating-a-professional-quality-visualization" class="level3">
 <h3 class="anchored" data-anchor-id="creating-a-professional-quality-visualization">Creating a Professional-Quality Visualization</h3>
 <p>Here’s a step-by-step guide to transform and visualize data from 10 countries in the dataset:</p>
-<div id="qwebr-insertion-location-50"></div>
+<div id="qwebr-insertion-location-55"></div>
 <script type="module">
 // Retrieve the insertion point
-const currentDocumentLocation = document.getElementById("qwebr-insertion-location-50");
+const currentDocumentLocation = document.getElementById("qwebr-insertion-location-55");
 
 // Initalize an interactive element
 const initializedElement =   qwebrCreateInteractiveElement(
-    50
+    55
   );
 
 // Add the interactive element into the document scope
@@ -2571,7 +2679,7 @@ ggplot(summaryData, aes(
     legend.text = element_text(size = 8), 
     legend.position = "bottom"
   )`, 
-  50);
+  55);
 </script>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>

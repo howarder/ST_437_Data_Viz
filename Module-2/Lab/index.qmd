@@ -426,20 +426,7 @@ There are a few join functions we'll use:
 
 -   `inner_join()` joins `x` and `y` based on a key. Only observations in `x` that have a matching key `y` are kept. 
 
-```{r}
-innerJoinedData <- countriesDs |>
-    inner_join(countriesExtraDs, by = "country")
-```
 
-```{r}
-leftJoinedData <- countriesDs |>
-    left_join(countriesExtraDs, by = "country")
-```
-
-```{r}
-rightJoinedData <- countriesDs |>
-    right_join(countriesExtraDs, by = "country")
-```
 
 
 
