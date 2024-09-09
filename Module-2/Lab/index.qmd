@@ -214,21 +214,41 @@ Filtering based on economic indicators allows for focused analysis on the relati
    - **Filter**: Only countries from Africa where the population exceeds 50 million.
    - **Purpose**: Isolate data for large African nations to analyze trends specific to highly populated areas.
 
+```{webr-r}
+# Your code here
+```
+
 2. **Economic Data in Europe**:
    - **Filter**: Show data only for the years 2015-2020 for European countries with GDP per capita above $30,000.
    - **Purpose**: Focus on wealthy European countries during a specific period to study economic outcomes.
+
+```{webr-r}
+# Your code here
+```
 
 3. **High Birth Rates in Asia**:
    - **Filter**: Data for Asian countries where the birth rate is above 2.5.
    - **Purpose**: Analyze regions with high birth rates, possibly indicating population growth trends.
 
+```{webr-r}
+# Your code here
+```
+
 4. **Cold Regions in Asia**:
    - **Filter**: Asian countries where the average temperature is below 10°C between 2010 and 2020.
    - **Purpose**: Focus on colder regions in Asia to study how temperature may correlate with other demographic factors.
+   
+```{webr-r}
+# Your code here
+```
 
 5. **GDP Data with Missing Values**:
    - **Filter**: Remove any entries with missing `gdp_per_capita` values for the years 2010-2020.
    - **Purpose**: Ensure clean data for economic analysis, removing incomplete records that could skew results.
+   
+```{webr-r}
+# Your code here
+```
 
 ### Selecting
 
@@ -254,10 +274,32 @@ ggplot(selectedData, aes(x = factor(year), y = gdp_per_capita, fill = country)) 
 
 #### Selecting Challenges
 1. **Select columns** related to economic indicators (e.g., `country`, `gdp_per_capita`, `population`) for further analysis.
+
+```{webr-r}
+# Your code here
+```
+
 2. **Create a dataset** with only the `year`, `life_expectancy`, and `temperature` columns for all countries and show the first 5 rows.
+
+```{webr-r}
+# Your code here
+```
+
 3. **Choose columns** that exclude any geographical information and check the first 10 rows.
+
+```{webr-r}
+# Your code here
+```
+
 4. **Select and rename** the `country` and `population` columns to `nation` and `pop_size`, respectively.
-5. **Create a new dataset** with only the `year`, `population`, and a newly created column, `population_in_millions` (which should be calculated as `population / 1e6`).
+
+```{webr-r}
+# Your code here
+```
+
+<!-- 5. **Create a new dataset** with only the `year`, `population`, and a newly created column, `population_in_millions` (which should be calculated as `population / 1e6`). -->
+
+
 
 ### Mutating
 
@@ -283,14 +325,38 @@ ggplot(mutatedData, aes(x = population, y = gdp_total, color = region)) +
 
 #### Mutating Challenges
 1. **Create a new column** called `gdp_total` that multiplies `gdp_per_capita` by `population`.
+
+```{webr-r}
+# Your code here
+```
+
 2. **Add a new column** that indicates whether a country's GDP per capita is above or below a certain threshold (e.g., $20,000).
+
+```{webr-r}
+# Your code here
+```
+
 3. **Mutate the `temperature` column** to create a new column, `temperature_f`, that converts Celsius to Fahrenheit.
+
+```{webr-r}
+# Your code here
+```
+
 4. **Create a `population_density` column** by dividing `population` by a given area (assuming you have area data).
+
+```{webr-r}
+# Your code here
+```
+
 5. **Generate a column** that calculates the ratio of birth rate to life expectancy for each country.
+
+```{webr-r}
+# Your code here
+```
 
 ### Summarizing
 
-Summarizing aggregates data by country, year, or region to find totals and averages.
+Summarizing, often done by aggregating data by a variable(s), can be used to produce summary statistsics.
 
 #### Example 1
 
