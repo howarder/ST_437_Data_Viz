@@ -37,8 +37,20 @@ library(palmerpenguins)
 -   Define visual encoding and decoding
 -   Identify channels for visual encoding
 -   Compare and critique the effectiveness of different channels
--   
+-   Use color appropriately in visualizations
 :::
+
+## 
+
+**Task:** Write down at least 5 observations about this plot.
+
+![Source: Kieran Healy](images/bad_life_exp.png){width="650"}
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes=3)
+```
 
 ## What is Visual Encoding?
 
@@ -247,6 +259,24 @@ These are not meant to be hard and fast rules that apply to every visualization 
 
 -   Don't expect your audience to be able to distinguish more than 7 levels of a channel.
 
+## Data Vizualization Decision Making
+
+::: fragment
+### Life Expectancy
+
+Identify the similarities and differences between the two plots. Which is better?
+
+![Source: Kieran Healy](images/life_exp_bar_dot.png){fig-align="center"}
+:::
+
+::: fragment
+### Law School Enrollments
+
+Identify the similarities and differences between the two plots. Which is better?
+
+![Source: Kieran Healy](images/law_enrollment.png){fig-align="center"}
+:::
+
 ## Perceiving Color
 
 -   Cones in our eyes are responsible for perceiving color
@@ -285,32 +315,37 @@ We can better describe color using the HCL color model
 
 ## Color Scales
 
-:::{.fragment}
+::: fragment
 ![](images/discrete.png){fig-align="" width="850"}
 :::
-:::{.fragment}
+
+::: fragment
 ![](images/seq.png){fig-align="left" width="850"}
 :::
 
-:::{.fragment}
+::: fragment
 ![](images/diverging.png){fig-align="left" width="850"}
 :::
 
 [**When using color, match the variable type to the appropriate type of color scale.**]{.fragment}
 
-## Making the right decision for your plots
+## Color Guidelines
 
-::: fragment
-### Life Expectancy
+-   When using color, match the variable type to the appropriate type of color scale.
 
-Identify the similarities and differences between the two plots. Which is better? ![Source: Kieran Healy](images/life_exp_bar_dot.png){fig-align="center"}
-:::
+-   If possible, avoid blue and red together because they can be difficult for viewers to focus on.
 
-::: fragment
-### Law School Enrollments
+-   Use saturated colors for small symbols in plots and less saturated colors for larger items.
 
-Identify the similarities and differences between the two plots. Which is better? ![Source: Kieran Healy](images/law_enrollment.png){fig-align="center"}
-:::
+-   Foreground and background colors should differ in luminance.
+
+-   Consider possible colorblindness in your viewers.
+
+    -   Avoid green and red together.
+
+    -   Use palettes that are colorblind friendly (e.g. the \`viridis\` package)
+
+    -   Use tools to test if your plots are color friendly (e.g. [colororacle.org](colororacle.org))
 
 ## Sketch a Alternative
 

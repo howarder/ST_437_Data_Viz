@@ -343,8 +343,26 @@
 <li>Define visual encoding and decoding</li>
 <li>Identify channels for visual encoding</li>
 <li>Compare and critique the effectiveness of different channels</li>
-<li></li>
+<li>Use color appropriately in visualizations</li>
 </ul>
+</div>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<p><strong>Task:</strong> Write down at least 5 observations about this plot.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/bad_life_exp.png" width="650"></p>
+<figcaption>Source: Kieran Healy</figcaption>
+</figure>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="countdown" id="timer_dc8feb4d" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+</div>
 </div>
 </section>
 <section id="what-is-visual-encoding" class="slide level2">
@@ -389,7 +407,7 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-2-1.png" width="960"></p>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-3-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -472,30 +490,6 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-3-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-3-2.png" width="960"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-3-3.png" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
 <p><img data-src="index_files/figure-revealjs/unnamed-chunk-4-1.png" width="960"></p>
 </figure>
 </div>
@@ -515,6 +509,30 @@
 </div>
 </div>
 </div>
+</div><div class="column">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-5-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-5-2.png" width="960"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-5-3.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
 </div></div>
 </section>
 <section id="some-guidelines" class="slide level2">
@@ -529,6 +547,31 @@
 <li class="fragment"><p>Conjunctions (e.g.&nbsp;color for one variable, shape for another) are generally not preattentive.</p></li>
 <li class="fragment"><p>Don’t expect your audience to be able to distinguish more than 7 levels of a channel.</p></li>
 </ul>
+</section>
+<section id="data-vizualization-decision-making" class="slide level2">
+<h2>Data Vizualization Decision Making</h2>
+<div class="fragment">
+<!-- -->
+<h3 id="life-expectancy">Life Expectancy</h3>
+<p>Identify the similarities and differences between the two plots. Which is better?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/life_exp_bar_dot.png"></p>
+<figcaption>Source: Kieran Healy</figcaption>
+</figure>
+</div>
+</div>
+<div class="fragment">
+<!-- -->
+<h3 id="law-school-enrollments">Law School Enrollments</h3>
+<p>Identify the similarities and differences between the two plots. Which is better?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/law_enrollment.png"></p>
+<figcaption>Source: Kieran Healy</figcaption>
+</figure>
+</div>
+</div>
 </section>
 <section id="perceiving-color" class="slide level2">
 <h2>Perceiving Color</h2>
@@ -606,18 +649,20 @@
 </div>
 <p><span class="fragment"><strong>When using color, match the variable type to the appropriate type of color scale.</strong></span></p>
 </section>
-<section id="making-the-right-decision-for-your-plots" class="slide level2">
-<h2>Making the right decision for your plots</h2>
-<div class="fragment">
-<!-- -->
-<h3 id="life-expectancy">Life Expectancy</h3>
-<p>Identify the similarities and differences between the two plots. Which is better? <img data-src="images/life_exp_bar_dot.png" class="quarto-figure quarto-figure-center" alt="Source: Kieran Healy"></p>
-</div>
-<div class="fragment">
-<!-- -->
-<h3 id="law-school-enrollments">Law School Enrollments</h3>
-<p>Identify the similarities and differences between the two plots. Which is better? <img data-src="images/law_enrollment.png" class="quarto-figure quarto-figure-center" alt="Source: Kieran Healy"></p>
-</div>
+<section id="color-guidelines" class="slide level2">
+<h2>Color Guidelines</h2>
+<ul>
+<li class="fragment"><p>When using color, match the variable type to the appropriate type of color scale.</p></li>
+<li class="fragment"><p>If possible, avoid blue and red together because they can be difficult for viewers to focus on.</p></li>
+<li class="fragment"><p>Use saturated colors for small symbols in plots and less saturated colors for larger items.</p></li>
+<li class="fragment"><p>Foreground and background colors should differ in luminance.</p></li>
+<li class="fragment"><p>Consider possible colorblindness in your viewers.</p>
+<ul>
+<li class="fragment"><p>Avoid green and red together.</p></li>
+<li class="fragment"><p>Use palettes that are colorblind friendly (e.g.&nbsp;the `viridis` package)</p></li>
+<li class="fragment"><p>Use tools to test if your plots are color friendly (e.g.&nbsp;<a href="colororacle.org">colororacle.org</a>)</p></li>
+</ul></li>
+</ul>
 </section>
 <section id="sketch-a-alternative" class="slide level2">
 <h2>Sketch a Alternative</h2>
@@ -626,14 +671,14 @@
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-5-1.png" width="960"></p>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-6-1.png" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="countdown" id="timer_b3e58eb0" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown" id="timer_980fbd7d" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
 <div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
