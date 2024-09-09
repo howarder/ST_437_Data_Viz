@@ -92,51 +92,52 @@ library(lubridate)
 `Windows users`: Use ctrl + enter to run single or highlighted line(s). Use shift + enter to run entire code block
 :::
 
-```{webr}
-#| autorun: TRUE
+```{r}
 # Specify the data URL using HTTPS
-url1 <- "https://howarder.github.io/ST_437_Data_Viz/Assets/Datasets/countries.csv"
-url2 <- "https://howarder.github.io/ST_437_Data_Viz/Assets/Datasets/countriesExtra.csv"
+url1 <- "https://howarder.github.io/ST_437_Data_Viz/Assets/Datasets/censuspop08.csv"
+url2 <- "https://howarder.github.io/ST_437_Data_Viz/Assets/Datasets/CIAWorldFactbook2013.csv"
+url3 <- "https://howarder.github.io/ST_437_Data_Viz/Assets/Datasets/continents.csv"
 
 # Download the data files from the HTTPS URL and save it as
 # countries.csv & countriesExtraInfo.csv
 cat("Downloading the data ...\n")
-download.file(url1, "countries.csv")
-download.file(url2, "countriesExtraInfo.csv")
+download.file(url1, "censuspop08.csv")
+download.file(url2, "CIAWorldFactbook2013.csv")
+download.file(url3, "continents.csv")
 
 # Check for the data.
 cat("After downloading the data, we now have:\n")
 list.files()
 
 # Read the countries data into R
-countriesDs <- read_csv("countries.csv", show_col_types = FALSE)
-countriesExtraDs <- read_csv("countriesExtraInfo.csv", show_col_types = FALSE)
+population <- read_csv("censuspop08.csv", show_col_types = FALSE)
+factbook2013 <- read_csv("CIAWorldFactbook2013.csv", show_col_types = FALSE)
+continents <- read_csv("contintents.csv", show_col_types = FALSE)
 ```
 
 #### Verify Datasets with `head()`
 
-```{webr-r}
-head(countriesDs, 5)
-head(countriesExtraDs, 5)
+```{r}
+head(population, 5)
+head(factbook2013, 5)
 ```
 
-#### Description of the Dataset
+#### Description of the `population` Dataset
 
--   **`country`**: Country name from a predefined list of 10 countries.
--   **`year`**: Years between 2010 and 2023.
--   **`population`**: Real-world population size for each country and year.
--   **`gdp`**: Gross Domestic Product (GDP) in USD millions for each country and year.
--   **`gdp_per_capita`**: GDP per capita, calculated as GDP divided by population.
--   **`life_expectancy`**: Life expectancy of citzens
--   **`birth_rate`**: Birth rate for each country and year
--   **`temperature`**: Average temperature in celsius per country
--   **`region`**: Geographical region corresponding to each country.
--   **`category`**: Classification of the country as "First World," "Second World," or "Third World."
+-   **`Country`**: Country name
+-   **`Continent`**: Continent country is located in
+-   **`CIA_Def`**: Country categorized as "developed", "transition", or "developing", as determine by the CIA
+-   **`1969`**: Population in 1969
+-   **`1970`**: Population in 1970
+-   ...
+-   **`2008`**: Population in 2008    
 
-#### Additional Dataset (`countriesExtra.csv`)
+#### Description of the `factbook2013` Dataset
 
--   **`country`**: Matches the country names from the main dataset.
--   **`continent`**: Continent corresponding to each country.
+-   **`Country`**: Country name
+-   **`Pop2013`**: Population in 2013
+-   **`Area_sqkm`**: Country's area in square kilometers
+-   **`PopGrowthRate`**:
 
 ## Tidy Data Wrangling
 
@@ -154,65 +155,40 @@ Filtering is essential for narrowing down datasets to the most relevant informat
 
 #### Example 1
 
-You are tasked with visualizing trends in life expectancy in Asian countries between 2010 and 2020.
+You are tasked with visualizing trends in health expenditure and life expectancy in countries with populations of at least five million people.
 
 ##### Filtering Process
 
-```{webr-r}
-filteredData <- countriesDs |>
-  filter(year >= 2010 & year <= 2020 & region == "Asia")
+```{r}
+filteredData <- factbook2013 |>
+  filter(Pop2013 > 5000000)
 
 head(filteredData, 5)
 ```
 
 ##### Visualization
 
-```{webr-r}
-ggplot(filteredData, aes(x = factor(year), y = life_expectancy, color = country)) +
+```{r}
+ggplot(filteredData, aes(x = HealthExpend, y = LifeExpectancy)) +
   geom_point(size = 2) +
-  labs(title = "Life Expectancy Trends in Asia (2010-2020)",
-       x = "Year", y = "Life Expectancy") +
+  labs(title = "Health Expenditure vs. Life Expectancy in Large Countries",
+       x = "Health Expenditure (percent of GDP)", y = "Life Expectancy (years)") +
   theme_minimal()
 ```
 
 ##### What did we do here?
 
-By focusing on specific countries and years, filtering allows for more targeted and relevant visualizations, making it easier to analyze trends and patterns specific to the context.
+By focusing on specific countries, filtering allows for more targeted and relevant visualizations, making it easier to analyze trends and patterns specific to the context.
 
-#### Example 2
 
-Analyze the relationship between GDP per capita and life expectancy in European countries with a GDP per capita above \$30,000 for the years 2015-2020.
 
-##### Filtering Process
-
-```{webr-r}
-filteredData <- countriesDs|>
-  filter(year >= 2015 & year <= 2020 & region == "Europe" & gdp_per_capita > 30000) |>
-  left_join(countriesExtraDs, by = "country")
-
-head(filteredData, 5)
-```
-
-##### Visualization
-
-```{webr-r}
-ggplot(filteredData, aes(x = gdp_per_capita, y = life_expectancy, color = country)) +
-  geom_point(size = 2) +
-  geom_smooth(method = "lm") +
-  labs(title = "GDP per Capita vs. Life Expectancy in Europe (2015-2020)",
-       x = "GDP per Capita", y = "Life Expectancy") +
-  theme_minimal()
-```
-
-##### What did we do here?
-
-Filtering based on economic indicators allows for focused analysis on the relationship between wealth and life expectancy, removing noise from countries with different economic conditions.
 
 #### Filtering Challenges
 
 1.  **Population Size in Africa**:
-    -   **Filter**: Only countries from Africa where the population exceeds 50 million.
-    -   **Purpose**: Isolate data for large African nations to analyze trends specific to highly populated areas.
+    -   **Filter**: Only countries where the net migration rate is negative (i.e. more people have emigrated than immigrated)
+    -   **Visualize**: 
+
 
 ```{webr-r}
 # Your code here
